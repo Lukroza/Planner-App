@@ -13,9 +13,9 @@ const GroupRoute = () => <Text></Text>;
 const MyComponent = () => {
   const [index, setIndex] = React.useState(0);
   const [routes] = React.useState([
-    { key: 'home', focusedIcon: 'home', unfocusedIcon: 'home-outline', color: '#F4F5FC'},
-    { key: 'plus', focusedIcon: 'plus-thick', unfocusedIcon: 'plus-outline', color: '#F4F5FC' },
-    { key: 'group', focusedIcon: 'account-group', unfocusedIcon: 'account-group-outline', color: '#F4F5FC'},
+    { key: 'home', focusedIcon: 'home', unfocusedIcon: 'home-outline'},
+    { key: 'plus', focusedIcon: 'plus-thick', unfocusedIcon: 'plus-outline'},
+    { key: 'group', focusedIcon: 'account-group', unfocusedIcon: 'account-group-outline'},
   ]);
 
   const renderScene = BottomNavigation.SceneMap({
@@ -24,17 +24,16 @@ const MyComponent = () => {
     group: GroupRoute,
   });
 
-
   const renderIcon = ({ route, focused }) => {
     const { focusedIcon, unfocusedIcon } = routes.find(r => r.key === route.key);
     const iconName = focused ? focusedIcon : unfocusedIcon;
-    const color = focused ? '#24293E' : '#F4F5FC'; // Change colors as needed for focused/unfocused states
+    const color = focused ? '#24293E' : '#F4F5FC';
     return <MaterialCommunityIcons name={iconName} size={24} color={color} />;
   };
 
   return (
     <BottomNavigation
-      barStyle={{height: 60, backgroundColor: '#24293D'}}
+      barStyle={{height: 75, backgroundColor: '#24293D'}}
       navigationState={{ index, routes }}
       onIndexChange={setIndex}
       renderScene={renderScene}
