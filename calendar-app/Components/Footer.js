@@ -3,14 +3,18 @@ import * as React from 'react';
 import { View, StyleSheet, TouchableOpacity } from "react-native";
 import { BottomNavigation, Text } from 'react-native-paper';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import GroupScreen from './GroupScreen';
+import HomeScreen from './HomeScreen';
+import CreateEventScreen from './CreateEventScreen';
 
-const HomeRoute = () => <Text></Text>;
 
-const PlusRoute = () => <Text></Text>;
+const HomeRoute = () => <HomeScreen/>;
 
-const GroupRoute = () => <Text></Text>;
+const PlusRoute = () => <CreateEventScreen/>;
 
-const MyComponent = () => {
+const GroupRoute = () => <GroupScreen />;
+
+const Footer = () => {
   const [index, setIndex] = React.useState(0);
   const [routes] = React.useState([
     { key: 'home', focusedIcon: 'home', unfocusedIcon: 'home-outline'},
@@ -42,4 +46,4 @@ const MyComponent = () => {
   );
 };
 
-export default MyComponent;
+export default Footer;
