@@ -1,13 +1,14 @@
 import * as React from 'react';
 import { View, StyleSheet } from 'react-native';
 import Header from './Components/Header'; // Assume your file is named Header.js
-import CalendarComponent from './Components/Calendar'; // Adjust the path as necessary
+import Calendar from './Components/Calendar';
 
 const App = () => {
   return (
       <View style={styles.container}>
-        <Header />
-        <CalendarComponent />
+        <Header/>
+        
+        <Calendar/>
       </View>
   );
 };
