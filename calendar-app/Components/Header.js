@@ -17,7 +17,7 @@ const Header = () => {
     return (
         <SafeAreaView edges={['right', 'top', 'left']} style={{ backgroundColor: '#2F3855' }}>
             <View style={styles.headerContainer}>
-                <Text style={styles.headerTitle}>Homee</Text>
+                <Text style={styles.headerTitle}>Home</Text>
                 <TouchableOpacity onPress={handleProfilePress}>
                     <Avatar.Text size={40} label="VT" style={styles.avatar} />
                 </TouchableOpacity>
