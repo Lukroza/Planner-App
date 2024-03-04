@@ -8,19 +8,22 @@ import Calendar from './Components/Calendar';
 const App = () => {
   return (
     <SafeAreaProvider>
-      <View style={styles.container}>
-        <Header/>
-        <Calendar/>
-        <Footer />
+      <Header/>
+      <Calendar/>
+      <View style={styles.footerContainer}>
+            <Footer />
       </View>
-      </SafeAreaProvider>
+    </SafeAreaProvider>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1, 
-    backgroundColor: '#2F3855', 
+    flex: 1,
+    backgroundColor: '#2F3855',
+  },
+  footerContainer: {
+    flex: 0.1,
   },
 });
 
