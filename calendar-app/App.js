@@ -8,7 +8,6 @@ const App = () => {
   return (
     <SafeAreaProvider>
       <View style={styles.container}>
-        <Header />
         <Footer />
       </View>
       </SafeAreaProvider>
