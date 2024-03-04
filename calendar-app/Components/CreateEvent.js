@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { View, StyleSheet, TextInput, Text, Button, TouchableWithoutFeedback, ScrollView } from 'react-native';
+import { View, StyleSheet, TextInput, Text, Button, ScrollView } from 'react-native';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import Footer from './Footer';
 import Header from './Header';
@@ -41,18 +41,47 @@ function CreateEvent() {
     };
 
     const handleCancel = () => {
-        
+        setName('');
+        setFromTime(new Date());
+        setToTime(new Date());
+        setFromPickerVisibility(false);
+        setToPickerVisibility(false);
+        setDescription('');
     };
 
-    const handleCreate = () => {
-        
+    const handleCreate = async () => {
+        const eventData = {
+            name,
+            fromTime,
+            toTime,
+            description,
+        };
+    
+        console.log("Creating event with data:", eventData);
+
+        try {
+            const response = await fetch('https://yourbackend.com/events', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(eventData),
+            });
+            if (response.ok) {
+                const result = await response.json();
+                console.log('Event created:', result);
+            } else {
+                console.error('Failed to create event');
+            }
+        } catch (error) {
+            console.error('Error creating event:', error);
+        }
     };
 
     return (
         <SafeAreaProvider style={styles.safeArea}>
             <Header title="Create Event"/>
-            <View style={styles.mainContent}>
-                <ScrollView style={styles.scrollView}>
+            <ScrollView style={styles.scrollView}>
                 <View style={styles.eventInputContainer}>
                     <Text style={styles.label}>Event Name</Text>
                     <TextInput
@@ -93,13 +122,12 @@ function CreateEvent() {
                     />
                 </View>
                 <View style={styles.buttonContainer}>
-                    <Button title="Create" onPress={handleCreate} color="#3DDC84" />
-                    <Button title="Cancel" onPress={handleCancel} color="#767577" />
+                    <Button style = {styles.button} title="Cancel" onPress={handleCancel} color="#767577" />
+                    <Button style = {styles.button} title="Create" onPress={handleCreate} color="#3DDC84" />
                 </View>
-                </ScrollView>
-                <View style={styles.footerContainer}>
-                    <Footer />
-                </View>
+            </ScrollView>
+            <View style={styles.footerContainer}>
+                <Footer />
             </View>
             
         </SafeAreaProvider>
@@ -107,45 +135,43 @@ function CreateEvent() {
 }
 
 const styles = StyleSheet.create({
+    safeArea: {
+        flex: 1,
+        backgroundColor: '#2F3855',
+    },
+    scrollView: {
+        flex: 1,
+    },
     eventInputContainer: {
-        flex: 0.7,
         backgroundColor: '#2F3855',
         alignItems: 'center',
         justifyContent: 'center',
+        padding: 20,
     },
     input: {
         borderColor: '#007AFF',
         borderWidth: 1,
         borderRadius: 10,
-        margin: 10,
+        marginVertical: 10,
         padding: 10,
         color: 'white',
         placeholderTextColor: '#9CA3AF',
-        width: '80%',
-        height: 45,
+        width: '90%',
         fontFamily: 'System',
         fontSize: 18,
     },
     timeContainer: {
         flexDirection: 'row',
         alignItems: 'center',
-        justifyContent: 'center',
+        justifyContent: 'space-around',
         padding: 20,
     },
     label: {
         color: 'white',
         fontSize: 20,
         fontWeight: 'bold',
-        paddingTop: 5,
-        marginBottom: 0,
-        alignSelf: 'flex-start', 
-        marginLeft: 40,
-    },
-    timeContainer: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-around',
-        padding: 20,
+        alignSelf: 'flex-start',
+        marginLeft: '5%',
     },
     fromToLabel: {
         color: 'white',
@@ -157,37 +183,38 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         padding: 20,
-        backgroundColor: '#2F3855',
     },
     descriptionInput: {
         borderColor: '#007AFF',
         borderWidth: 1,
         borderRadius: 10,
-        margin: 10,
+        marginVertical: 10,
         padding: 10,
         color: 'white',
-        width: '90%', 
+        width: '90%',
         fontFamily: 'System',
         fontSize: 18,
-        textAlignVertical: 'top', 
+        textAlignVertical: 'top',
     },
     buttonContainer: {
         flexDirection: 'row',
         justifyContent: 'space-evenly',
-        alignItems: 'center',
         padding: 10,
-        backgroundColor: '#2F3855',
     },
-    safeArea: {
-        flex: 1, // Use flex to expand the container to the full height of the screen
-        backgroundColor: '#2F3855', // Assuming the safe area should be black as your theme
+    footerContainer: {
+        padding: 10,
+        
     },
-    mainContent: {
-        flex: 1, // Main content area taking up the full height minus the footer
+    button: {
+        color: 'white',
+        fontSize: 20,
+        fontWeight: 'bold',
     },
-    scrollViewContent: {
-        // No flex needed here, ScrollView will automatically take up the available space
+    footerContainer: {
+        height: 60,
+        backgroundColor: 'transparent',
     },
+
 });
 
 export default CreateEvent;
