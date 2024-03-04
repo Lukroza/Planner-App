@@ -2,7 +2,6 @@ import * as React from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { View, StyleSheet, TextInput, Text, Button, ScrollView } from 'react-native';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
-import Footer from './Footer';
 import Header from './Header';
 import Calendar from './Calendar';
 
@@ -56,26 +55,7 @@ function CreateEvent() {
             toTime,
             description,
         };
-    
-        console.log("Creating event with data:", eventData);
 
-        try {
-            const response = await fetch('https://yourbackend.com/events', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(eventData),
-            });
-            if (response.ok) {
-                const result = await response.json();
-                console.log('Event created:', result);
-            } else {
-                console.error('Failed to create event');
-            }
-        } catch (error) {
-            console.error('Error creating event:', error);
-        }
     };
 
     return (
@@ -126,9 +106,6 @@ function CreateEvent() {
                     <Button style = {styles.button} title="Create" onPress={handleCreate} color="#3DDC84" />
                 </View>
             </ScrollView>
-            <View style={styles.footerContainer}>
-                <Footer />
-            </View>
             
         </SafeAreaProvider>
     );
@@ -218,5 +195,3 @@ const styles = StyleSheet.create({
 });
 
 export default CreateEvent;
-
-
