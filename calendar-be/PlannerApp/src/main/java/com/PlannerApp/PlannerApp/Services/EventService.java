@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
+import java.sql.Time;
 import java.util.UUID;
 
 @Service
@@ -20,16 +21,16 @@ public class EventService {
 
     public void insertEvent(Event event){
         UUID eventId = UUID.randomUUID();
+        UUID userID = UUID.randomUUID();
         eventRepository.insertEvent(
                 EventEntity.builder()
                         .id(eventId)
-                        .user_id(event.getUser_id())
+                        .user_id(userID)
                         .name(event.getName())
                         .description(event.getDescription())
                         .date(event.getDate())
                         .from(event.getFrom())
                         .to(event.getTo())
-                        .attendees(event.getAttendees())
                         .build()
         );
     }

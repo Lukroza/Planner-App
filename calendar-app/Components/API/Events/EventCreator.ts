@@ -9,7 +9,7 @@ interface IEvent {
     attendees?: string;
 }
 
-async function createEvent(props : IEvent) {
+async function createEventApi(props : IEvent) {
     try {
         const response = await fetch(backendURL + "/event/insert", {
             method: 'POST',

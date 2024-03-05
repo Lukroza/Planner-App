@@ -4,6 +4,7 @@ import { View, StyleSheet, TextInput, Text, Button, ScrollView, KeyboardAvoiding
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import Header from './Header';
 import Calendar from './Calendar';
+import {createEventApi} from './API/Events/EventCreator';
 
 function CreateEvent() {
     const [name, setName] = React.useState('');
@@ -43,10 +44,11 @@ function CreateEvent() {
     const formatTime = (date) => {
         let hours = date.getUTCHours() + 2;
         const minutes = date.getUTCMinutes();
+        const seconds = date.getUTCSeconds();
         if (hours >= 24) {
             hours -= 24;
         }
-        return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
+        return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
     };
     
     const fromTimeString = formatTime(fromTime);
@@ -69,12 +71,11 @@ function CreateEvent() {
         const eventData = {
             name: name,
             date: selectedDate,
-            fromTime: fromTimeString,
-            toTime: toTimeString,
+            from: fromTimeString,
+            to: toTimeString,
             description: description,
         };
-        
-        console.log(eventData);
+        createEventApi(eventData).then(data => console.log(SuccessAction));
     };
 
     return (
