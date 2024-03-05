@@ -4,7 +4,7 @@ import { Avatar } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useFonts, Poppins_700Bold } from '@expo-google-fonts/poppins';
 
-const Header = () => {
+const Header = ({title}) => {
 
     const [fontsLoaded] = useFonts({
         Poppins_700Bold,
@@ -17,7 +17,7 @@ const Header = () => {
     return (
         <SafeAreaView edges={['right', 'top', 'left']} style={{ backgroundColor: '#2F3855' }}>
             <View style={styles.headerContainer}>
-                <Text style={styles.headerTitle}>Home</Text>
+                <Text style={styles.headerTitle}>{title}</Text>
                 <TouchableOpacity onPress={handleProfilePress}>
                     <Avatar.Text size={40} label="VT" style={styles.avatar} />
                 </TouchableOpacity>
