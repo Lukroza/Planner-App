@@ -10,14 +10,17 @@ const App = () => {
       <View style={styles.container}>
         <Footer />
       </View>
-      </SafeAreaProvider>
+    </SafeAreaProvider>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1, 
-    backgroundColor: '#2F3855', 
+    flex: 1,
+    backgroundColor: '#2F3855',
+  },
+  footerContainer: {
+    flex: 0.1,
   },
 });
 
