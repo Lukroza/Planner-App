@@ -1,80 +1,102 @@
 import React from 'react';
-import { Modal, Text, TouchableHighlight, View, StyleSheet, TouchableWithoutFeedback } from 'react-native';
-import {Dimensions} from 'react-native';
+import { Modal, Text, View, StyleSheet, TouchableOpacity } from 'react-native';
 
 const EventDescription = ({ isVisible, onClose, event }) => {
   return (
     <Modal
-      animationType="slide"
+      animationType="fade"
       transparent={true}
       visible={isVisible}
       onRequestClose={onClose}>
-      <TouchableWithoutFeedback onPress={onClose}>
-        <View style={styles.centeredView}>
-          <View style={styles.modalOverlay}>
-            <TouchableWithoutFeedback>
-              <View style={styles.modalView}>
-                <Text style={styles.modalText}>Event: {event?.name}</Text>
-                <Text style={styles.modalText}>Time: {event?.time}</Text>
-                <TouchableHighlight
-                  style={styles.closeButton}
-                  underlayColor="#E8E8E8"
-                  onPress={onClose}>
-                  <Text style={styles.textStyle}>Hide Modal</Text>
-                </TouchableHighlight>
-              </View>
-            </TouchableWithoutFeedback>
-          </View>
+      <TouchableOpacity style={styles.modalOverlay} onPress={onClose} activeOpacity={1}>
+        <View style={styles.modalContent}>
+          <TouchableOpacity style={styles.closeButton} onPress={onClose}>
+            <Text style={styles.closeButtonText}>×</Text>
+          </TouchableOpacity>
+          <Text style={styles.eventName}>{event?.name}</Text>
+          <Text style={styles.eventTime}>{event?.time}</Text>
+          <Text style={styles.descriptionTitle}>Description</Text>
+          <Text style={styles.descriptionText}>KEBAB TIME (Placeholder text)</Text> 
+          <Text style={styles.attendeesTitle}>Attendees</Text>
+          <Text style={styles.attendeesText}>Lukas, Ignas, Vilius, Jonas (Placeholder text)</Text>
+          <TouchableOpacity style={styles.joinButton} onPress={() => {}}>
+            <Text style={styles.joinButtonText}>Join</Text>
+          </TouchableOpacity>
         </View>
-      </TouchableWithoutFeedback>
+      </TouchableOpacity>
     </Modal>
   );
 };
 
 const styles = StyleSheet.create({
-  centeredView: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
   modalOverlay: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    width: Dimensions.get('window').width,
-    height: Dimensions.get('window').height,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    backgroundColor: 'rgba(0, 0, 0, 0.8)',
   },
-  modalView: {
-    margin: 20,
-    backgroundColor: 'white',
-    borderRadius: 20,
-    padding: 35,
+  modalContent: {
+    width: '80%',
+    backgroundColor: '#17161B',
+    borderRadius: 15,
+    padding: 20,
     alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
     elevation: 5,
   },
   closeButton: {
-    backgroundColor: '#2196F3',
-    borderRadius: 20,
-    padding: 10,
-    elevation: 2,
-    marginTop: 15,
+    alignSelf: 'flex-end',
   },
-  textStyle: {
+  closeButtonText: {
     color: 'white',
+    fontSize: 24,
     fontWeight: 'bold',
-    textAlign: 'center',
   },
-  modalText: {
-    marginBottom: 15,
-    textAlign: 'center',
+  eventName: {
+    color: 'white',
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginVertical: 8,
+  },
+  eventTime: {
+    color: 'white',
+    fontSize: 18,
+    marginBottom: 16,
+  },
+  descriptionTitle: {
+    color: 'white',
+    alignSelf: 'flex-start',
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginBottom: 4,
+  },
+  descriptionText: {
+    color: 'white',
+    alignSelf: 'flex-start',
+    marginBottom: 16,
+  },
+  attendeesTitle: {
+    color: 'white',
+    alignSelf: 'flex-start',
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginBottom: 4,
+  },
+  attendeesText: {
+    color: 'white',
+    alignSelf: 'flex-start',
+    marginBottom: 16,
+  },
+  joinButton: {
+    backgroundColor: '#58a700',
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 20,
+    elevation: 2,
+  },
+  joinButtonText: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight: 'bold',
   },
 });
 
