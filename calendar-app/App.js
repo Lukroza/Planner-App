@@ -3,15 +3,12 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { View, StyleSheet } from 'react-native';
 import Header from './Components/Header'; 
 import Footer from './Components/Footer'; 
-import Calendar from './Components/Calendar';
 
 const App = () => {
   return (
     <SafeAreaProvider>
-      <Header/>
-      <Calendar/>
-      <View style={styles.footerContainer}>
-            <Footer />
+      <View style={styles.container}>
+        <Footer />
       </View>
     </SafeAreaProvider>
   );
