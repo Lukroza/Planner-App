@@ -1,6 +1,12 @@
 import React from 'react';
 import { Modal, Text, View, StyleSheet, TouchableOpacity } from 'react-native';
 
+const CloseButton = ({ onPress }) => (
+  <TouchableOpacity style={styles.closeButton} onPress={onPress}>
+    <Text style={styles.closeButtonText}>×</Text>
+  </TouchableOpacity>
+);
+
 const EventDescription = ({ isVisible, onClose, event }) => {
   return (
     <Modal
@@ -8,17 +14,18 @@ const EventDescription = ({ isVisible, onClose, event }) => {
       transparent={true}
       visible={isVisible}
       onRequestClose={onClose}>
-      <TouchableOpacity style={styles.modalOverlay} onPress={onClose} activeOpacity={1}>
+      <TouchableOpacity
+        style={styles.modalOverlay}
+        onPress={onClose}
+        activeOpacity={1}>
         <View style={styles.modalContent}>
-          <TouchableOpacity style={styles.closeButton} onPress={onClose}>
-            <Text style={styles.closeButtonText}>×</Text>
-          </TouchableOpacity>
+          <CloseButton onPress={onClose} />
           <Text style={styles.eventName}>{event?.name}</Text>
           <Text style={styles.eventTime}>{event?.time}</Text>
           <Text style={styles.descriptionTitle}>Description</Text>
-          <Text style={styles.descriptionText}>KEBAB TIME (Placeholder text)</Text> 
+          <Text style={styles.descriptionText}>{event?.description || "KEBAB TIME (Placeholder text)"}</Text>
           <Text style={styles.attendeesTitle}>Attendees</Text>
-          <Text style={styles.attendeesText}>Lukas, Ignas, Vilius, Jonas (Placeholder text)</Text>
+          <Text style={styles.attendeesText}>{event?.attendees || "Lukas, Ignas, Vilius, Jonas (Placeholder text)"}</Text>
           <TouchableOpacity style={styles.joinButton} onPress={() => {}}>
             <Text style={styles.joinButtonText}>Join</Text>
           </TouchableOpacity>
@@ -45,6 +52,7 @@ const styles = StyleSheet.create({
   },
   closeButton: {
     alignSelf: 'flex-end',
+    padding: 10,
   },
   closeButtonText: {
     color: 'white',

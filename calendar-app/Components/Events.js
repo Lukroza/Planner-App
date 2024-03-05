@@ -1,13 +1,12 @@
 import React, { useState } from 'react';
 import { View, Text, FlatList, TouchableOpacity, StyleSheet, Dimensions } from 'react-native';
-import EventDescription from './EventDescription'; // Assuming this is a React Native modal now
+import EventDescription from './EventDescription';
 
 const Events = ({ events, selectedDate, calendarHeight }) => {
-  const windowHeight = Dimensions.get('window').height;
-  const data = events[selectedDate] ? events[selectedDate].events : [];
-
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState(null);
+
+  const styles = createStyles(calendarHeight);
 
   const handleEventPress = (item) => {
     setSelectedEvent(item);
@@ -15,23 +14,20 @@ const Events = ({ events, selectedDate, calendarHeight }) => {
   };
 
   const renderEvent = ({ item }) => (
-    <TouchableOpacity onPress={() => handleEventPress(item)}>
-      <View style={styles.event}>
-        <Text style={styles.eventText}>{item.name} at {item.time}</Text>
-      </View>
+    <TouchableOpacity onPress={() => handleEventPress(item)} style={styles.event}>
+      <Text style={styles.eventText}>{item.name} at {item.time}</Text>
     </TouchableOpacity>
   );
 
   return (
-    <View>
+    <View style={styles.container}>
       <FlatList
-        data={data}
+        data={events[selectedDate]?.events || []}
         renderItem={renderEvent}
         keyExtractor={(item, index) => item.id || index.toString()}
-        style={[styles.eventsContainer, { maxHeight: windowHeight - calendarHeight - 5 }]}
         ListEmptyComponent={<Text style={styles.noEventsText}>No events</Text>}
       />
-      {selectedEvent && (
+      {isModalVisible && (
         <EventDescription 
           isVisible={isModalVisible} 
           event={selectedEvent} 
@@ -42,15 +38,19 @@ const Events = ({ events, selectedDate, calendarHeight }) => {
   );
 };
 
-const styles = StyleSheet.create({
+const createStyles = (calendarHeight) => StyleSheet.create({
+  container: {
+    flex: 1,
+  },
   eventsContainer: {
+    maxHeight: Dimensions.get('window').height - calendarHeight - 5,
     backgroundColor: '#f0f0f0',
     padding: 10,
   },
   event: {
     backgroundColor: 'white',
     padding: 10,
-    marginTop: 5,
+    marginVertical: 5,
     borderRadius: 5,
     borderWidth: 1,
     borderColor: '#ddd',
