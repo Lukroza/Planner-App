@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { View, StyleSheet, TextInput, Text, Button, ScrollView } from 'react-native';
+import { View, StyleSheet, TextInput, Text, Button, ScrollView, KeyboardAvoidingView } from 'react-native';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import Header from './Header';
 import Calendar from './Calendar';
@@ -12,6 +12,7 @@ function CreateEvent() {
     const [isFromPickerVisible, setFromPickerVisibility] = React.useState(false);
     const [isToPickerVisible, setToPickerVisibility] = React.useState(false);
     const [description, setDescription] = React.useState('');
+    const [selectedDate, setSelectedDate] = React.useState(new Date());
 
     const showFromPicker = () => {
         setFromPickerVisibility(true);
@@ -19,11 +20,6 @@ function CreateEvent() {
 
     const hideFromPicker = () => {
         setFromPickerVisibility(false);
-    };
-
-    const handleFromConfirm = (date) => {
-        setFromTime(date);
-        hideFromPicker();
     };
 
     const showToPicker = () => {
@@ -34,10 +30,27 @@ function CreateEvent() {
         setToPickerVisibility(false);
     };
 
+    const handleFromConfirm = (date) => {
+        setFromTime(date);
+        hideFromPicker();
+    };
+    
     const handleToConfirm = (date) => {
         setToTime(date);
         hideToPicker();
     };
+    
+    const formatTime = (date) => {
+        let hours = date.getUTCHours() + 2;
+        const minutes = date.getUTCMinutes();
+        if (hours >= 24) {
+            hours -= 24;
+        }
+        return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
+    };
+    
+    const fromTimeString = formatTime(fromTime);
+    const toTimeString = formatTime(toTime);
 
     const handleCancel = () => {
         setName('');
@@ -48,14 +61,20 @@ function CreateEvent() {
         setDescription('');
     };
 
+    const handleDateChange = (date) => {
+        setSelectedDate(date);
+    }
+
     const handleCreate = async () => {
         const eventData = {
-            name,
-            fromTime,
-            toTime,
-            description,
+            name: name,
+            date: selectedDate,
+            fromTime: fromTimeString,
+            toTime: toTimeString,
+            description: description,
         };
-
+        
+        console.log(eventData);
     };
 
     return (
@@ -70,23 +89,25 @@ function CreateEvent() {
                         onChangeText={setName}
                     />
                 </View>
-                <Calendar showEvents={false} />
+                <Calendar showEvents={false} onDayPress={day => handleDateChange(day)}/>
                 <View style={styles.timeContainer}>
                     <Text style={styles.fromToLabel}>From</Text>
-                    <Button title="Select Time" onPress={showFromPicker} />
+                    <Button title={fromTimeString} onPress={showFromPicker} />
                     <DateTimePickerModal
                         isVisible={isFromPickerVisible}
                         mode="time"
                         onConfirm={handleFromConfirm}
                         onCancel={hideFromPicker}
+                        date = {fromTime}                      
                     />
                     <Text style={styles.fromToLabel}>To</Text>
-                    <Button title="Select Time" onPress={showToPicker} />
+                    <Button title={toTimeString} onPress={showToPicker} />
                     <DateTimePickerModal
                         isVisible={isToPickerVisible}
                         mode="time"
                         onConfirm={handleToConfirm}
                         onCancel={hideToPicker}
+                        date = {toTime}    
                     />
                 </View>
                 <View style={styles.descriptionContainer}>
