@@ -21,6 +21,14 @@ dependencies {
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	implementation ("org.springframework.boot:spring-boot-starter-data-jpa")
 	implementation ("org.postgresql:postgresql")
+
+	implementation("org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.3")
+	testImplementation("org.springframework.boot:spring-boot-starter-test")
+	testImplementation("org.mybatis.spring.boot:mybatis-spring-boot-starter-test:3.0.3")
+
+	annotationProcessor("org.projectlombok:lombok")
+	compileOnly("org.projectlombok:lombok")
+
 }
 
 tasks.withType<Test> {
