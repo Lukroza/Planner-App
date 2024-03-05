@@ -70,7 +70,7 @@ function CreateEvent() {
                         onChangeText={setName}
                     />
                 </View>
-                <Calendar />
+                <Calendar showEvents={false} />
                 <View style={styles.timeContainer}>
                     <Text style={styles.fromToLabel}>From</Text>
                     <Button title="Select Time" onPress={showFromPicker} />

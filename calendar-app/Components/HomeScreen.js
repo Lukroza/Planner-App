@@ -1,16 +1,22 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import Header from './Header';
-import Footer from './Footer';
+import Calendar from './Calendar';
 
 const HomeScreen = () => {
   return (
-    <View>
+    <View style={styles.view}>
       <Header title={"Home"} />
-      <Text>Welcome to the Home Screen!</Text>
+      <Calendar showEvents={true}/>
     </View>
   );
 };
 
+const styles = StyleSheet.create({
+  view: {
+      flex: 1,
+      backgroundColor: '#2F3855',
+  },
+});
 
 export default HomeScreen;
