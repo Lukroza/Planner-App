@@ -9,7 +9,7 @@ interface IEvent {
     attendees?: string;
 }
 
-async function createEventApi(props : IEvent) {
+export async function createEventApi(props : IEvent) {
     try {
         const response = await fetch(backendURL + "/event/insert", {
             method: 'POST',
@@ -23,7 +23,12 @@ async function createEventApi(props : IEvent) {
             throw new Error('Failed to create event');
         }
 
-        const data = await response.json();
+        const text = await response.text();
+        if (!text) {
+            return null;
+        }
+
+        const data = JSON.parse(text);
         return data;
     } catch (error) {
         console.error(error);
