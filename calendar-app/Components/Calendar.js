@@ -3,11 +3,11 @@ import { View, StyleSheet } from 'react-native';
 import { Calendar } from 'react-native-calendars';
 import Events from './Events';
 
-const App = ({ showEvents }) => {
+const App = ({ showEvents , onDayPress}) => {
   const [selected, setSelected] = useState('');
   const [calendarHeight, setCalendarHeight] = useState(350);
   const [events, setEvents] = useState({
-    '2024-03-20': { events: [{ name: 'Event 11', time: '10:00 AM' }, { name: 'Event 12', time: '02:00 PM' }, { name: 'Event 11', time: '10:00 AM' }, { name: 'Event 12', time: '02:00 PM' }, { name: 'Event 11', time: '10:00 AM' }, { name: 'Event 12', time: '02:00 PM' }, { name: 'Event 11', time: '10:00 AM' }, { name: 'Event 12', time: '02:00 PM' }]  },
+    '2024-03-20': { events: [{ name: 'Event 11', time: '10:00 AM' }, { name: 'Event 12', time: '02:00 PM' }, { name: 'Event 11', time: '10:00 AM' }, { name: 'Event 12', time: '02:00 PM' }, { name: 'Event 11', time: '10:00 AM' }, { name: 'Event 12', time: '02:00 PM' }, { name: 'Event 11', time: '10:00 AM' }, { name: 'Event 12', time: '02:00 PM' }, { name: 'Event 11', time: '10:00 AM' }, { name: 'Event 12', time: '02:00 PM' }, { name: 'Event 11', time: '10:00 AM' }, { name: 'Event 12', time: '02:00 PM' }, { name: 'Event 11', time: '10:00 AM' }, { name: 'Event 12', time: '02:00 PM' }, { name: 'Event 11', time: '10:00 AM' }, { name: 'Event 12', time: '02:00 PM' }]  },
     '2024-03-22': { events: [{ name: 'Event 3', time: '12:00 PM' }, { name: 'Event 4', time: '04:00 PM' }] },
   });
 
@@ -35,6 +35,10 @@ const App = ({ showEvents }) => {
         <Calendar
           onDayPress={day => {
             setSelected(day.dateString);
+            if(onDayPress)
+            {
+              onDayPress(day.dateString);
+            }
           }}
           markedDates={computeMarkedDates()}
         />
