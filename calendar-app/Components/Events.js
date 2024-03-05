@@ -1,24 +1,44 @@
-import React from 'react';
-import { View, Text, FlatList, StyleSheet, Dimensions } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, FlatList, TouchableOpacity, StyleSheet, Dimensions } from 'react-native';
+import EventDescription from './EventDescription'; // Assuming this is a React Native modal now
 
 const Events = ({ events, selectedDate, calendarHeight }) => {
   const windowHeight = Dimensions.get('window').height;
   const data = events[selectedDate] ? events[selectedDate].events : [];
 
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [selectedEvent, setSelectedEvent] = useState(null);
+
+  const handleEventPress = (item) => {
+    setSelectedEvent(item);
+    setIsModalVisible(true);
+  };
+
   const renderEvent = ({ item }) => (
-    <View style={styles.event}>
-      <Text style={styles.eventText}>{item.name} at {item.time}</Text>
-    </View>
+    <TouchableOpacity onPress={() => handleEventPress(item)}>
+      <View style={styles.event}>
+        <Text style={styles.eventText}>{item.name} at {item.time}</Text>
+      </View>
+    </TouchableOpacity>
   );
 
   return (
-    <FlatList
-      data={data}
-      renderItem={renderEvent}
-      keyExtractor={(item, index) => item.id || index.toString()}
-      style={[styles.eventsContainer, { maxHeight: windowHeight - calendarHeight - 5 }]}
-      ListEmptyComponent={<Text style={styles.noEventsText}>No events</Text>}
-    />
+    <View>
+      <FlatList
+        data={data}
+        renderItem={renderEvent}
+        keyExtractor={(item, index) => item.id || index.toString()}
+        style={[styles.eventsContainer, { maxHeight: windowHeight - calendarHeight - 5 }]}
+        ListEmptyComponent={<Text style={styles.noEventsText}>No events</Text>}
+      />
+      {selectedEvent && (
+        <EventDescription 
+          isVisible={isModalVisible} 
+          event={selectedEvent} 
+          onClose={() => setIsModalVisible(false)}
+        />
+      )}
+    </View>
   );
 };
 
