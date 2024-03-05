@@ -75,7 +75,7 @@ function CreateEvent() {
             to: toTimeString,
             description: description,
         };
-        createEventApi(eventData).then(data => console.log(SuccessAction));
+        createEventApi(eventData);
     };
 
     return (
