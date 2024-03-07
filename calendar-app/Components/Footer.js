@@ -7,8 +7,6 @@ import GroupScreen from './GroupScreen';
 import HomeScreen from './HomeScreen';
 import CreateEventScreen from './CreateEventScreen';
 
-
-
 const HomeRoute = () => <HomeScreen/>;
 
 const PlusRoute = () => <CreateEventScreen/>;
