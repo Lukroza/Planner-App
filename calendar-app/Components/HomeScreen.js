@@ -3,8 +3,6 @@ import { View, TouchableOpacity, Text, StyleSheet } from 'react-native';
 import Header from './Header';
 import Calendar from './Calendar';
 import { GlobalColor, GlobalSecondaryColor, GlobalFont } from '../Styles';
-import * as Font from 'expo-font';
-
 
 const HomeScreen = () => {
   return (
