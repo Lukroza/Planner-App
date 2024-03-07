@@ -58,8 +58,10 @@ const createStyles = (calendarHeight) => StyleSheet.create({
   },
   eventText: {
     color: 'black',
+    fontFamily: GlobalFont,
   },
   noEventsText: {
+    fontFamily: GlobalFont,
     textAlign: 'center',
     color: '#999',
     marginTop: 20,

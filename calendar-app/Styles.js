@@ -4,4 +4,4 @@ export const GlobalColor = '#2F3855';
 
 export const GlobalSecondaryColor = '#24293D';
 
-export const GlobalFont = 'Sans-serif';
+export const GlobalFont = 'monospace';

@@ -157,7 +157,7 @@ const styles = StyleSheet.create({
         color: 'white',
         placeholderTextColor: '#9CA3AF',
         width: '90%',
-        fontFamily: 'System',
+        fontFamily: GlobalFont,
         fontSize: 18,
     },
     timeContainer: {
@@ -167,6 +167,7 @@ const styles = StyleSheet.create({
         padding: 20,
     },
     label: {
+        fontFamily: GlobalFont,
         color: 'white',
         fontSize: 20,
         fontWeight: 'bold',
@@ -174,6 +175,7 @@ const styles = StyleSheet.create({
         marginLeft: '5%',
     },
     fromToLabel: {
+        fontFamily: GlobalFont,
         color: 'white',
         fontSize: 20,
         fontWeight: 'bold',
@@ -192,7 +194,7 @@ const styles = StyleSheet.create({
         padding: 10,
         color: 'white',
         width: '90%',
-        fontFamily: 'System',
+        fontFamily: GlobalFont,
         fontSize: 18,
         textAlignVertical: 'top',
     },
@@ -206,6 +208,7 @@ const styles = StyleSheet.create({
         
     },
     button: {
+        fontFamily: GlobalFont,
         color: 'white',
         fontSize: 20,
         fontWeight: 'bold',
