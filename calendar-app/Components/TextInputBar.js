@@ -1,14 +1,11 @@
 import * as React from 'react';
 import { TextInput } from 'react-native-paper';
 
-const TextInputBar = ({label}) => {
-  const [text, setText] = React.useState("");
-
+const TextInputBar = ({ label, onChangeText }) => {
   return (
     <TextInput
       label={label}
-      value={text}
-      onChangeText={text => setText(text)}
+      onChangeText={onChangeText}
     />
   );
 };
