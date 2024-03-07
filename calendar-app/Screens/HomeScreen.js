@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import Header from './Header';
-import Calendar from './Calendar';
+import Header from '../Components/Header';
+import Calendar from '../Components/Calendar';
 
 const HomeScreen = () => {
   return (

@@ -2,9 +2,9 @@ import * as React from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { View, StyleSheet, TextInput, Text, Button, ScrollView, KeyboardAvoidingView } from 'react-native';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
-import Header from './Header';
-import Calendar from './Calendar';
-import {createEventApi} from './API/Events/EventCreator';
+import Header from '../Components/Header';
+import Calendar from '../Components/Calendar';
+import {createEventApi} from '../Components/API/Events/EventCreator';
 
 function CreateEvent() {
     const [name, setName] = React.useState('');
