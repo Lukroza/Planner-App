@@ -1,6 +1,7 @@
 import { View, Text, StyleSheet } from 'react-native';
 import React, { useLayoutEffect } from 'react';
-import Header from './Header';
+import Header from '../Components/Header';
+import TextInputBar from '../Components/TextInputBar';
 
 const GroupScreen = () => {
   return (
