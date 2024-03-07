@@ -4,6 +4,7 @@ import com.PlannerApp.PlannerApp.Entities.UserEntity;
 import com.PlannerApp.PlannerApp.Repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
@@ -12,16 +13,16 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @Slf4j
 public class UserService {
-
+    @Autowired
     private final UserRepository userRepository;
 
-    public void registerUser(String username) {
+    public void insertUser(String username) {
         UUID userID = UUID.randomUUID();
         UserEntity userEntity = UserEntity.builder()
-                .user_id(userID) // Assuming the database user_id column is VARCHAR to store UUID as string.
+                .id(userID)
                 .username(username)
                 .build();
 
-        userRepository.registerUser(userEntity);
+        userRepository.insertUser(userEntity);
     }
 }

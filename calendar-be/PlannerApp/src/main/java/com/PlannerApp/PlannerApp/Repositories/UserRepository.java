@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 @Mapper
 public interface UserRepository {
 
-    @Insert("INSERT INTO user (user_id, username) " +
-            "VALUES (#{user.user_id}, #{user.username})")
-    void registerUser(@Param("user") UserEntity user);
+    @Insert("INSERT INTO users (id, username) " +
+            "VALUES (#{user.id}, #{user.username})")
+    void insertUser(@Param("user") UserEntity user);
 }
