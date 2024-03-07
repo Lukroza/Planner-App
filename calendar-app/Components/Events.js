@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, FlatList, TouchableOpacity, StyleSheet, Dimensions } from 'react-native';
 import EventDescription from './EventDescription';
+import { GlobalColor, GlobalSecondaryColor,GlobalFont } from '../Styles';
 
 const Events = ({ events, selectedDate, calendarHeight }) => {
   const [isModalVisible, setIsModalVisible] = useState(false);

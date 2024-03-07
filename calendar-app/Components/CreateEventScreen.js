@@ -5,6 +5,7 @@ import DateTimePickerModal from "react-native-modal-datetime-picker";
 import Header from './Header';
 import Calendar from './Calendar';
 import {createEventApi} from './API/Events/EventCreator';
+import { GlobalColor, GlobalSecondaryColor, GlobalFont } from '../Styles';
 
 function CreateEvent() {
     const [name, setName] = React.useState('');
@@ -136,13 +137,13 @@ function CreateEvent() {
 const styles = StyleSheet.create({
     safeArea: {
         flex: 1,
-        backgroundColor: '#2F3855',
+        backgroundColor: GlobalColor,
     },
     scrollView: {
         flex: 1,
     },
     eventInputContainer: {
-        backgroundColor: '#2F3855',
+        backgroundColor: GlobalColor,
         alignItems: 'center',
         justifyContent: 'center',
         padding: 20,

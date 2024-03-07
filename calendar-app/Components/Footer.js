@@ -6,8 +6,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import GroupScreen from './GroupScreen';
 import HomeScreen from './HomeScreen';
 import CreateEventScreen from './CreateEventScreen';
-
-
+import { GlobalColor, GlobalSecondaryColor, GlobalFont } from '../Styles';
 
 const HomeRoute = () => <HomeScreen/>;
 
@@ -38,7 +37,7 @@ const Footer = () => {
 
   return (
     <BottomNavigation
-      barStyle={{height: 75, backgroundColor: '#24293D'}}
+      barStyle={{height: 75, backgroundColor: GlobalSecondaryColor}}
       navigationState={{ index, routes }}
       onIndexChange={setIndex}
       renderScene={renderScene}
