@@ -3,18 +3,11 @@ import * as React from 'react';
 import { View, StyleSheet, TouchableOpacity } from "react-native";
 import { BottomNavigation, Text } from 'react-native-paper';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-<<<<<<< HEAD
 import GroupScreen from '../Screens/GroupScreen';
 import HomeScreen from '../Screens/HomeScreen';
 import CreateEventScreen from '../Screens/CreateEventScreen';
 
 
-=======
-import GroupScreen from './GroupScreen';
-import HomeScreen from './HomeScreen';
-import CreateEventScreen from './CreateEventScreen';
-import { GlobalColor, GlobalSecondaryColor, GlobalFont } from '../Styles';
->>>>>>> main
 
 const HomeRoute = () => <HomeScreen/>;
 
@@ -45,7 +38,7 @@ const Footer = () => {
 
   return (
     <BottomNavigation
-      barStyle={{height: 75, backgroundColor: GlobalSecondaryColor}}
+      barStyle={{height: 75, backgroundColor: '#24293D'}}
       navigationState={{ index, routes }}
       onIndexChange={setIndex}
       renderScene={renderScene}
