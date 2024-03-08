@@ -1,4 +1,3 @@
-
 import * as React from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { View, StyleSheet, TextInput, Text, Button, ScrollView, KeyboardAvoidingView } from 'react-native';
@@ -6,7 +5,7 @@ import DateTimePickerModal from "react-native-modal-datetime-picker";
 import Header from '../Components/Header';
 import Calendar from '../Components/Calendar';
 import {createEventApi} from '../Components/API/Events/EventCreator';
-import { GlobalFont } from '../Styles';
+import { GlobalColor, GlobalFont } from '../Styles';
 
 function CreateEvent() {
     const [name, setName] = React.useState('');
@@ -138,13 +137,13 @@ function CreateEvent() {
 const styles = StyleSheet.create({
     safeArea: {
         flex: 1,
-        backgroundColor: '#2F3855',
+        backgroundColor: GlobalColor,
     },
     scrollView: {
         flex: 1,
     },
     eventInputContainer: {
-        backgroundColor: '#2F3855',
+        backgroundColor: GlobalColor,
         alignItems: 'center',
         justifyContent: 'center',
         padding: 20,
@@ -169,6 +168,7 @@ const styles = StyleSheet.create({
         padding: 20,
     },
     label: {
+        fontFamily: GlobalFont, 
         color: 'white',
         fontSize: 20,
         fontWeight: 'bold',
@@ -176,12 +176,14 @@ const styles = StyleSheet.create({
         marginLeft: '5%',
     },
     fromToLabel: {
+        fontFamily: GlobalFont, 
         color: 'white',
         fontSize: 20,
         fontWeight: 'bold',
         padding: 10,
     },
     descriptionContainer: {
+        fontFamily: GlobalFont,
         alignItems: 'center',
         justifyContent: 'center',
         padding: 20,
@@ -194,7 +196,7 @@ const styles = StyleSheet.create({
         padding: 10,
         color: 'white',
         width: '90%',
-        fontFamily: 'System',
+        fontFamily: GlobalFont, 
         fontSize: 18,
         textAlignVertical: 'top',
     },

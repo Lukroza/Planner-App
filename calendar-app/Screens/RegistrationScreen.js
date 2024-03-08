@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, Keyboard, TouchableWithoutFeedback } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import TextInputBar from '../Components/TextInputBar';
 import ButtonComp from '../Components/ButtonComp';
 import { createUserApi } from '../Components/API/Users/UserRegister';
 import { storeUserInfo } from '../Components/Storage/userDataStorage';
+import { GlobalColor } from '../Styles';
 
 const RegistrationScreen = (props) => {
   const [username, setUsername] = useState('');
@@ -22,6 +23,7 @@ const RegistrationScreen = (props) => {
   };
 
   return (
+    <TouchableWithoutFeedback onPress={ () => { Keyboard.dismiss() } }>
     <SafeAreaProvider>
       <View style={styles.container}>
         <TextInputBar 
@@ -31,14 +33,17 @@ const RegistrationScreen = (props) => {
         <ButtonComp text="Register" onPress={handleRegistration} />
       </View>
     </SafeAreaProvider>
+    </TouchableWithoutFeedback>
   );
 };
 
-//Made this styles temporary, to test it in the iOs.
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center', 
+    alignItems: 'center',
+    backgroundColor: GlobalColor,
+    gap: 20,
   },
 });
 
