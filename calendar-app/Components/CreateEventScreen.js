@@ -5,6 +5,7 @@ import DateTimePickerModal from "react-native-modal-datetime-picker";
 import Header from './Header';
 import Calendar from './Calendar';
 import {createEventApi} from './API/Events/EventCreator';
+import { GlobalColor, GlobalSecondaryColor, GlobalFont } from '../Styles';
 
 function CreateEvent() {
     const [name, setName] = React.useState('');
@@ -136,13 +137,13 @@ function CreateEvent() {
 const styles = StyleSheet.create({
     safeArea: {
         flex: 1,
-        backgroundColor: '#2F3855',
+        backgroundColor: GlobalColor,
     },
     scrollView: {
         flex: 1,
     },
     eventInputContainer: {
-        backgroundColor: '#2F3855',
+        backgroundColor: GlobalColor,
         alignItems: 'center',
         justifyContent: 'center',
         padding: 20,
@@ -156,7 +157,7 @@ const styles = StyleSheet.create({
         color: 'white',
         placeholderTextColor: '#9CA3AF',
         width: '90%',
-        fontFamily: 'System',
+        fontFamily: GlobalFont,
         fontSize: 18,
     },
     timeContainer: {
@@ -166,6 +167,7 @@ const styles = StyleSheet.create({
         padding: 20,
     },
     label: {
+        fontFamily: GlobalFont,
         color: 'white',
         fontSize: 20,
         fontWeight: 'bold',
@@ -173,6 +175,7 @@ const styles = StyleSheet.create({
         marginLeft: '5%',
     },
     fromToLabel: {
+        fontFamily: GlobalFont,
         color: 'white',
         fontSize: 20,
         fontWeight: 'bold',
@@ -191,7 +194,7 @@ const styles = StyleSheet.create({
         padding: 10,
         color: 'white',
         width: '90%',
-        fontFamily: 'System',
+        fontFamily: GlobalFont,
         fontSize: 18,
         textAlignVertical: 'top',
     },
@@ -205,6 +208,7 @@ const styles = StyleSheet.create({
         
     },
     button: {
+        fontFamily: GlobalFont,
         color: 'white',
         fontSize: 20,
         fontWeight: 'bold',
