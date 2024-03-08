@@ -1,13 +1,14 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
-import Header from '../Components/Header';
-import Calendar from '../Components/Calendar';
+import { View, TouchableOpacity, Text, StyleSheet } from 'react-native';
+import Header from './Header';
+import Calendar from './Calendar';
+import { GlobalColor, GlobalSecondaryColor, GlobalFont } from '../Styles';
 
 const HomeScreen = () => {
   return (
     <View style={styles.view}>
       <Header title={"Home"} />
-      <Calendar showEvents={true}/>
+      <Calendar showEvents={true} onDayPress={null}/>
     </View>
   );
 };
@@ -15,7 +16,7 @@ const HomeScreen = () => {
 const styles = StyleSheet.create({
   view: {
       flex: 1,
-      backgroundColor: '#2F3855',
+      backgroundColor: GlobalColor,
   },
 });
 

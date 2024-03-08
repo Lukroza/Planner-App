@@ -3,6 +3,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { View, StyleSheet } from 'react-native';
 import Header from './Components/Header'; 
 import Footer from './Components/Footer'; 
+import { GlobalColor, GlobalSecondaryColor, GlobalFont } from './Styles';
 
 const App = () => {
   return (
@@ -17,7 +18,7 @@ const App = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#2F3855',
+    backgroundColor: GlobalColor,
   },
   footerContainer: {
     flex: 0.1,

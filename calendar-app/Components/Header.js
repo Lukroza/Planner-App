@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { Avatar } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useFonts, Poppins_700Bold } from '@expo-google-fonts/poppins';
+import { GlobalColor, GlobalSecondaryColor, GlobalFont } from '../Styles';
 
 const Header = ({title}) => {
 
@@ -14,17 +15,22 @@ const Header = ({title}) => {
         console.log('Profile icon pressed');
     };
 
-    return (
-        <SafeAreaView edges={['right', 'top', 'left']} style={{ backgroundColor: '#2F3855' }}>
-            <View style={styles.headerContainer}>
-                <Text style={styles.headerTitle}>{title}</Text>
-                <TouchableOpacity onPress={handleProfilePress}>
-                    <Avatar.Text size={40} label="VT" style={styles.avatar} />
-                </TouchableOpacity>
-            </View>
-            <View style={styles.line} />
-        </SafeAreaView>
-    );
+    if (!fontsLoaded) {
+
+    } else {
+      return (
+          <SafeAreaView edges={['right', 'top', 'left']} style={{ backgroundColor: GlobalColor }}>
+              <View style={styles.headerContainer}>
+                  <Text style={styles.headerTitle}>{title}</Text>
+                  <TouchableOpacity onPress={handleProfilePress}>
+                      <Avatar.Text size={40} label="VT" style={styles.avatar} />
+                  </TouchableOpacity>
+              </View>
+              <View style={styles.line} />
+          </SafeAreaView>
+      );
+  }
+
 };
 
 const styles = StyleSheet.create({
@@ -32,13 +38,13 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        backgroundColor: '#2F3855',
+        backgroundColor: GlobalColor,
         marginTop: 10,
         paddingHorizontal: 30,
         paddingVertical: 10,
     },
     headerTitle: {
-        fontFamily: 'Poppins_700Bold', 
+        fontFamily: GlobalFont, 
         fontSize: 32,
         color: '#F4F4FC',
     },
