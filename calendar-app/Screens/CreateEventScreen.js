@@ -1,3 +1,4 @@
+
 import * as React from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { View, StyleSheet, TextInput, Text, Button, ScrollView, KeyboardAvoidingView } from 'react-native';
@@ -168,7 +169,6 @@ const styles = StyleSheet.create({
         padding: 20,
     },
     label: {
-        fontFamily: GlobalFont,
         color: 'white',
         fontSize: 20,
         fontWeight: 'bold',
@@ -176,7 +176,6 @@ const styles = StyleSheet.create({
         marginLeft: '5%',
     },
     fromToLabel: {
-        fontFamily: GlobalFont,
         color: 'white',
         fontSize: 20,
         fontWeight: 'bold',
@@ -195,7 +194,7 @@ const styles = StyleSheet.create({
         padding: 10,
         color: 'white',
         width: '90%',
-        fontFamily: GlobalFont,
+        fontFamily: 'System',
         fontSize: 18,
         textAlignVertical: 'top',
     },

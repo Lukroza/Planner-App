@@ -1,15 +1,28 @@
 import * as React from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { View, StyleSheet } from 'react-native';
-import Header from './Components/Header'; 
-import Footer from './Components/Footer'; 
-import RegistrationScreen from './Screens/RegistrationScreen';
 import { GlobalColor, GlobalSecondaryColor, GlobalFont } from './Styles';
+import RegistrationScreen from './Screens/RegistrationScreen';
+import { useState } from 'react';
+import Footer from './Components/Footer';
+
 
 const App = () => {
+  const [refreshKey, setRefreshKey] = useState(0);
+  const [isRegistered, setIsRegistered] = useState(false);
+  
+  const handleRefresh = () => {
+    setRefreshKey(oldKey => oldKey + 1);
+    setIsRegistered(true);
+  };
+  
   return (
     <SafeAreaProvider>
-      <RegistrationScreen />
+      {isRegistered ? (
+        <Footer /> // Render Footer if isRegistered is true
+      ) : (
+        <RegistrationScreen key={refreshKey} onRefresh={handleRefresh} /> // Render RegistrationScreen if isRegistered is false
+      )}
     </SafeAreaProvider>
   );
 };

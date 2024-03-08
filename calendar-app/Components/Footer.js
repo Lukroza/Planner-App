@@ -37,7 +37,7 @@ const Footer = () => {
 
   return (
     <BottomNavigation
-      barStyle={{height: 75, backgroundColor: GlobalSecondaryColor}}
+      barStyle={{height: 75, backgroundColor: '#24293D'}}
       navigationState={{ index, routes }}
       onIndexChange={setIndex}
       renderScene={renderScene}
