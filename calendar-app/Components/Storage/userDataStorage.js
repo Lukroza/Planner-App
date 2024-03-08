@@ -1,6 +1,5 @@
 import * as SecureStore from 'expo-secure-store';
 
-// Function to store the user ID and inGroup status
 export async function storeUserInfo(userId, inGroup) {
   try {
     await SecureStore.setItemAsync('userId', userId.toString());
@@ -10,7 +9,6 @@ export async function storeUserInfo(userId, inGroup) {
   }
 }
 
-// Function to retrieve the user ID
 export async function getUserId() {
   try {
     const userId = await SecureStore.getItemAsync('userId');
@@ -20,7 +18,6 @@ export async function getUserId() {
   }
 }
 
-// Function to retrieve the inGroup status
 export async function getInGroupStatus() {
   try {
     const inGroup = await SecureStore.getItemAsync('inGroup');
