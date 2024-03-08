@@ -1,5 +1,6 @@
 import React from 'react';
 import { Modal, Text, View, StyleSheet, TouchableOpacity } from 'react-native';
+import { GlobalFont } from '../Styles';
 
 const CloseButton = ({ onPress }) => (
   <TouchableOpacity style={styles.closeButton} onPress={onPress}>
@@ -60,17 +61,20 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   eventName: {
+    fontFamily: GlobalFont,
     color: 'white',
     fontSize: 20,
     fontWeight: 'bold',
     marginVertical: 8,
   },
   eventTime: {
+    fontFamily: GlobalFont,
     color: 'white',
     fontSize: 18,
     marginBottom: 16,
   },
   descriptionTitle: {
+    fontFamily: GlobalFont,
     color: 'white',
     alignSelf: 'flex-start',
     fontSize: 16,
@@ -78,11 +82,13 @@ const styles = StyleSheet.create({
     marginBottom: 4,
   },
   descriptionText: {
+    fontFamily: GlobalFont,
     color: 'white',
     alignSelf: 'flex-start',
     marginBottom: 16,
   },
   attendeesTitle: {
+    fontFamily: GlobalFont,
     color: 'white',
     alignSelf: 'flex-start',
     fontSize: 16,
@@ -90,6 +96,7 @@ const styles = StyleSheet.create({
     marginBottom: 4,
   },
   attendeesText: {
+    fontFamily: GlobalFont,
     color: 'white',
     alignSelf: 'flex-start',
     marginBottom: 16,
@@ -102,6 +109,7 @@ const styles = StyleSheet.create({
     elevation: 2,
   },
   joinButtonText: {
+    fontFamily: GlobalFont,
     color: 'white',
     fontSize: 16,
     fontWeight: 'bold',
