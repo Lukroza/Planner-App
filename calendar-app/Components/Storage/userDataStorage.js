@@ -1,51 +1,31 @@
-import { useEffect, useState } from 'react';
-import store from 'react-native-simple-store';
+import * as SecureStore from 'expo-secure-store';
 
-export const useUserSettings = (userIDKey, inGroupKey) => {
-  const [settings, setSettings] = useState({ userID: null, inGroup: null, isLoaded: false });
+// Function to store the user ID and inGroup status
+export async function storeUserInfo(userId, inGroup) {
+  try {
+    await SecureStore.setItemAsync('userId', userId.toString());
+    await SecureStore.setItemAsync('inGroup', JSON.stringify(inGroup));
+  } catch (error) {
+    console.error('Error storing the user info', error);
+  }
+}
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const [storedUserID, storedInGroup] = await Promise.all([
-          store.get(userIDKey),
-          store.get(inGroupKey),
-        ]);
+// Function to retrieve the user ID
+export async function getUserId() {
+  try {
+    const userId = await SecureStore.getItemAsync('userId');
+    return userId;
+  } catch (error) {
+    console.error('Error retrieving the user ID', error);
+  }
+}
 
-        setSettings((prevState) => ({
-          ...prevState,
-          userID: storedUserID !== null ? parseFloat(storedUserID) : null,
-          inGroup: storedInGroup !== null ? storedInGroup : null,
-          isLoaded: true,
-        }));
-      } catch (error) {
-        logError('fetching user settings from store', error);
-      }
-    };
-
-    fetchData();
-  }, [userIDKey, inGroupKey]);
-
-  const logError = (action, error) => {
-    console.error(`Error ${action}:`, error);
-  };
-
-  const saveSetting = async (key, value, setter) => {
-    try {
-      await store.save(key, typeof value === 'number' ? value.toString() : value);
-      setter(value);
-    } catch (error) {
-      logError(`saving ${key} to store`, error);
-    }
-  };
-
-  const saveUserID = (newUserID) => {
-    saveSetting(userIDKey, newUserID, (val) => setSettings((prevState) => ({ ...prevState, userID: val })));
-  };
-
-  const saveInGroup = (newInGroup) => {
-    saveSetting(inGroupKey, newInGroup, (val) => setSettings((prevState) => ({ ...prevState, inGroup: val })));
-  };
-
-  return { ...settings, saveUserID, saveInGroup };
-};
+// Function to retrieve the inGroup status
+export async function getInGroupStatus() {
+  try {
+    const inGroup = await SecureStore.getItemAsync('inGroup');
+    return JSON.parse(inGroup);
+  } catch (error) {
+    console.error('Error retrieving the inGroup status', error);
+  }
+}
