@@ -14,10 +14,9 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @Slf4j
 public class UserService {
-    @Autowired
     private final UserRepository userRepository;
 
-    public void insertUser(String username) {
+    public UUID insertUser(String username) {
         UUID userID = UUID.randomUUID();
         UserEntity userEntity = UserEntity.builder()
                 .id(userID)
@@ -25,10 +24,6 @@ public class UserService {
                 .build();
 
         userRepository.insertUser(userEntity);
-    }
-
-    public UUID getUserIDByUsername(String username) {
-        Optional<UserEntity> user = userRepository.findByUsername(username);
-        return user.map(UserEntity::getId).orElse(null);
+        return userID;
     }
 }

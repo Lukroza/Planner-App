@@ -16,8 +16,4 @@ public interface UserRepository {
     @Insert("INSERT INTO users (id, username) " +
             "VALUES (#{user.id}, #{user.username})")
     void insertUser(@Param("user") UserEntity user);
-
-    @Select("SELECT id, username FROM users WHERE username = #{username}")
-    Optional<UserEntity> findByUsername(@Param("username") String username);
-
 }

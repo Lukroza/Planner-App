@@ -19,13 +19,7 @@ public class UserController {
 
     @PostMapping("/insert")
     @ResponseStatus(HttpStatus.CREATED)
-    public void insertUser(@RequestBody User user){
-        userService.insertUser(user.getUsername());
-    }
-
-    @GetMapping("/get/{username}")
-    public UUID getUserIDByUsername(@PathVariable String username){
-        System.out.println(username);
-        return userService.getUserIDByUsername(username);
+    public UUID insertUser(@RequestBody User user) {
+        return userService.insertUser(user.getUsername());
     }
 }
