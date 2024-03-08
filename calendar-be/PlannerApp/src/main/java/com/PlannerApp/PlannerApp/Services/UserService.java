@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import java.util.Optional;
 
 import java.util.UUID;
 
@@ -13,10 +14,9 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @Slf4j
 public class UserService {
-    @Autowired
     private final UserRepository userRepository;
 
-    public void insertUser(String username) {
+    public UUID insertUser(String username) {
         UUID userID = UUID.randomUUID();
         UserEntity userEntity = UserEntity.builder()
                 .id(userID)
@@ -24,5 +24,6 @@ public class UserService {
                 .build();
 
         userRepository.insertUser(userEntity);
+        return userID;
     }
 }
