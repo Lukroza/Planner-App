@@ -19,9 +19,9 @@ const App = () => {
   return (
     <SafeAreaProvider>
       {isRegistered ? (
-        <Footer /> // Render Footer if isRegistered is true
+        <Footer />
       ) : (
-        <RegistrationScreen key={refreshKey} onRefresh={handleRefresh} /> // Render RegistrationScreen if isRegistered is false
+        <RegistrationScreen key={refreshKey} onRefresh={handleRefresh} />
       )}
     </SafeAreaProvider>
   );
