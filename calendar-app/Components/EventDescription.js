@@ -1,6 +1,6 @@
 import React from 'react';
 import { Modal, Text, View, StyleSheet, TouchableOpacity } from 'react-native';
-import { GlobalFont } from '../Styles';
+import { GlobalFont, GlobalSecondaryColor } from '../Styles';
 
 const CloseButton = ({ onPress }) => (
   <TouchableOpacity style={styles.closeButton} onPress={onPress}>
@@ -45,7 +45,7 @@ const styles = StyleSheet.create({
   },
   modalContent: {
     width: '80%',
-    backgroundColor: '#17161B',
+    backgroundColor: GlobalSecondaryColor,
     borderRadius: 15,
     padding: 20,
     alignItems: 'center',

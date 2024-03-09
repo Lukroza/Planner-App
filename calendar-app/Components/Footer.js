@@ -3,9 +3,9 @@ import * as React from 'react';
 import { View, StyleSheet, TouchableOpacity } from "react-native";
 import { BottomNavigation, Text } from 'react-native-paper';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import GroupScreen from './GroupScreen';
-import HomeScreen from './HomeScreen';
-import CreateEventScreen from './CreateEventScreen';
+import GroupScreen from '../Screens/GroupScreen';
+import HomeScreen from '../Screens/HomeScreen';
+import CreateEventScreen from '../Screens/CreateEventScreen';
 import { GlobalColor, GlobalSecondaryColor, GlobalFont } from '../Styles';
 
 const HomeRoute = () => <HomeScreen/>;
