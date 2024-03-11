@@ -14,4 +14,5 @@ import java.util.UUID;
 public class UserEntity {
     private UUID id;
     private String username;
+    private UUID group_id;
 }

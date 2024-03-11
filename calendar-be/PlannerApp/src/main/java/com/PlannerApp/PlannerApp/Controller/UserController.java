@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -21,5 +22,10 @@ public class UserController {
     @ResponseStatus(HttpStatus.CREATED)
     public UUID insertUser(@RequestBody User user) {
         return userService.insertUser(user.getUsername());
+    }
+
+    @GetMapping("/get/group/{groupId}")
+    public List<User> getUsersByGroupID(@PathVariable UUID groupId) {
+        return userService.getGroupUsers(groupId);
     }
 }
