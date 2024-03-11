@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, TouchableWithoutFeedback, Keyboard } from 'react-native';
 import React, { useLayoutEffect } from 'react';
 import Header from '../Components/Header';
 import TextInputBar from '../Components/TextInputBar';
@@ -7,7 +7,8 @@ import ButtonComp from '../Components/ButtonComp';
 import { useState, useEffect } from 'react';
 import { createGroup } from '../Components/API/Groups/GroupCreation';
 import { ActivityIndicator } from 'react-native';
-import { GlobalSecondaryColor } from '../Styles'
+import { GlobalColor, GlobalSecondaryColor } from '../Styles'
+import NoGroupSection from '../Components/GroupSection/NoGroupSection'
 
 async function getGroupStatus() {
     const inGroup = await getInGroupStatus();
@@ -30,6 +31,7 @@ const GroupScreen = () => {
   }, []);
 
   const handleCreateGroup = async () => {
+    
     setIsLoading(true);
     const groupData = {
       name: groupName,
@@ -44,25 +46,41 @@ const GroupScreen = () => {
   };
 
   return (
-    <View>
+    <View style={styles.view}>
       <Header title={"Group"} />
+      <TouchableWithoutFeedback onPress={ () => { Keyboard.dismiss() } }>
       <View>
         {
           isLoading ? (
-            <ActivityIndicator size="large" color={GlobalSecondaryColor} /> // Loading spinner
+            <ActivityIndicator size="large" color={GlobalSecondaryColor}  style={styles.topContainer}/> 
           ) : inGroup ? (
-            <Text>You are in a group</Text>
+            
+            <Text>Cia probably geriau butu sukurt component kad ten InGroupView ir ten viska det galimai taip pat ir jei nera grupei</Text>
           ) : (
-            <>
-              <Text>You are not in a group</Text>
-              <TextInputBar label="Group Name" onChangeText={setGroupName} />
-              <ButtonComp text="Create" onPress={handleCreateGroup} />
-            </>
+            <NoGroupSection setGroupName={setGroupName} handleCreateGroup={handleCreateGroup} />
           )
         }
       </View>
+      </TouchableWithoutFeedback>
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  view: {
+      flex: 1,
+      backgroundColor: GlobalColor,
+  },
+  topContainer: {
+    width: '100%',
+    height: '50%',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: '10%',
+    padding: 20,
+    gap: 20,
+    alignSelf: 'center',
+  },
+});
 
 export default GroupScreen;
