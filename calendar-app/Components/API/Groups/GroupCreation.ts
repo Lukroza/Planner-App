@@ -20,10 +20,10 @@ export async function createGroup(props : IGroup) {
             throw new Error('Failed to create the group');
         }
 
-        const data = await response.json(); // Use .json() instead of .text() and JSON.parse()
+        const data = await response.json();
 
         return data;
     } catch (error) {
-        //console.error(error);
+        console.error(error);
     }
 }
