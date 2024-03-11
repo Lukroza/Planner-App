@@ -6,6 +6,8 @@ import { getInGroupStatus, getUserId, storeUserInfo } from '../Components/Storag
 import ButtonComp from '../Components/ButtonComp';
 import { useState, useEffect } from 'react';
 import { createGroup } from '../Components/API/Groups/GroupCreation';
+import { ActivityIndicator } from 'react-native';
+import { GlobalSecondaryColor } from '../Styles'
 
 async function getGroupStatus() {
     const inGroup = await getInGroupStatus();
@@ -20,6 +22,7 @@ const GroupScreen = () => {
   const [inGroup, setInGroup] = useState(null);
   const [userId, setUserId] = useState(null);
   const [groupName, setGroupName] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     getGroupStatus().then(setInGroup);
@@ -27,6 +30,7 @@ const GroupScreen = () => {
   }, []);
 
   const handleCreateGroup = async () => {
+    setIsLoading(true);
     const groupData = {
       name: groupName,
       owner_id: userId,
@@ -34,6 +38,7 @@ const GroupScreen = () => {
       await createGroup(groupData).then((response) => {
         storeUserInfo(userId, true, true, response);
         setInGroup(true);
+        setIsLoading(false);
       });
       
   };
@@ -43,21 +48,21 @@ const GroupScreen = () => {
       <Header title={"Group"} />
       <View>
         {
-          inGroup ? (
+          isLoading ? (
+            <ActivityIndicator size="large" color={GlobalSecondaryColor} /> // Loading spinner
+          ) : inGroup ? (
             <Text>You are in a group</Text>
           ) : (
-            <Text>You are not in a group</Text>
+            <>
+              <Text>You are not in a group</Text>
+              <TextInputBar label="Group Name" onChangeText={setGroupName} />
+              <ButtonComp text="Create" onPress={handleCreateGroup} />
+            </>
           )
         }
-        <TextInputBar 
-          label="Group Name"
-          onChangeText={setGroupName}
-        />
-        <ButtonComp text="Create" onPress={ handleCreateGroup} />
       </View>
     </View>
   );
 };
-
 
 export default GroupScreen;
