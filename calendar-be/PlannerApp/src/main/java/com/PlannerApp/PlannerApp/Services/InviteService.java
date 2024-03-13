@@ -1,6 +1,7 @@
 // Annotate InviteService with @Service
 package com.PlannerApp.PlannerApp.Services;
 
+import com.PlannerApp.PlannerApp.Models.Invite;
 import org.springframework.stereotype.Service;
 import com.PlannerApp.PlannerApp.Repositories.InviteRepository;
 import java.util.UUID;
@@ -14,15 +15,15 @@ public class InviteService {
         this.inviteRepository = inviteRepository;
     }
 
-    public UUID insertInvite(UUID userId, UUID groupId) {
-        UUID inviteId = UUID.randomUUID();
+    public UUID insertInvite(Invite invite) {
+        UUID invite_id = UUID.randomUUID();
         InviteEntity inviteEntity = InviteEntity.builder()
-                .id(inviteId)
-                .user_id(userId)
-                .group_id(groupId)
+                .id(invite_id)
+                .user_id(invite.getUser_id())
+                .group_id(invite.getGroup_id())
                 .build();
 
         inviteRepository.insertInvite(inviteEntity);
-        return inviteId;
+        return invite_id;
     }
 }
