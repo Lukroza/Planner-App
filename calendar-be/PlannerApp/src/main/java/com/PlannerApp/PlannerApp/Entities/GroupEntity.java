@@ -11,8 +11,8 @@ import java.util.UUID;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserEntity {
+public class GroupEntity {
     private UUID id;
-    private String username;
-    private UUID group_id;
+    private String name;
+    private UUID owner_id;
 }

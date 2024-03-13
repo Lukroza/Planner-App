@@ -1,4 +1,4 @@
-package com.PlannerApp.PlannerApp.Entities;
+package com.PlannerApp.PlannerApp.Models;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -7,12 +7,12 @@ import lombok.NoArgsConstructor;
 
 import java.util.UUID;
 
-@Data
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserEntity {
+@Data
+@Builder
+public class Group {
     private UUID id;
-    private String username;
-    private UUID group_id;
+    private String name;
+    private UUID owner_id;
 }
