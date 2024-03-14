@@ -5,6 +5,8 @@ import { GlobalColor, GlobalSecondaryColor, GlobalFont } from './Styles';
 import RegistrationScreen from './Screens/RegistrationScreen';
 import { useState } from 'react';
 import Footer from './Components/Footer';
+import { getIsLoggedIn } from './Components/Storage/userDataStorage'; 
+import { useEffect } from 'react';
 
 
 const App = () => {
@@ -15,6 +17,19 @@ const App = () => {
     setRefreshKey(oldKey => oldKey + 1);
     setIsRegistered(true);
   };
+
+  useEffect(() => {
+    const checkLoginStatus = async () => {
+      const loggedIn = await getIsLoggedIn();
+      if (loggedIn) {
+        setIsRegistered(true);
+      }
+    };
+
+    checkLoginStatus();
+  }, []);
+
+
   
   return (
     <SafeAreaProvider>

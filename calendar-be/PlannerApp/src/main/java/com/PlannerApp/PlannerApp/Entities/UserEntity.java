@@ -15,4 +15,8 @@ public class UserEntity {
     private UUID id;
     private String username;
     private UUID group_id;
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> main

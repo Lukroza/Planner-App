@@ -5,7 +5,6 @@ import com.PlannerApp.PlannerApp.Models.User;
 import com.PlannerApp.PlannerApp.Repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,6 +17,16 @@ import java.util.UUID;
 @Slf4j
 public class UserService {
     private final UserRepository userRepository;
+
+    public Optional<User> getUserByUsername(String username) {
+        //convert userEntity to User
+        return userRepository.getUserByUsername(username)
+                .map(userEntity -> User.builder()
+                        .id(userEntity.getId())
+                        .username(userEntity.getUsername())
+                        .group_id(userEntity.getGroup_id())
+                        .build());
+    }
 
     public UUID insertUser(String username) {
         UUID userID = UUID.randomUUID();
