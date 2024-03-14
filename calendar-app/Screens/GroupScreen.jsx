@@ -9,6 +9,7 @@ import { createGroup } from '../Components/API/Groups/GroupCreation';
 import { ActivityIndicator } from 'react-native';
 import { GlobalColor, GlobalSecondaryColor } from '../Styles'
 import NoGroupSection from '../Components/GroupSection/NoGroupSection'
+import InGroupSection from '../Components/GroupSection/InGroupSection'
 
 async function getGroupStatus() {
     const inGroup = await getInGroupStatus();
@@ -50,12 +51,12 @@ const GroupScreen = () => {
       <Header title={"Group"} />
       <TouchableWithoutFeedback onPress={ () => { Keyboard.dismiss() } }>
       <View>
+
         {
           isLoading ? (
             <ActivityIndicator size="large" color={GlobalSecondaryColor}  style={styles.topContainer}/> 
           ) : inGroup ? (
-            
-            <Text>Cia probably geriau butu sukurt component kad ten InGroupView ir ten viska det galimai taip pat ir jei nera grupei</Text>
+            <InGroupSection />
           ) : (
             <NoGroupSection setGroupName={setGroupName} handleCreateGroup={handleCreateGroup} />
           )

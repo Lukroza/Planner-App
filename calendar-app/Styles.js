@@ -7,3 +7,5 @@ export const GlobalSecondaryColor = '#24293D';
 export const GlobalFont = 'monospace';
 
 export const GlobalTextColor = '#F4F4FC';
+
+export const GlobalBorderColor = 'white';
