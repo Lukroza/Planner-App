@@ -1,4 +1,3 @@
-// inviteToGroup.ts
 import backendURL from "../BeUrl";
 
 export async function inviteToGroup({ user_id, group_id }) {
