@@ -8,8 +8,6 @@ import { getUserId } from "../Storage/userDataStorage";
 
 const GroupInput = () => {
   const [username, setUsername] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
-  const [user, setUser] = useState(null);
 
   const handleSendInvite = async () => {
     if (!username) {
@@ -17,17 +15,14 @@ const GroupInput = () => {
       return;
     }
     
-    setIsLoading(true);
     try {
       const fetchedUser = await loginUserAPI({ username });
       if (fetchedUser && fetchedUser.group_id) {
         Alert.alert('User already in a group');
-        setIsLoading(false);
         return;
       }
       
       if (fetchedUser && !fetchedUser.group_id) {
-        setUser(fetchedUser);
         const group_id = await getUserId();
         await inviteToGroup({ user_id: fetchedUser.id, group_id });
         Alert.alert('Invitation sent!');
@@ -37,8 +32,6 @@ const GroupInput = () => {
     } catch (error) {
       Alert.alert('Failed to send invitation');
       console.error(error);
-    } finally {
-      setIsLoading(false);
     }
   };
 

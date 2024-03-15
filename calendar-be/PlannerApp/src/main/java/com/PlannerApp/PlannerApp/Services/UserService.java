@@ -17,7 +17,6 @@ public class UserService {
     private final UserRepository userRepository;
 
     public Optional<User> getUserByUsername(String username) {
-        //convert userEntity to User
         return userRepository.getUserByUsername(username)
                 .map(userEntity -> User.builder()
                         .id(userEntity.getId())
