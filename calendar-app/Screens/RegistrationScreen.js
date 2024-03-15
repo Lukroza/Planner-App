@@ -39,7 +39,6 @@ const RegistrationScreen = (props) => {
     }
   };
 
-
   return (
     <TouchableWithoutFeedback onPress={ () => { Keyboard.dismiss() } }>
     <SafeAreaProvider>
