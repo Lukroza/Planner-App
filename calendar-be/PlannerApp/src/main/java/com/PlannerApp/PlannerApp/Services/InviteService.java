@@ -1,4 +1,3 @@
-// Annotate InviteService with @Service
 package com.PlannerApp.PlannerApp.Services;
 
 import com.PlannerApp.PlannerApp.Models.Invite;
@@ -15,7 +14,7 @@ public class InviteService {
         this.inviteRepository = inviteRepository;
     }
 
-    public UUID insertInvite(Invite invite) {
+    public UUID sendInvite(Invite invite) {
         UUID invite_id = UUID.randomUUID();
         InviteEntity inviteEntity = InviteEntity.builder()
                 .id(invite_id)
@@ -23,7 +22,7 @@ public class InviteService {
                 .group_id(invite.getGroup_id())
                 .build();
 
-        inviteRepository.insertInvite(inviteEntity);
+        inviteRepository.sendInvite(inviteEntity);
         return invite_id;
     }
 }

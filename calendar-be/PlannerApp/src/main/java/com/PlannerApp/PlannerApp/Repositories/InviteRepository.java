@@ -9,5 +9,5 @@ import org.springframework.stereotype.Repository;
 public interface InviteRepository {
     @Insert("INSERT INTO invites (id, user_id, group_id) " +
             "VALUES (#{invite.id}, #{invite.user_id}, #{invite.group_id})")
-    void insertInvite(@Param("invite") InviteEntity invite);
+    void sendInvite(@Param("invite") InviteEntity invite);
 }

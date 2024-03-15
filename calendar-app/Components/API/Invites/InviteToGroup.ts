@@ -1,8 +1,13 @@
 import backendURL from "../BeUrl";
 
-export async function inviteToGroup({ user_id, group_id }) {
+interface InviteParams {
+  user_id: string;
+  group_id: string;
+}
+
+export async function inviteToGroup({ user_id, group_id }: InviteParams) {
   try {
-    const response = await fetch(`${backendURL}/invite/insert`, {
+    const response = await fetch(`${backendURL}/invite/send`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

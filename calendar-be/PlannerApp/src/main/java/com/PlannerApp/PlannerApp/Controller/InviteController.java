@@ -18,9 +18,9 @@ import java.util.UUID;
 public class InviteController {
     private final InviteService inviteService;
 
-    @PostMapping("/insert")
+    @PostMapping("/send")
     @ResponseStatus(HttpStatus.CREATED)
     public UUID insertGroup(@RequestBody Invite invite){
-        return inviteService.insertInvite(invite);
+        return inviteService.sendInvite(invite);
     }
 }
