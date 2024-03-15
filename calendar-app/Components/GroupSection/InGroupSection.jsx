@@ -1,15 +1,18 @@
 import React, { useState } from "react";
-import { Alert, View, StyleSheet } from "react-native";
+import { Alert, View, StyleSheet, Text, FlatList } from "react-native";
 import TextInputBar from "../TextInputBar";
 import ButtonComp from '../ButtonComp';
 import { loginUserAPI } from '../API/Users/UsernameCheck';
 import { inviteToGroup } from '../API/Invites/InviteToGroup';
 import { getUserId } from "../Storage/userDataStorage";
+import { GlobalColor, GlobalFont, GlobalSecondaryColor, GlobalTextColor } from '../../Styles';
 
 const GroupInput = () => {
   const [username, setUsername] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [user, setUser] = useState(null);
+  const [members, setMembers] = useState([]);
+
 
   const handleSendInvite = async () => {
     if (!username) {
@@ -42,20 +45,75 @@ const GroupInput = () => {
     }
   };
 
+  const renderMember = ({ item }) => (
+    <View style={styles.memberItem}>
+      <Text style={styles.memberText}>{item.username}</Text>
+      <TouchableOpacity onPress={() => alert('Remove member')}>
+        <Text style={styles.removeIcon}>×</Text>
+      </TouchableOpacity>
+    </View>
+  );
+
   return (
+    <View>
     <View style={styles.addContainer}>
       <TextInputBar label="Enter username" onChangeText={setUsername}/>
       <ButtonComp text="Add User" onPress={handleSendInvite} />
+    </View>
+    <View style={styles.container}>
+            <Text style={styles.header}>Members</Text>
+            <FlatList
+              data={members}
+              renderItem={renderMember}
+              keyExtractor={item => item.id}
+              style={styles.membersList}
+            />
+          </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  addContainer: {
+  addContainer:{
     marginTop: 20,
     gap: 20,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  container: {
+    backgroundColor: '#8EBBFF', 
+    borderRadius: 10,
+    padding: 10,
+    margin: 20,
+    alignItems: 'stretch',
+  },
+  memberItem: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    padding: 10,
+    marginVertical: 5,
+    backgroundColor: '#8EBBFF',
+  },
+  memberText: {
+    color: GlobalTextColor, 
+    fontSize: 20,
+  },
+  removeIcon: {
+    color: '#FFFFFF', 
+    fontSize: 24,
+    fontWeight: 'bold',
+    padding: 8,
+  },
+  membersList: {
+    flexGrow: 0, 
+  },
+  header: {
+    color: GlobalTextColor,
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 10,
+    textAlign: 'center',
   },
 });
 
