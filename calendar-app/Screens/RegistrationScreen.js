@@ -29,6 +29,9 @@ const RegistrationScreen = (props) => {
       if(userData.group_id !== null) {
         await storeUserInfo(userData.id, true, true, userData.group_id);
       }
+      else{
+        await storeUserInfo(userData.id, false, true, "0");
+      }
       props.onRefresh();
     } 
     else {
