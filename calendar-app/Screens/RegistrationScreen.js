@@ -6,6 +6,7 @@ import ButtonComp from '../Components/ButtonComp';
 import { createUserApi } from '../Components/API/Users/UserRegister';
 import { storeUserInfo } from '../Components/Storage/userDataStorage';
 import { GlobalColor } from '../Styles';
+import { loginUserAPI } from '../Components/API/Users/UsernameCheck';
 
 const RegistrationScreen = (props) => {
   const [username, setUsername] = useState('');
@@ -22,6 +23,22 @@ const RegistrationScreen = (props) => {
     }
   };
 
+  const handleLogin = async () => {
+    const userData = await loginUserAPI({username});
+    if(userData != null) {
+      if(userData.group_id !== null) {
+        await storeUserInfo(userData.id, true, true, userData.group_id);
+      }
+      else{
+        await storeUserInfo(userData.id, false, true, "0");
+      }
+      props.onRefresh();
+    } 
+    else {
+      console.log("User not found");
+    }
+  };
+
   return (
     <TouchableWithoutFeedback onPress={ () => { Keyboard.dismiss() } }>
     <SafeAreaProvider>
@@ -30,6 +47,7 @@ const RegistrationScreen = (props) => {
           label="Username"
           onChangeText={setUsername}
         />
+        <ButtonComp text="Login" onPress={handleLogin}/>
         <ButtonComp text="Register" onPress={handleRegistration} />
       </View>
     </SafeAreaProvider>

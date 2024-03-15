@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -27,5 +28,10 @@ public class UserController {
     @GetMapping("/get/{username}")
     public Optional<User> getUserByUsername(@PathVariable String username) {
         return userService.getUserByUsername(username);
+    }
+
+    @GetMapping("/get/group/{groupId}")
+    public List<User> getGroupUsers(@PathVariable UUID groupId) {
+        return userService.getGroupUsers(groupId);
     }
 }
