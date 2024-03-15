@@ -3,6 +3,8 @@ package com.PlannerApp.PlannerApp.Repositories;
 import com.PlannerApp.PlannerApp.Entities.UserEntity;
 import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -18,6 +20,8 @@ public interface UserRepository {
             "VALUES (#{user.id}, #{user.username})")
     void insertUser(@Param("user") UserEntity user);
 
+    @Select("SELECT id, username FROM users WHERE group_id = #{groupID}")
+    List<UserEntity> getGroupUsers(@Param("groupID") UUID groupId);
     @Select("SELECT * FROM users WHERE username = #{username}")
     Optional<UserEntity> getUserByUsername(@Param("username") String username);
 }

@@ -6,6 +6,8 @@ import com.PlannerApp.PlannerApp.Repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 import java.util.Optional;
 
 import java.util.UUID;
@@ -37,4 +39,13 @@ public class UserService {
         return userID;
     }
 
+    public List<User> getGroupUsers(UUID groupId) {
+        return userRepository.getGroupUsers(groupId).stream()
+                .map(userEntity -> User.builder()
+                        .id(userEntity.getId())
+                        .username(userEntity.getUsername())
+                        .group_id(userEntity.getGroup_id())
+                        .build())
+                .toList();
+    }
 }
