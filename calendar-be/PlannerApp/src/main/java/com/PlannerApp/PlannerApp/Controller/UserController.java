@@ -28,16 +28,5 @@ public class UserController {
     public Optional<User> getUserByUsername(@PathVariable String username) {
         return userService.getUserByUsername(username);
     }
-    @GetMapping("/get/id/{username}")
-    public ResponseEntity<UUID> getUserIdByUsername(@PathVariable String username) {
-        Optional<User> userOptional = userService.getUserByUsername(username);
-        if(userOptional.isPresent()) {
-            User user = userOptional.get();
-            return ResponseEntity.ok(user.getId());
-        } else {
-            return ResponseEntity.notFound().build();
-        }
-    }
-
 
 }
