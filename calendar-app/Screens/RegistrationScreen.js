@@ -26,7 +26,12 @@ const RegistrationScreen = (props) => {
   const handleLogin = async () => {
     const userData = await loginUserAPI({username});
     if(userData != null) {
-      await storeUserInfo(userData, false, true, "0");
+      if(userData.group_id !== null) {
+        await storeUserInfo(userData.id, true, true, userData.group_id);
+      }
+      else{
+        await storeUserInfo(userData.id, false, true, "0");
+      }
       props.onRefresh();
     } 
     else {
