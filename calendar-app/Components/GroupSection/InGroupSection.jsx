@@ -20,17 +20,14 @@ const GroupInput = () => {
       return;
     }
     
-    setIsLoading(true);
     try {
       const fetchedUser = await loginUserAPI({ username });
       if (fetchedUser && fetchedUser.group_id) {
         Alert.alert('User already in a group');
-        setIsLoading(false);
         return;
       }
       
       if (fetchedUser && !fetchedUser.group_id) {
-        setUser(fetchedUser);
         const group_id = await getUserId();
         await inviteToGroup({ user_id: fetchedUser.id, group_id });
         Alert.alert('Invitation sent!');

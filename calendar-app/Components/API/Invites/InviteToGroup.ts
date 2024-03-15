@@ -7,7 +7,7 @@ interface InviteParams {
 
 export async function inviteToGroup({ user_id, group_id }: InviteParams) {
   try {
-    const response = await fetch(`${backendURL}/invite/send`, {
+    const response = await fetch(`${backendURL}/invite/insert`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
