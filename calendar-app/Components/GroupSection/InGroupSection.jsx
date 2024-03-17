@@ -9,9 +9,8 @@ import { GlobalColor, GlobalFont, GlobalSecondaryColor, GlobalTextColor } from '
 
 const GroupInput = () => {
   const [username, setUsername] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
-  const [user, setUser] = useState(null);
-  const [members, setMembers] = useState([]);
+  const [setIsLoading] = useState(false);
+  const [members] = useState([]);
 
 
   const handleSendInvite = async () => {
@@ -29,7 +28,6 @@ const GroupInput = () => {
       
       if (fetchedUser && !fetchedUser.group_id) {
         const group_id = await getGroupId();
-        console.log(group_id);
         await inviteToGroup({ user_id: fetchedUser.id, group_id });
         Alert.alert('Invitation sent!');
       } else {
