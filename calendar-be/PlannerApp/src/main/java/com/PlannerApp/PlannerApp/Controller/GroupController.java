@@ -22,5 +22,5 @@ public class GroupController {
     @ResponseStatus(HttpStatus.CREATED)
     public UUID insertGroup(@RequestBody Group group){
         return groupService.insertGroup(group);
-    };
+    }
 }
