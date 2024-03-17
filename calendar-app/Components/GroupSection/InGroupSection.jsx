@@ -9,8 +9,8 @@ import { GlobalColor, GlobalFont, GlobalSecondaryColor, GlobalTextColor } from '
 
 const GroupInput = () => {
   const [username, setUsername] = useState('');
-  const [setIsLoading] = useState(false);
-  const [members] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [members, setMembers] = useState([]);
 
 
   const handleSendInvite = async () => {
