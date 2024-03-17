@@ -4,7 +4,7 @@ import TextInputBar from "../TextInputBar";
 import ButtonComp from '../ButtonComp';
 import { loginUserAPI } from '../API/Users/UsernameCheck';
 import { inviteToGroup } from '../API/Invites/InviteToGroup';
-import { getUserId } from "../Storage/userDataStorage";
+import { getGroupId } from "../Storage/userDataStorage";
 import { GlobalColor, GlobalFont, GlobalSecondaryColor, GlobalTextColor } from '../../Styles';
 
 const GroupInput = () => {
@@ -28,7 +28,8 @@ const GroupInput = () => {
       }
       
       if (fetchedUser && !fetchedUser.group_id) {
-        const group_id = await getUserId();
+        const group_id = await getGroupId();
+        console.log(group_id);
         await inviteToGroup({ user_id: fetchedUser.id, group_id });
         Alert.alert('Invitation sent!');
       } else {
