@@ -15,7 +15,6 @@ public class InviteService {
     private final InviteRepository inviteRepository;
 
     public UUID insertInvite(Invite invite) {
-        log.info("Inserting invite: {}", invite);
         UUID invite_id = UUID.randomUUID();
         InviteEntity inviteEntity = InviteEntity.builder()
                 .id(invite_id)
