@@ -4,17 +4,33 @@ import { GlobalColor } from "../../Styles";
 import TextInputBar from  "../TextInputBar";
 import ButtonComp from '../ButtonComp';
 import { getUserInvites } from "../API/Invites/UserInvites";
+import { getGroupName } from "../API/Groups/GroupName";
 
 const GroupInput = ({ setGroupName, handleCreateGroup, userId }) => {
   const [invites, setInvites] = useState(null);
+  const [groupNames, setGroupNames] = useState({});
 
   useEffect(() => {
-    const fetchInvites = async () => {
+    const fetchInvitesAndGroupNames = async () => {
       const userInvites = await getUserInvites({ userId });
       setInvites(userInvites);
+
+      const names = {};
+      for (const invite of userInvites) {
+        try {
+          const groupNameData = await getGroupName({ groupId: invite.group_id });
+          if (groupNameData && groupNameData.name) {
+            names[invite.group_id] = groupNameData.name;
+          }
+        } catch (error) {
+          console.error('Error fetching group name:', error);
+          names[invite.group_id] = 'Unknown Group';
+        }
+      }
+      setGroupNames(names);
     };
 
-    fetchInvites();
+    fetchInvitesAndGroupNames();
   }, [userId]);
 
   return (
@@ -27,7 +43,7 @@ const GroupInput = ({ setGroupName, handleCreateGroup, userId }) => {
         {invites && invites.map((invite, index) => (
           <View key={index} style={styles.inviteContainer}>
             <Text style={styles.inviteText}>
-              You have been invited to join {invite.groupName}
+              You have been invited to join {groupNames[invite.group_id]}
             </Text>
             <View style={styles.buttonsContainer}>
               <TouchableOpacity style={styles.buttonAccept}>
@@ -47,7 +63,7 @@ const GroupInput = ({ setGroupName, handleCreateGroup, userId }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#FFFFFF", // Replace with your global background color
+    backgroundColor: "#FFFFFF", 
   },
   topContainer: {
     padding: 20,
@@ -57,20 +73,25 @@ const styles = StyleSheet.create({
   },
   createButton: {
     marginTop: 10,
-    backgroundColor: "#0000FF", // Adjust to match the button color in the image
+    backgroundColor: "#0000FF", 
   },
   bottomContainer: {
     padding: 20,
   },
+  invitationsText: {
+    fontWeight: 'bold',
+    fontSize: 16,
+    marginBottom: 10,
+  },
   inviteContainer: {
     padding: 10,
-    backgroundColor: "#E5E5E5", // Adjust to match the invite background color in the image
+    backgroundColor: "#E5E5E5", 
     borderRadius: 10,
     marginBottom: 10,
   },
   inviteText: {
     fontSize: 14,
-    color: "#000000", // Adjust to match the invite text color in the image
+    color: "#000000", 
   },
   buttonsContainer: {
     flexDirection: 'row',
@@ -79,16 +100,16 @@ const styles = StyleSheet.create({
   },
   buttonAccept: {
     padding: 10,
-    backgroundColor: "#00FF00", // Adjust to match the accept button color in the image
+    backgroundColor: "#00FF00", 
     borderRadius: 5,
   },
   buttonDecline: {
     padding: 10,
-    backgroundColor: "#FF0000", // Adjust to match the decline button color in the image
+    backgroundColor: "#FF0000",
     borderRadius: 5,
   },
   buttonText: {
-    color: "#FFFFFF", // Adjust to match the button text color in the image
+    color: "#FFFFFF",
     fontSize: 16,
   },
 });

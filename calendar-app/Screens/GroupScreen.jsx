@@ -10,7 +10,7 @@ import { ActivityIndicator } from 'react-native';
 import { GlobalColor, GlobalFont, GlobalSecondaryColor, GlobalTextColor } from '../Styles';
 import NoGroupSection from '../Components/GroupSection/NoGroupSection';
 import { getGroupMembers } from '../Components/API/Groups/GroupMembers';
-import InGroupSection from '../Components/GroupSection/InGroupSection'
+import InGroupSection from '../Components/GroupSection/InGroupSection';
 
 async function getGroupStatus() {
     const inGroup = await getInGroupStatus();
@@ -74,14 +74,13 @@ const GroupScreen = () => {
       <Header title={"Group"} />
       <TouchableWithoutFeedback onPress={ () => { Keyboard.dismiss() } }>
       <View>
-
         {
           isLoading ? (
             <ActivityIndicator size="large" color={GlobalSecondaryColor}  style={styles.topContainer}/> 
           ) : inGroup ? (
             <InGroupSection />
           ) : (
-            <NoGroupSection setGroupName={setGroupName} handleCreateGroup={handleCreateGroup} />
+            <NoGroupSection setGroupName={setGroupName} handleCreateGroup={handleCreateGroup} userId={userId} />
           )
         }
       </View>
