@@ -27,4 +27,14 @@ public class InviteController {
 
     @GetMapping("/get/{userId}")
     public List<Invite> getUserInvites(@PathVariable UUID userId){ return inviteService.getUserInvites(userId);}
+
+    @DeleteMapping("/accept/{inviteId}")
+    public UUID acceptInvite(@PathVariable UUID inviteId){
+        return inviteService.acceptInvite(inviteId);
+    }
+
+    @DeleteMapping("/decline/{inviteId}")
+    public void declineInvite(@PathVariable UUID inviteId){
+        inviteService.declineInvite(inviteId);
+    }
 }
