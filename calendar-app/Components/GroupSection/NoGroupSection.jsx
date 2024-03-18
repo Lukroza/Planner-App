@@ -1,37 +1,66 @@
-import { React, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Text, StyleSheet, View, TouchableOpacity } from "react-native";
 import { GlobalColor } from "../../Styles";
 import TextInputBar from  "../TextInputBar";
 import ButtonComp from '../ButtonComp';
 import { getUserInvites } from "../API/Invites/UserInvites";
 import { getGroupName } from "../API/Groups/GroupName";
+import { declineInvite } from "../API/Invites/DeclineInvite";
+import { acceptInvite } from "../API/Invites/AcceptInvite";
+import { storeUserInfo } from "../Storage/userDataStorage";
+import GroupScreen from "../../Screens/GroupScreen";
 
 const GroupInput = ({ setGroupName, handleCreateGroup, userId }) => {
   const [invites, setInvites] = useState(null);
   const [groupNames, setGroupNames] = useState({});
 
   useEffect(() => {
-    const fetchInvitesAndGroupNames = async () => {
-      const userInvites = await getUserInvites({ userId });
-      setInvites(userInvites);
-
-      const names = {};
-      for (const invite of userInvites) {
-        try {
-          const groupNameData = await getGroupName({ groupId: invite.group_id });
-          if (groupNameData && groupNameData.name) {
-            names[invite.group_id] = groupNameData.name;
-          }
-        } catch (error) {
-          console.error('Error fetching group name:', error);
-          names[invite.group_id] = 'Unknown Group';
-        }
-      }
-      setGroupNames(names);
-    };
-
     fetchInvitesAndGroupNames();
   }, [userId]);
+
+  const fetchInvitesAndGroupNames = async () => {
+    const userInvites = await getUserInvites({ userId });
+    setInvites(userInvites);
+
+    const names = {};
+    for (const invite of userInvites) {
+      const groupNameData = await getGroupName({ groupId: invite.group_id });
+      names[invite.group_id] = groupNameData.name;
+    }
+    setGroupNames(names);
+  };
+
+  const updateGroupStatus = (group_id) => {
+    storeUserInfo(userId, true, true, group_id);
+  };
+
+  const handleDeclineInvite = async (inviteId) => {
+    await declineInvite({ invite_id: inviteId });
+    fetchInvitesAndGroupNames();
+  };
+
+  const handleAcceptInvite = async (inviteId, group_id) => {
+    await acceptInvite({ invite_id: inviteId });
+    updateGroupStatus(group_id);
+  };
+
+  const renderInvites = () => {
+    return invites.map((invite, index) => (
+      <View key={index} style={styles.inviteContainer}>
+        <Text style={styles.inviteText}>
+          You have been invited to join {groupNames[invite.group_id]}
+        </Text>
+        <View style={styles.buttonsContainer}>
+          <TouchableOpacity style={styles.buttonAccept} onPress={() => handleAcceptInvite(invite.id, invite.group_id)}>
+            <Text style={styles.buttonText}>✓</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.buttonDecline} onPress={() => handleDeclineInvite(invite.id)}>
+            <Text style={styles.buttonText}>✕</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+    ));
+  };
 
   return (
     <>
@@ -40,21 +69,7 @@ const GroupInput = ({ setGroupName, handleCreateGroup, userId }) => {
         <ButtonComp text="Create" onPress={handleCreateGroup} style={styles.createButton}/>
       </View>
       <View style={styles.bottomContainer}>
-        {invites && invites.map((invite, index) => (
-          <View key={index} style={styles.inviteContainer}>
-            <Text style={styles.inviteText}>
-              You have been invited to join {groupNames[invite.group_id]}
-            </Text>
-            <View style={styles.buttonsContainer}>
-              <TouchableOpacity style={styles.buttonAccept}>
-                <Text style={styles.buttonText}>✓</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.buttonDecline}>
-                <Text style={styles.buttonText}>✕</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        ))}
+        {invites && renderInvites()}
       </View>
     </>
   );
