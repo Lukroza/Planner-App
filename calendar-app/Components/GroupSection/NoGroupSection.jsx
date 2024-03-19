@@ -8,9 +8,8 @@ import { getGroupName } from "../API/Groups/GroupName";
 import { declineInvite } from "../API/Invites/DeclineInvite";
 import { acceptInvite } from "../API/Invites/AcceptInvite";
 import { storeUserInfo } from "../Storage/userDataStorage";
-import GroupScreen from "../../Screens/GroupScreen";
 
-const GroupInput = ({ setGroupName, handleCreateGroup, userId }) => {
+const GroupInput = ({ setGroupName, handleCreateGroup, userId, onRefresh }) => {
   const [invites, setInvites] = useState(null);
   const [groupNames, setGroupNames] = useState({});
 
@@ -42,6 +41,7 @@ const GroupInput = ({ setGroupName, handleCreateGroup, userId }) => {
   const handleAcceptInvite = async (inviteId, group_id) => {
     await acceptInvite({ invite_id: inviteId });
     updateGroupStatus(group_id);
+    onRefresh();
   };
 
   const renderInvites = () => {

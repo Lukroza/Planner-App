@@ -32,6 +32,7 @@ const GroupScreen = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [members, setMembers] = useState([]);
   const [groupId, setGroupId] = useState(null);
+  const [refreshKey, setRefreshKey] = useState(0);
 
   useEffect(() => {
     getGroupStatus().then(setInGroup);
@@ -68,19 +69,24 @@ const GroupScreen = () => {
       setIsLoading(false);
     });
   };
+  
+  const handleRefresh = () => {
+    setRefreshKey(oldKey => oldKey + 1);
+    setInGroup(true);
+  };
 
   return (
     <View style={styles.view}>
       <Header title={"Group"} />
       <TouchableWithoutFeedback onPress={ () => { Keyboard.dismiss() } }>
-      <View>
+      <View key={refreshKey} >
         {
           isLoading ? (
             <ActivityIndicator size="large" color={GlobalSecondaryColor}  style={styles.topContainer}/> 
           ) : inGroup ? (
             <InGroupSection />
           ) : (
-            <NoGroupSection setGroupName={setGroupName} handleCreateGroup={handleCreateGroup} userId={userId} />
+            <NoGroupSection setGroupName={setGroupName} handleCreateGroup={handleCreateGroup} userId={userId} onRefresh={handleRefresh} key={refreshKey} />
           )
         }
       </View>
