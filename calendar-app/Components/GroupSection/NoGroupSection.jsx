@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Text, StyleSheet, View, TouchableOpacity } from "react-native";
 import { GlobalColor } from "../../Styles";
-import TextInputBar from  "../TextInputBar";
+import TextInputBar from "../TextInputBar";
 import ButtonComp from '../ButtonComp';
 import { getUserInvites } from "../API/Invites/UserInvites";
 import { getGroupName } from "../API/Groups/GroupName";
@@ -13,12 +13,12 @@ const GroupInput = ({ setGroupName, handleCreateGroup, userId, onRefresh }) => {
   const [invites, setInvites] = useState(null);
   const [groupNames, setGroupNames] = useState({});
 
-  useEffect(() => {
+  useEffect(() => { //CIA BLOGAI NES USER ID BUNA NULL IS PRADZIU TD PRISIJUNGIA IR TAMP KAZKOKS IR DEL TO FETCHINA NORS NE GRUPEJ
     fetchInvitesAndGroupNames();
   }, [userId]);
 
   const fetchInvitesAndGroupNames = async () => {
-    const userInvites = await getUserInvites({ userId });
+    const userInvites = await getUserInvites({ userId: userId });
     setInvites(userInvites);
 
     const names = {};
@@ -65,8 +65,8 @@ const GroupInput = ({ setGroupName, handleCreateGroup, userId, onRefresh }) => {
   return (
     <>
       <View style={styles.topContainer}>
-        <TextInputBar label="Group Name" onChangeText={setGroupName} style={styles.textInput}/>
-        <ButtonComp text="Create" onPress={handleCreateGroup} style={styles.createButton}/>
+        <TextInputBar label="Group Name" onChangeText={setGroupName} style={styles.textInput} />
+        <ButtonComp text="Create" onPress={handleCreateGroup} style={styles.createButton} />
       </View>
       <View style={styles.bottomContainer}>
         {invites && renderInvites()}
@@ -78,7 +78,7 @@ const GroupInput = ({ setGroupName, handleCreateGroup, userId, onRefresh }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#FFFFFF", 
+    backgroundColor: "#FFFFFF",
   },
   topContainer: {
     padding: 20,
@@ -88,7 +88,7 @@ const styles = StyleSheet.create({
   },
   createButton: {
     marginTop: 10,
-    backgroundColor: "#0000FF", 
+    backgroundColor: "#0000FF",
   },
   bottomContainer: {
     padding: 20,
@@ -100,13 +100,13 @@ const styles = StyleSheet.create({
   },
   inviteContainer: {
     padding: 10,
-    backgroundColor: "#E5E5E5", 
+    backgroundColor: "#E5E5E5",
     borderRadius: 10,
     marginBottom: 10,
   },
   inviteText: {
     fontSize: 14,
-    color: "#000000", 
+    color: "#000000",
   },
   buttonsContainer: {
     flexDirection: 'row',
@@ -115,7 +115,7 @@ const styles = StyleSheet.create({
   },
   buttonAccept: {
     padding: 10,
-    backgroundColor: "#00FF00", 
+    backgroundColor: "#00FF00",
     borderRadius: 5,
   },
   buttonDecline: {

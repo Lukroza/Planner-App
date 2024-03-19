@@ -1,24 +1,21 @@
 import { View, Text, StyleSheet, TouchableWithoutFeedback, Keyboard, FlatList, TouchableOpacity } from 'react-native';
 import React, { useLayoutEffect } from 'react';
 import Header from '../Components/Header';
-import TextInputBar from '../Components/TextInputBar';
 import { getInGroupStatus, getUserId, storeUserInfo, getGroupId } from '../Components/Storage/userDataStorage';
-import ButtonComp from '../Components/ButtonComp';
 import { useState, useEffect } from 'react';
 import { createGroup } from '../Components/API/Groups/GroupCreation';
 import { ActivityIndicator } from 'react-native';
 import { GlobalColor, GlobalFont, GlobalSecondaryColor, GlobalTextColor } from '../Styles';
 import NoGroupSection from '../Components/GroupSection/NoGroupSection';
-import { getGroupMembers } from '../Components/API/Groups/GroupMembers';
 import InGroupSection from '../Components/GroupSection/InGroupSection';
 
 async function getGroupStatus() {
-    const inGroup = await getInGroupStatus();
-    return inGroup;
+  const inGroup = await getInGroupStatus();
+  return inGroup;
 }
 async function getUser() {
-    const userId = await getUserId();
-    return userId;
+  const userId = await getUserId();
+  return userId;
 }
 async function getGroup() {
   const groupId = await getGroupId();
@@ -30,30 +27,12 @@ const GroupScreen = () => {
   const [userId, setUserId] = useState(null);
   const [groupName, setGroupName] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [members, setMembers] = useState([]);
-  const [groupId, setGroupId] = useState(null);
   const [refreshKey, setRefreshKey] = useState(0);
 
   useEffect(() => {
     getGroupStatus().then(setInGroup);
     getUser().then(setUserId);
-    getGroup().then(setGroupId);
-    
-    handleGetMembers();
   }, []);
-
-  const handleGetMembers = async () => {
-    await getGroupMembers({ groupId })
-      .then((data) => {
-        setMembers(data);
-      })
-      .catch((error) => {
-        console.error(error);
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
-  };
 
   const handleCreateGroup = async () => {
     setIsLoading(true);
@@ -62,14 +41,14 @@ const GroupScreen = () => {
       name: groupName,
       owner_id: userId,
     };
-    
+
     await createGroup(groupData).then((response) => {
       storeUserInfo(userId, true, true, response);
       setInGroup(true);
       setIsLoading(false);
     });
   };
-  
+
   const handleRefresh = () => {
     setRefreshKey(oldKey => oldKey + 1);
     setInGroup(true);
@@ -78,18 +57,18 @@ const GroupScreen = () => {
   return (
     <View style={styles.view}>
       <Header title={"Group"} />
-      <TouchableWithoutFeedback onPress={ () => { Keyboard.dismiss() } }>
-      <View key={refreshKey} >
-        {
-          isLoading ? (
-            <ActivityIndicator size="large" color={GlobalSecondaryColor}  style={styles.topContainer}/> 
-          ) : inGroup ? (
-            <InGroupSection />
-          ) : (
-            <NoGroupSection setGroupName={setGroupName} handleCreateGroup={handleCreateGroup} userId={userId} onRefresh={handleRefresh} key={refreshKey} />
-          )
-        }
-      </View>
+      <TouchableWithoutFeedback onPress={() => { Keyboard.dismiss() }}>
+        <View key={refreshKey} >
+          {
+            isLoading ? (
+              <ActivityIndicator size="large" color={GlobalSecondaryColor} style={styles.topContainer} />
+            ) : inGroup ? (
+              <InGroupSection />
+            ) : (
+              <NoGroupSection setGroupName={setGroupName} handleCreateGroup={handleCreateGroup} userId={userId} onRefresh={handleRefresh} key={refreshKey} />
+            )
+          }
+        </View>
       </TouchableWithoutFeedback>
     </View>
   );
@@ -97,8 +76,8 @@ const GroupScreen = () => {
 
 const styles = StyleSheet.create({
   view: {
-      flex: 1,
-      backgroundColor: GlobalColor,
+    flex: 1,
+    backgroundColor: GlobalColor,
   },
   topContainer: {
     width: '100%',
