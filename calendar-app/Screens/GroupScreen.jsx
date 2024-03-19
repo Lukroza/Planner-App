@@ -65,7 +65,7 @@ const GroupScreen = () => {
             ) : inGroup ? (
               <InGroupSection />
             ) : (
-              <NoGroupSection setGroupName={setGroupName} handleCreateGroup={handleCreateGroup} userId={userId} onRefresh={handleRefresh} key={refreshKey} />
+              <NoGroupSection setGroupName={setGroupName} handleCreateGroup={handleCreateGroup} onRefresh={handleRefresh} key={refreshKey} />
             )
           }
         </View>

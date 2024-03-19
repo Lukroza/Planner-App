@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Alert, View, StyleSheet, Text, FlatList, TouchableOpacity } from "react-native";
+import { Alert, View, StyleSheet, Text, FlatList, TouchableOpacity, ScrollView } from "react-native";
 import TextInputBar from "../TextInputBar";
 import ButtonComp from '../ButtonComp';
 import { loginUserAPI } from '../API/Users/UsernameCheck';
@@ -27,7 +27,6 @@ const GroupInput = () => {
         const groupMembers = getGroupMembers({ groupId }).then((data) => {
           setMembers(data);
         });
-        console.log(groupMembers)
         setMembers(groupMembers);
       }
       setIsLoading(false);
@@ -65,15 +64,15 @@ const GroupInput = () => {
 
   const renderMember = ({ item }) => (
     <View style={styles.memberItem}>
-      <Text style={styles.memberText}>{item.username}</Text>
-      <TouchableOpacity onPress={() => alert('Remove member')}>
-        <Text style={styles.removeIcon}>×</Text>
-      </TouchableOpacity>
-    </View>
+        <Text style={styles.memberText}>{item.username}</Text>
+        <TouchableOpacity onPress={() => alert('Remove member')}>
+          <Text style={styles.removeIcon}>×</Text>
+        </TouchableOpacity>
+    </View>    
   );
 
   return (
-    <View>
+    <>
       <View style={styles.addContainer}>
         <TextInputBar label="Enter username" onChangeText={setUsername} />
         <ButtonComp text="Add User" onPress={handleSendInvite} />
@@ -87,7 +86,7 @@ const GroupInput = () => {
           style={styles.membersList}
         />
       </View>
-    </View>
+    </>
   );
 };
 
