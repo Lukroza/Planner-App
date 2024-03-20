@@ -1,6 +1,8 @@
 package com.PlannerApp.PlannerApp.Services;
 
 import com.PlannerApp.PlannerApp.Models.Group;
+import com.PlannerApp.PlannerApp.Models.Invite;
+import com.PlannerApp.PlannerApp.Models.User;
 import com.PlannerApp.PlannerApp.Repositories.GroupRepository;
 import com.PlannerApp.PlannerApp.Repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -9,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.PlannerApp.PlannerApp.Entities.GroupEntity;
 
+import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -32,4 +36,12 @@ public class GroupService {
         return groupId;
     }
 
+    public Optional<Group> getGroupName(UUID groupId) {
+        return groupRepository.getGroupName(groupId)
+                .map(groupEntity -> Group.builder()
+                        .id(groupEntity.getId())
+                        .name(groupEntity.getName())
+                        .owner_id(groupEntity.getOwner_id())
+                        .build());
+    }
 }

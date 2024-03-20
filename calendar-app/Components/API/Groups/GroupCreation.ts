@@ -6,7 +6,6 @@ interface IGroup {
 }
 
 export async function createGroup(props : IGroup) {
-    console.log(props.owner_id);
     try {
         const response = await fetch(backendURL + "/group/insert", {
             method: 'POST',

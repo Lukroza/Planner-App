@@ -4,6 +4,7 @@ import { Avatar } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useFonts, Poppins_700Bold } from '@expo-google-fonts/poppins';
 import { GlobalColor, GlobalSecondaryColor, GlobalFont } from '../Styles';
+import { storeUserInfo } from "./Storage/userDataStorage";
 
 const Header = ({title}) => {
 
@@ -13,6 +14,7 @@ const Header = ({title}) => {
 
     const handleProfilePress = () => {
         console.log('Profile icon pressed');
+        storeUserInfo("0", false, false, "0");
     };
 
     if (!fontsLoaded) {
