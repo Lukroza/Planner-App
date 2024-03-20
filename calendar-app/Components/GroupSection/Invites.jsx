@@ -6,17 +6,18 @@ import { declineInvite } from "../API/Invites/DeclineInvite";
 import { acceptInvite } from "../API/Invites/AcceptInvite";
 import { getUserId } from "../Storage/userDataStorage";
 import { GlobalSecondaryColor, GlobalTextColor } from "../../Styles";
+import { Card, Button } from 'react-native-paper';
 
 async function getUser() {
   const userId = await getUserId();
   return userId;
 }
 
-const Invites = ({ onAccept, onDecline }) => {
+const Invites = ({ onAccept }) => {
   const [invites, setInvites] = useState(null);
   const [groupNames, setGroupNames] = useState({});
 
-  useEffect(() => { 
+  useEffect(() => {
     fetchInvitesAndGroupNames();
   }, []);
 
@@ -45,19 +46,21 @@ const Invites = ({ onAccept, onDecline }) => {
 
   const renderInvites = () => {
     return invites.map((invite, index) => (
-      <View key={index} style={styles.container} >
-        <Text style={styles.textStyles}>
-          You have been invited to join {groupNames[invite.group_id]}
-        </Text>
-        <View style={styles.buttonStyles}>
-          <TouchableOpacity  onPress={() => handleAcceptInvite(invite.id, invite.group_id)}>
-            <Text style={styles.buttonStyles} backgroundColor={'green'} >✓</Text>
-          </TouchableOpacity>
-          <TouchableOpacity  onPress={() => handleDeclineInvite(invite.id)}>
-            <Text style={styles.buttonStyles} backgroundColor={'red'}>✕</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
+      <Card key={index} style={styles.container}>
+        <Card.Content>
+          <Text style={styles.textStyles}>
+            You have been invited to join {groupNames[invite.group_id]}
+          </Text>
+        </Card.Content>
+        <Card.Actions>
+          <Button onPress={() => handleDeclineInvite(invite.id)} color="red">
+            Decline
+          </Button>
+          <Button onPress={() => handleAcceptInvite(invite.id, invite.group_id)} color="green">
+            Accept
+          </Button>
+        </Card.Actions>
+      </Card>
     ));
   };
 
