@@ -41,13 +41,29 @@ const GroupInput = ({ setGroupName, handleCreateGroup, onRefresh }) => {
 
   return (
     <View>
+      <View style={styles.createContainer}>
       <TextInputBar label="Group Name" onChangeText={setGroupName}/>
       <ButtonComp text="Create" onPress={handleCreateGroup}/>
+      </View>
+      <View style={styles.inviteContainer}>
       {!inGroup && <Invites onAccept={updateGroupStatus} />}
+      </View>
     </View>
   );
 };
 
-// Jonai good luck :)
+const styles = StyleSheet.create({
+  createContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    gap: 20,
+    marginTop: 20,
+  },
+  inviteContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 20,
+  },
 
+});
 export default GroupInput;

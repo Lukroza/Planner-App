@@ -124,6 +124,7 @@ const styles = StyleSheet.create({
   },
   membersList: {
     flexGrow: 0,
+    height: 425,
   },
   header: {
     color: GlobalTextColor,

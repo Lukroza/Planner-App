@@ -5,6 +5,7 @@ import { getGroupName } from "../API/Groups/GroupName";
 import { declineInvite } from "../API/Invites/DeclineInvite";
 import { acceptInvite } from "../API/Invites/AcceptInvite";
 import { getUserId } from "../Storage/userDataStorage";
+import { GlobalSecondaryColor, GlobalTextColor } from "../../Styles";
 
 async function getUser() {
   const userId = await getUserId();
@@ -44,16 +45,16 @@ const Invites = ({ onAccept, onDecline }) => {
 
   const renderInvites = () => {
     return invites.map((invite, index) => (
-      <View key={index} >
-        <Text>
+      <View key={index} style={styles.container} >
+        <Text style={styles.textStyles}>
           You have been invited to join {groupNames[invite.group_id]}
         </Text>
-        <View >
+        <View style={styles.buttonStyles}>
           <TouchableOpacity  onPress={() => handleAcceptInvite(invite.id, invite.group_id)}>
-            <Text >✓</Text>
+            <Text style={styles.buttonStyles} backgroundColor={'green'} >✓</Text>
           </TouchableOpacity>
           <TouchableOpacity  onPress={() => handleDeclineInvite(invite.id)}>
-            <Text >✕</Text>
+            <Text style={styles.buttonStyles} backgroundColor={'red'}>✕</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -67,6 +68,33 @@ const Invites = ({ onAccept, onDecline }) => {
   );
 };
 
-// Jonai good luck :)
+const styles = StyleSheet.create({
+  container: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: GlobalSecondaryColor,
+    borderRadius: 20,
+    margin: 10,
+    padding: 10,
+  },
+  textStyles: {
+    fontSize: 20,
+    color: GlobalTextColor,
 
+  },
+
+  buttonStyles: {
+    flexDirection: 'row',
+    width: 50,
+    height: 50,
+    margin: 10,
+    fontSize: 20,
+    justifyContent: 'center',
+    alignItems: 'center',
+    textAlign: 'center',
+    borderRadius: 20,
+    padding: 10,
+    color: GlobalTextColor,
+  },
+});
 export default Invites;
