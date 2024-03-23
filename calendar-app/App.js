@@ -7,6 +7,7 @@ import { useState } from 'react';
 import Footer from './Components/Footer';
 import { getIsLoggedIn } from './Components/Storage/userDataStorage'; 
 import { useEffect } from 'react';
+import { Provider } from 'react-native-paper';
 
 
 const App = () => {
@@ -32,6 +33,7 @@ const App = () => {
 
   
   return (
+    <Provider>
     <SafeAreaProvider>
       {isRegistered ? (
         <Footer />
@@ -39,6 +41,7 @@ const App = () => {
         <RegistrationScreen key={refreshKey} onRefresh={handleRefresh} />
       )}
     </SafeAreaProvider>
+    </Provider>
   );
 };
 
