@@ -7,6 +7,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.format.annotation.DateTimeFormat;
+import java.util.Date;
 
 import java.util.UUID;
 
@@ -23,6 +25,10 @@ public class EventController {
         eventService.insertEvent(event);
     }
 
-
+    @GetMapping("/count")
+    public Long countEventsOnDate(@RequestParam("date") @DateTimeFormat(pattern = "yyyy-MM-dd") Date utilDate) {
+        java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());
+        return eventService.countEventsByDate(sqlDate);
+    }
 }
 

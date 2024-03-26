@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
+import java.sql.Date;
 
 import java.sql.Time;
 import java.util.UUID;
@@ -33,5 +34,9 @@ public class EventService {
                         .to(event.getTo())
                         .build()
         );
+    }
+
+    public Long countEventsByDate(Date date) {
+        return eventRepository.countByDate(date);
     }
 }
