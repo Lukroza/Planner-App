@@ -6,7 +6,6 @@ interface IUser {
 
 export async function getUserById(props : IUser) {
     try {
-        console.log(props.user_id);
         const response = await fetch(backendURL + "/user/get/id/" + props.user_id, {
             method: 'GET',
             headers: {

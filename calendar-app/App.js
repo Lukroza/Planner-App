@@ -35,7 +35,6 @@ const App = () => {
     if (userId) {
       const updateUserData = async () => {
         const userData = await getUserById({ user_id: userId }); 
-        console.log(userData); 
         if(userData != null) {
           if(userData.group_id !== null) {
             await storeUserInfo(userData.id, true, true, userData.group_id);
