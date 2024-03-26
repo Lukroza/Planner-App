@@ -3,14 +3,11 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { View, StyleSheet } from 'react-native';
 import { GlobalColor, GlobalSecondaryColor, GlobalFont } from './Styles';
 import RegistrationScreen from './Screens/RegistrationScreen';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Footer from './Components/Footer';
-import { getIsLoggedIn } from './Components/Storage/userDataStorage'; 
-import { useEffect } from 'react';
+import { getIsLoggedIn, getUserId, storeUserInfo } from './Components/Storage/userDataStorage'; 
 import { Provider } from 'react-native-paper';
 import { getUserById } from './Components/API/Users/UserGetById';
-import { getUserId } from './Components/Storage/userDataStorage';
-import { storeUserInfo } from './Components/Storage/userDataStorage';
 
 async function getUser() {
   const userId = await getUserId();
@@ -29,39 +26,33 @@ const App = () => {
 
   useEffect(() => {
     getUser().then(setUserId);
-  }, []); 
-  
-  useEffect(() => {
-    if (userId) {
-      const updateUserData = async () => {
-        const userData = await getUserById({ user_id: userId }); 
-        if(userData != null) {
-          if(userData.group_id !== null) {
-            await storeUserInfo(userData.id, true, true, userData.group_id);
-          }
-          else{
-            await storeUserInfo(userData.id, false, true, "0");
-          }
-          props.onRefresh();
-        } 
-      };
-  
-      updateUserData();
-    }
-  }, [userId]);
-
-  useEffect(() => {
-    const checkLoginStatus = async () => {
-      const loggedIn = await getIsLoggedIn();
-      if (loggedIn) {
-        setIsRegistered(true);
-      }
-    };
-  
     checkLoginStatus();
   }, []);
 
+  useEffect(() => {
+    if (userId) { 
+      updateUserData();
+    }
+  }, [userId]); 
+  
+  const updateUserData = async () => {
+    const userData = await getUserById({ userId });
+    if(userData != null) {
+      if(userData.group_id !== null) {
+        await storeUserInfo(userData.id, true, true, userData.group_id);
+      }
+      else{
+        await storeUserInfo(userData.id, false, true, "0");
+      }
+    } 
+  };
 
+  const checkLoginStatus = async () => {
+    const loggedIn = await getIsLoggedIn();
+    if (loggedIn) {
+      setIsRegistered(true);
+    }
+  };
   
   return (
     <Provider>

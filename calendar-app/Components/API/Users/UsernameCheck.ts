@@ -1,10 +1,10 @@
 import backendURL from "../BeUrl";
 
-interface IUrser {
+interface IUser {
     username: string;
 }
 
-export async function loginUserAPI(props : IUrser) {
+export async function loginUserAPI(props : IUser) {
     try {
         const response = await fetch(backendURL + "/user/get/" + props.username, {
             method: 'GET',

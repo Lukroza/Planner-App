@@ -1,10 +1,10 @@
 import backendURL from "../BeUrl";
 
-interface IUrser {
+interface IUser {
     username: string;
 }
 
-export async function createUserApi(props : IUrser) {
+export async function createUserApi(props : IUser) {
     try {
         const response = await fetch(backendURL + "/user/insert", {
             method: 'POST',

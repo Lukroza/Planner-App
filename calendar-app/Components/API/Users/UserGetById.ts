@@ -1,12 +1,12 @@
 import backendURL from "../BeUrl";
 
 interface IUser {
-    user_id: string;
+    userId: string;
 }
 
 export async function getUserById(props : IUser) {
     try {
-        const response = await fetch(backendURL + "/user/get/id/" + props.user_id, {
+        const response = await fetch(backendURL + "/user/get/id/" + props.userId, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -18,6 +18,7 @@ export async function getUserById(props : IUser) {
         }
 
         const text = await response.text();
+        console.log(text);
         if (!text) {
             return null;
         }
