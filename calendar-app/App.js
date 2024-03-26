@@ -8,16 +8,48 @@ import Footer from './Components/Footer';
 import { getIsLoggedIn } from './Components/Storage/userDataStorage'; 
 import { useEffect } from 'react';
 import { Provider } from 'react-native-paper';
+import { getUserById } from './Components/API/Users/UserGetById';
+import { getUserId } from './Components/Storage/userDataStorage';
+import { storeUserInfo } from './Components/Storage/userDataStorage';
 
+async function getUser() {
+  const userId = await getUserId();
+  return userId;
+}
 
 const App = () => {
   const [refreshKey, setRefreshKey] = useState(0);
   const [isRegistered, setIsRegistered] = useState(false);
+  const [userId, setUserId] = useState(null);
   
   const handleRefresh = () => {
     setRefreshKey(oldKey => oldKey + 1);
     setIsRegistered(true);
   };
+
+  useEffect(() => {
+    getUser().then(setUserId);
+  }, []); 
+  
+  useEffect(() => {
+    if (userId) {
+      const updateUserData = async () => {
+        const userData = await getUserById({ user_id: userId }); 
+        console.log(userData); 
+        if(userData != null) {
+          if(userData.group_id !== null) {
+            await storeUserInfo(userData.id, true, true, userData.group_id);
+          }
+          else{
+            await storeUserInfo(userData.id, false, true, "0");
+          }
+          props.onRefresh();
+        } 
+      };
+  
+      updateUserData();
+    }
+  }, [userId]);
 
   useEffect(() => {
     const checkLoginStatus = async () => {
@@ -26,7 +58,7 @@ const App = () => {
         setIsRegistered(true);
       }
     };
-
+  
     checkLoginStatus();
   }, []);
 

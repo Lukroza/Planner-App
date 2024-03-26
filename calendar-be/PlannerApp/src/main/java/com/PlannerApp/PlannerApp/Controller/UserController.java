@@ -34,4 +34,9 @@ public class UserController {
     public List<User> getGroupUsers(@PathVariable UUID groupId) {
         return userService.getGroupUsers(groupId);
     }
+
+    @GetMapping("/get/id/{userId}")
+    public Optional<User> getUserByID(@PathVariable UUID userId) {
+        return userService.getUserByID(userId);
+    }
 }
