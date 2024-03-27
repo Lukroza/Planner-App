@@ -25,19 +25,19 @@ const App = () => {
   };
 
   useEffect(() => {
-    getUser().then(setUserId);
-    checkLoginStatus();
+    getUser().then(setUserId); // Gets and sets the userID needed for the update of the user data
+    checkLoginStatus(); // Checks if the user is logged in
   }, []);
 
-  useEffect(() => {
-    if (userId) { 
-      updateUserData();
+  useEffect(() => { // Updates the user data if the user is logged in
+    if (userId && isRegistered) { // If the user is logged in and the userId is updated then the user data is updated
+      updateUserData(); // Updates the user data
     }
-  }, [userId]); 
+  }, [isRegistered]); // Depends on the isRegistered state
   
   const updateUserData = async () => {
-    const userData = await getUserById({ userId });
-    if(userData != null) {
+    const userData = await getUserById({ userId }); // Gets the user data by the userId
+    if(userData != null) { // If the user data is not null then updates the user info depending on if the user is in a group or not
       if(userData.group_id !== null) {
         await storeUserInfo(userData.id, true, true, userData.group_id);
       }
