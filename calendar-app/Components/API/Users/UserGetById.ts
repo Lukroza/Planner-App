@@ -18,7 +18,6 @@ export async function getUserById(props : IUser) {
         }
 
         const text = await response.text();
-        console.log(text);
         if (!text) {
             return null;
         }

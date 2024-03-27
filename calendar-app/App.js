@@ -38,7 +38,7 @@ const App = () => {
   const updateUserData = async () => {
     const userData = await getUserById({ userId }); // Gets the user data by the userId
     if(userData != null) { // If the user data is not null then updates the user info depending on if the user is in a group or not
-      if(userData.group_id !== null) {
+      if(userData.group_id != null) {
         await storeUserInfo(userData.id, true, true, userData.group_id);
       }
       else{
