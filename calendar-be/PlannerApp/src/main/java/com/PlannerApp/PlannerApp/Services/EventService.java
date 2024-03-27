@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.sql.Time;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -21,11 +22,10 @@ public class EventService {
 
     public void insertEvent(Event event){
         UUID eventId = UUID.randomUUID();
-        UUID userID = UUID.randomUUID();
         eventRepository.insertEvent(
                 EventEntity.builder()
                         .id(eventId)
-                        .user_id(userID)
+                        .user_id(event.getUserId())
                         .name(event.getName())
                         .description(event.getDescription())
                         .date(event.getDate())
@@ -34,4 +34,5 @@ public class EventService {
                         .build()
         );
     }
+
 }

@@ -2,6 +2,7 @@ import backendURL from "../BeUrl";
 
 interface IEvent {
     name: string;
+    userId: string;
     date: Date;
     from: string;
     to: string;
@@ -9,7 +10,7 @@ interface IEvent {
     attendees?: string;
 }
 
-export async function createEventApi(props : IEvent) {
+export async function createEventApi(props: IEvent) {
     try {
         const response = await fetch(backendURL + "/event/insert", {
             method: 'POST',
