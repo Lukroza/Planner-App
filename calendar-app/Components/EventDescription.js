@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Modal, Text, View, StyleSheet, TouchableOpacity } from 'react-native';
 import { GlobalFont, GlobalSecondaryColor } from '../Styles';
+import { getEventDetails } from './API/Events/EventDetails';
 
 const CloseButton = ({ onPress }) => (
   <TouchableOpacity style={styles.closeButton} onPress={onPress}>
@@ -9,6 +10,14 @@ const CloseButton = ({ onPress }) => (
 );
 
 const EventDescription = ({ isVisible, onClose, event }) => {
+  const [eventDetails, setEventDetails] = useState(null);
+
+  useEffect(() => {
+    if (event) {
+      getEventDetails({eventId: event.id}).then(setEventDetails);
+    }
+  }, [event]);
+
   return (
     <Modal
       animationType="fade"
@@ -24,9 +33,9 @@ const EventDescription = ({ isVisible, onClose, event }) => {
           <Text style={styles.eventName}>{event?.name}</Text>
           <Text style={styles.eventTime}>{event?.time}</Text>
           <Text style={styles.descriptionTitle}>Description</Text>
-          <Text style={styles.descriptionText}>{event?.description || "KEBAB TIME (Placeholder text)"}</Text>
+          <Text style={styles.descriptionText}>{eventDetails?.description}</Text>
           <Text style={styles.attendeesTitle}>Attendees</Text>
-          <Text style={styles.attendeesText}>{event?.attendees || "Lukas, Ignas, Vilius, Jonas (Placeholder text)"}</Text>
+          <Text style={styles.attendeesText}>{eventDetails?.attendees || "Be The First One!"}</Text>
           <TouchableOpacity style={styles.joinButton} onPress={() => {}}>
             <Text style={styles.joinButtonText}>Join</Text>
           </TouchableOpacity>

@@ -4,7 +4,7 @@ interface IUser {
     userId: string;
 }
 
-export async function getUserById(props : IUser) {
+export async function getUserById(props: IUser) {
     try {
         const response = await fetch(backendURL + "/user/get/id/" + props.userId, {
             method: 'GET',
@@ -14,7 +14,7 @@ export async function getUserById(props : IUser) {
         });
 
         if (!response.ok) {
-            throw new Error('Failed to find the user');
+            throw new Error('Failed to find the user2222');
         }
 
         const text = await response.text();
@@ -26,5 +26,7 @@ export async function getUserById(props : IUser) {
         return data;
     } catch (error) {
         console.error(error);
+        console.log(props.userId)
+        console.log("vyko")
     }
 }

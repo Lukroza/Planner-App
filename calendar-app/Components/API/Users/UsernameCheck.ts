@@ -4,7 +4,7 @@ interface IUser {
     username: string;
 }
 
-export async function loginUserAPI(props : IUser) {
+export async function loginUserAPI(props: IUser) {
     try {
         const response = await fetch(backendURL + "/user/get/" + props.username, {
             method: 'GET',

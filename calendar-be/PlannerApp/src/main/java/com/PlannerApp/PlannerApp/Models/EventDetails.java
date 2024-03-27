@@ -1,5 +1,4 @@
-package com.PlannerApp.PlannerApp.Entities;
-
+package com.PlannerApp.PlannerApp.Models;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -10,18 +9,15 @@ import java.sql.Time;
 import java.util.Date;
 import java.util.UUID;
 
-@Data
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class EventEntity {
-    private UUID event_id;
-    private UUID user_id;
-    private String event_name;
-    private String event_description;
+@Data
+@Builder
+public class EventDetails {
+    private String name;
     private Date date;
-    private Time time_from;
-    private Time time_to;
+    private Time from;
+    private Time to;
+    private String description;
     private String attendees;
-
 }
