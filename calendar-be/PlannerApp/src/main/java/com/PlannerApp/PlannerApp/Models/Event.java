@@ -15,7 +15,7 @@ import java.util.UUID;
 @Builder
 public class Event {
     private UUID id;
-    private UUID user_id;
+    private UUID userId;
     private String name;
     private Date date;
     private Time from;
