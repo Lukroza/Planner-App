@@ -33,6 +33,7 @@ public class EventController {
 
     @GetMapping("/getEventDetails/{eventId}")
     public EventDetails getEventDetails(@PathVariable UUID eventId){
+        System.out.println(eventService.getEventDetails(eventId));
         return eventService.getEventDetails(eventId);
     }
 }

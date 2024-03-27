@@ -26,7 +26,5 @@ export async function getUserById(props: IUser) {
         return data;
     } catch (error) {
         console.error(error);
-        console.log(props.userId)
-        console.log("vyko")
     }
 }

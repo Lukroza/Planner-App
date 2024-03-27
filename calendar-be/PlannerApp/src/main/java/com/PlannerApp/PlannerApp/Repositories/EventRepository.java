@@ -21,7 +21,6 @@ public interface EventRepository {
             "VALUES (#{event.id}, #{event.user_id}, #{event.name}, #{event.date}, #{event.from}, #{event.to}, #{event.description}, #{event.attendees})")
     void insertEvent(@Param("event") EventEntity event);
 
-    //get events from every user in a group
     @Select("SELECT * FROM event WHERE user_id IN (SELECT id FROM users WHERE group_id = #{groupID})")
     List<EventEntity> getGroupEvents(@Param("groupID") UUID groupID);
 

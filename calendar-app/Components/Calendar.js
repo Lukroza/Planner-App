@@ -24,7 +24,6 @@ const App = ({ showEvents , onDayPress}) => {
 
   useEffect(() => {
     if (events) {
-      console.log(selected)
       const filteredEvents = Object.values(events).filter(event =>
         new Date(event.date).toLocaleDateString() === new Date(selected).toLocaleDateString()
       );

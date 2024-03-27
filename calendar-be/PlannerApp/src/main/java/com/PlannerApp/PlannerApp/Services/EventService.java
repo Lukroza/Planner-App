@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 import java.sql.Time;
 import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -46,11 +47,10 @@ public class EventService {
 
     //returns All possible events
     public List<EventHeader> getEvents(UUID userId){
-        List<UserEntity> groupMembers = userRepository.getGroupUsers(userId);
+        Optional<UserEntity> user = userRepository.getUserById(userId);
+        List<UserEntity> groupMembers = userRepository.getGroupUsers(user.get().getGroup_id());
         SimpleDateFormat formatter = new SimpleDateFormat("HH:mm");
-        //check if there are any group members
-        if (groupMembers.isEmpty()){
-            System.out.println("NEdeja");
+        if (groupMembers.size() < 2){
            return eventRepository.getEventsByUserId(userId)
                    .stream().map(EventEntity -> EventHeader.builder()
                            .id(EventEntity.getEvent_id())
@@ -59,8 +59,7 @@ public class EventService {
                             .date(EventEntity.getDate())
                            .build()).toList();
         }
-        System.out.println("deja");
-        return eventRepository.getGroupEvents(groupMembers.get(0).getGroup_id()).stream()
+        return eventRepository.getGroupEvents(user.get().getGroup_id()).stream()
                 .map(EventEntity -> EventHeader.builder()
                         .id(EventEntity.getEvent_id())
                         .name(EventEntity.getEvent_name())
