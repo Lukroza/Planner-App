@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, FlatList, TouchableOpacity, StyleSheet, Dimensions } from 'react-native';
 import EventDescription from './EventDescription';
 import { GlobalColor, GlobalSecondaryColor,GlobalFont } from '../Styles';
@@ -16,14 +16,14 @@ const Events = ({ events, selectedDate, calendarHeight }) => {
 
   const renderEvent = ({ item }) => (
     <TouchableOpacity onPress={() => handleEventPress(item)} style={styles.event}>
-      <Text style={styles.eventText}>{item.name} at {item.time}</Text>
+      <Text style={styles.eventText}>{item.name} at {item.from}</Text>
     </TouchableOpacity>
   );
 
   return (
     <View style={styles.container}>
       <FlatList
-        data={events[selectedDate]?.events || []}
+        data={events}
         renderItem={renderEvent}
         keyExtractor={(item, index) => item.id || index.toString()}
         ListEmptyComponent={<Text style={styles.noEventsText}>No events</Text>}
