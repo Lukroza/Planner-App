@@ -14,7 +14,7 @@ export async function getUserById(props: IUser) {
         });
 
         if (!response.ok) {
-            throw new Error('Failed to find the user2222');
+            throw new Error('Failed to find the user by id');
         }
 
         const text = await response.text();
