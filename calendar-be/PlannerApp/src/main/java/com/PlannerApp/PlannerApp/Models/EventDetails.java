@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 import java.sql.Time;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 @NoArgsConstructor
@@ -19,5 +20,5 @@ public class EventDetails {
     private Time from;
     private Time to;
     private String description;
-    private String attendees;
+    private List<String> attendees;
 }

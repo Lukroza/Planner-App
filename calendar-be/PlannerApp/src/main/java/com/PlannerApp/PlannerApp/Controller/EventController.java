@@ -44,5 +44,10 @@ public class EventController {
         return eventService.countEventsOnDate(userId, sqlDate);
     }
 
+
+    @GetMapping("/getAttendees/{eventId}")
+    public List<String> getAttendees(@PathVariable UUID eventId){
+        return eventService.getAttendees(eventId);
+    }
 }
 

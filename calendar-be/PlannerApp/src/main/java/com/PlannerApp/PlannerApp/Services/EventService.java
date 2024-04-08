@@ -77,7 +77,7 @@ public class EventService {
                 .date(eventEntity.getDate())
                 .from(eventEntity.getTime_from())
                 .to(eventEntity.getTime_to())
-                .attendees(eventEntity.getAttendees())
+                .attendees(getAttendees(eventId))
                 .build();
     }
 
@@ -85,4 +85,7 @@ public class EventService {
         return eventRepository.countEventsByUserIdAndDate(userId, date);
     }
 
+    public List<String> getAttendees(UUID eventId){
+        return eventRepository.getAttendees(eventId);
+    }
 }
