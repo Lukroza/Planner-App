@@ -51,7 +51,14 @@ const GroupScreen = () => {
 
   const handleRefresh = () => {
     setRefreshKey(oldKey => oldKey + 1);
-    setInGroup(true);
+    if(inGroup)
+    {
+      setInGroup(false);
+    }
+    else
+    {
+      setInGroup(true);
+    }
   };
 
   return (
@@ -63,7 +70,7 @@ const GroupScreen = () => {
             isLoading ? (
               <ActivityIndicator size="large" color={GlobalSecondaryColor} style={styles.topContainer} />
             ) : inGroup ? (
-              <InGroupSection />
+              <InGroupSection onRefresh={handleRefresh} key={refreshKey} />
             ) : (
               <NoGroupSection setGroupName={setGroupName} handleCreateGroup={handleCreateGroup} onRefresh={handleRefresh} key={refreshKey} />
             )

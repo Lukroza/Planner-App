@@ -4,7 +4,7 @@ interface IGroup {
     userId: string;
 }
 
-export async function deleteUser(props: IGroup): Promise<void> {
+export async function deleteUser(props: IGroup){
     try {
         const response = await fetch(backendURL + "/group/removeUser/" + props.userId, {
             method: 'DELETE',
