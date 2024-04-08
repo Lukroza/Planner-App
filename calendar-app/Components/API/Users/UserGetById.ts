@@ -1,27 +1,20 @@
 import backendURL from "../BeUrl";
 
-interface IEvent {
-    name: string;
+interface IUser {
     userId: string;
-    date: Date;
-    from: string;
-    to: string;
-    description: string;
-    attendees?: string;
 }
 
-export async function createEventApi(props: IEvent) {
+export async function getUserById(props: IUser) {
     try {
-        const response = await fetch(backendURL + "/event/insert", {
-            method: 'POST',
+        const response = await fetch(backendURL + "/user/get/id/" + props.userId, {
+            method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify(props),
         });
 
         if (!response.ok) {
-            throw new Error('Failed to create event');
+            throw new Error('Failed to find the user by id');
         }
 
         const text = await response.text();

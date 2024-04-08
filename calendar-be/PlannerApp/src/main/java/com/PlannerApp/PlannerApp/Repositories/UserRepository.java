@@ -27,4 +27,7 @@ public interface UserRepository {
 
     @Update("UPDATE users SET group_id = #{groupID} WHERE id = #{userID}")
     void addUserToGroup(@Param("groupID") UUID groupID, @Param("userID") UUID userID);
+
+    @Select("SELECT * FROM users WHERE id = #{id}")
+    Optional<UserEntity> getUserById(@Param("id") UUID id);
 }

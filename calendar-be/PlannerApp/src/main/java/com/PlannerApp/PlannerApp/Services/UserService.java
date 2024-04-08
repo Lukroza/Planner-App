@@ -47,4 +47,13 @@ public class UserService {
                         .build())
                 .toList();
     }
+
+    public Optional<User> getUserByID(UUID userId) {
+        return userRepository.getUserById(userId)
+                .map(userEntity -> User.builder()
+                        .id(userEntity.getId())
+                        .username(userEntity.getUsername())
+                        .group_id(userEntity.getGroup_id())
+                        .build());
+    }
 }

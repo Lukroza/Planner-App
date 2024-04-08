@@ -15,13 +15,13 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 public class EventEntity {
-    private UUID id;
+    private UUID event_id;
     private UUID user_id;
-    private String name;
-    private String description;
+    private String event_name;
+    private String event_description;
     private Date date;
-    private Time from;
-    private Time to;
+    private Time time_from;
+    private Time time_to;
     private String attendees;
 
 }

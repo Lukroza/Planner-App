@@ -13,13 +13,9 @@ import java.util.UUID;
 @AllArgsConstructor
 @Data
 @Builder
-public class Event {
+public class EventHeader {
     private UUID id;
-    private UUID userId;
     private String name;
+    private String from;
     private Date date;
-    private Time from;
-    private Time to;
-    private String description;
-    private String attendees;
 }

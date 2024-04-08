@@ -6,6 +6,7 @@ import Header from '../Components/Header';
 import Calendar from '../Components/Calendar';
 import {createEventApi} from '../Components/API/Events/EventCreator';
 import { GlobalColor, GlobalFont } from '../Styles';
+import { getUserId } from '../Components/Storage/userDataStorage';
 
 function CreateEvent() {
     const [name, setName] = React.useState('');
@@ -69,8 +70,11 @@ function CreateEvent() {
     }
 
     const handleCreate = async () => {
+        const userId = await getUserId();
+
         const eventData = {
             name: name,
+            userId: userId,
             date: selectedDate,
             from: fromTimeString,
             to: toTimeString,
