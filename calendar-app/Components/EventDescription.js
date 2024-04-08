@@ -35,7 +35,7 @@ const EventDescription = ({ isVisible, onClose, event }) => {
           <Text style={styles.descriptionTitle}>Description</Text>
           <Text style={styles.descriptionText}>{eventDetails?.description}</Text>
           <Text style={styles.attendeesTitle}>Attendees</Text>
-          <Text style={styles.attendeesText}>{eventDetails?.attendees || "Be The First One!"}</Text>
+          <Text style={styles.attendeesText}>{eventDetails?.attendees.map(name => name + " ") || "Be The First One!"}</Text>
           <TouchableOpacity style={styles.joinButton} onPress={() => {}}>
             <Text style={styles.joinButtonText}>Join</Text>
           </TouchableOpacity>
