@@ -1,5 +1,6 @@
 package com.PlannerApp.PlannerApp.Services;
 
+import com.PlannerApp.PlannerApp.Entities.EventAttendeeEntity;
 import com.PlannerApp.PlannerApp.Entities.EventEntity;
 import com.PlannerApp.PlannerApp.Entities.UserEntity;
 import com.PlannerApp.PlannerApp.Models.Event;
@@ -78,5 +79,9 @@ public class EventService {
                 .to(eventEntity.getTime_to())
                 .attendees(eventEntity.getAttendees())
                 .build();
+    }
+
+    public void joinEvent(EventAttendeeEntity attendee){
+        eventRepository.joinEvent(attendee);
     }
 }

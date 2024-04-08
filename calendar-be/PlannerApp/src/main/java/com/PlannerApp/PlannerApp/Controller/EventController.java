@@ -1,5 +1,6 @@
 package com.PlannerApp.PlannerApp.Controller;
 
+import com.PlannerApp.PlannerApp.Entities.EventAttendeeEntity;
 import com.PlannerApp.PlannerApp.Entities.EventEntity;
 import com.PlannerApp.PlannerApp.Models.Event;
 import com.PlannerApp.PlannerApp.Models.EventDetails;
@@ -34,6 +35,11 @@ public class EventController {
     @GetMapping("/getEventDetails/{eventId}")
     public EventDetails getEventDetails(@PathVariable UUID eventId){
         return eventService.getEventDetails(eventId);
+    }
+
+    @PostMapping("/join")
+    public void joinEvent(@RequestBody EventAttendeeEntity attendee){
+        eventService.joinEvent(attendee);
     }
 }
 
