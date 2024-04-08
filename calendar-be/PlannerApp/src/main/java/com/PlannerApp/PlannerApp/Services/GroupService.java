@@ -44,4 +44,8 @@ public class GroupService {
                         .owner_id(groupEntity.getOwner_id())
                         .build());
     }
+
+    public void removeUserFromGroup(UUID userId) {
+        userRepository.removeUserFromGroup(userId);
+    }
 }
