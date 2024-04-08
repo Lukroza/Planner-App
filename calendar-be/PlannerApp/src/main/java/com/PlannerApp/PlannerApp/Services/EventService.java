@@ -76,7 +76,7 @@ public class EventService {
                 .date(eventEntity.getDate())
                 .from(eventEntity.getTime_from())
                 .to(eventEntity.getTime_to())
-                .attendees(eventEntity.getAttendees())
+                .attendees(getAttendees(eventId))
                 .build();
     }
 
