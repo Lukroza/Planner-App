@@ -79,4 +79,8 @@ public class EventService {
                 .attendees(eventEntity.getAttendees())
                 .build();
     }
+
+    public List<String> getAttendees(UUID eventId){
+        return eventRepository.getAttendees(eventId);
+    }
 }

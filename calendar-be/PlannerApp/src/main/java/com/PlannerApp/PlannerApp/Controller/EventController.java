@@ -35,5 +35,10 @@ public class EventController {
     public EventDetails getEventDetails(@PathVariable UUID eventId){
         return eventService.getEventDetails(eventId);
     }
+
+    @GetMapping("/getAttendees/{eventId}")
+    public List<String> getAttendees(@PathVariable UUID eventId){
+        return eventService.getAttendees(eventId);
+    }
 }
 
