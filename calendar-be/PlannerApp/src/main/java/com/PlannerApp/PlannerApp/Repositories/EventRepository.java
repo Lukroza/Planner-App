@@ -28,6 +28,9 @@ public interface EventRepository {
     @Select("SELECT * FROM event WHERE event_id = #{eventId}")
     EventEntity getEventDetails(UUID eventId);
 
+    @Select("SELECT users.username FROM event_attendees JOIN users ON event_attendees.user_id = users.id WHERE event_id = #{eventId}")
+    List<String> getAttendees(@Param("eventId") UUID eventId);
+
     @Insert("INSERT INTO event_attendees (event_id, user_id) VALUES (#{attendee.event_id}, #{attendee.user_id})")
     void joinEvent(@Param("attendee") EventAttendeeEntity attendee);
 }

@@ -41,5 +41,10 @@ public class EventController {
     public void joinEvent(@RequestBody EventAttendeeEntity attendee){
         eventService.joinEvent(attendee);
     }
+
+    @GetMapping("/getAttendees/{eventId}")
+    public List<String> getAttendees(@PathVariable UUID eventId){
+        return eventService.getAttendees(eventId);
+    }
 }
 

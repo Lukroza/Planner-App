@@ -77,8 +77,12 @@ public class EventService {
                 .date(eventEntity.getDate())
                 .from(eventEntity.getTime_from())
                 .to(eventEntity.getTime_to())
-                .attendees(eventEntity.getAttendees())
+                .attendees(getAttendees(eventId))
                 .build();
+    }
+
+    public List<String> getAttendees(UUID eventId){
+        return eventRepository.getAttendees(eventId);
     }
 
     public void joinEvent(EventAttendeeEntity attendee){
