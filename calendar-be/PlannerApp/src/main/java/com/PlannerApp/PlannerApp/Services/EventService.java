@@ -76,7 +76,7 @@ public class EventService {
     }
 
 
-    public int countGroupEventsOnDate(UUID groupId, java.sql.Date date) {
+    public long countGroupEventsOnDate(UUID groupId, java.sql.Date date) {
         List<EventEntity> groupEvents = eventRepository.getGroupEvents(groupId);
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
         String targetDateString = formatter.format(date);
@@ -88,7 +88,7 @@ public class EventService {
                 })
                 .count();
 
-        return (int) count;
+        return count;
     }
 
     public List<String> getAttendees(UUID eventId){

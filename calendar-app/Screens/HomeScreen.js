@@ -27,14 +27,11 @@ const HomeScreen = () => {
     fetchEventCount(selectedDate);
   }, [selectedDate, fetchEventCount]);
 
-  const handleDateChange = (date) => {
-    setSelectedDate(date);
-}
 
   return (
     <View style={styles.view}>
       <Header title={"Home"} />
-      <Calendar showEvents={true} onDayPress={day => handleDateChange(day)}/>
+      <Calendar showEvents={true} onDayPress={day => setSelectedDate(day)}/>
       {eventCount !== null && (
         <View style={styles.eventCountContainer}>
           <Text style={styles.eventCountText}>Event {eventCount}</Text>

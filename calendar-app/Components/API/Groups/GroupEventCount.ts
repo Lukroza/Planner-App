@@ -1,3 +1,4 @@
+import axios from 'axios';
 import backendURL from "../BeUrl";
 
 interface IGroupEventCountRequest {
@@ -7,22 +8,13 @@ interface IGroupEventCountRequest {
 
 export async function getGroupEventCount({ groupId, date }: IGroupEventCountRequest) {
   try {
-    const response = await fetch(`${backendURL}/event/countEventsByGroup/${groupId}?date=${date}`, {
-      method: 'GET',
-      headers: {
-        'Accept': 'application/json',
-      },
+    const response = await axios.get(`${backendURL}/event/countEventsByGroup/${groupId}`, {
+      params: { date }
     });
 
-    if (!response.ok) {
-      throw new Error('Failed to fetch the event count');
-    }
-
-    const data = await response.json();
-
-    return data;
+    return response.data;
   } catch (error) {
     console.error(error);
-    throw error;
+    throw error.response ? error.response.data : new Error('Error fetching event count');
   }
 }

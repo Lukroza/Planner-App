@@ -39,7 +39,7 @@ public class EventController {
     }
 
     @GetMapping("/countEventsByGroup/{groupId}")
-    public int countEventsByGroupOnDate(
+    public long countEventsByGroupOnDate(
             @PathVariable UUID groupId,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date date) {
         java.sql.Date sqlDate = new java.sql.Date(date.getTime());
