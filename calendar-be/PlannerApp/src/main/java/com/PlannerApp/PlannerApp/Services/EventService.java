@@ -11,8 +11,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import java.time.LocalDate;
-import java.time.ZoneId;
 
 import java.text.SimpleDateFormat;
 import java.util.List;
@@ -80,15 +78,13 @@ public class EventService {
 
     public int countGroupEventsOnDate(UUID groupId, java.sql.Date date) {
         List<EventEntity> groupEvents = eventRepository.getGroupEvents(groupId);
-
-        LocalDate targetDate = date.toLocalDate();
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        String targetDateString = formatter.format(date);
 
         long count = groupEvents.stream()
                 .filter(event -> {
-                    LocalDate eventDate = event.getDate().toInstant()
-                            .atZone(ZoneId.systemDefault())
-                            .toLocalDate();
-                    return eventDate.equals(targetDate);
+                    String eventDateString = formatter.format(event.getDate());
+                    return eventDateString.equals(targetDateString);
                 })
                 .count();
 
