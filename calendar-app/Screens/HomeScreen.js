@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import Header from '../Components/Header';
 import Calendar from '../Components/Calendar';
-import { getGroupEventCount } from '../Components/API/Groups/GroupEventCount';
+import { eventMonthCount } from '../Components/API/Events/EventMonthCount';
 import { getGroupId } from '../Components/Storage/userDataStorage';
 
 const HomeScreen = () => {
@@ -13,7 +13,7 @@ const HomeScreen = () => {
     try {
       const groupId = await getGroupId();
       if (groupId) {
-        const count = await getGroupEventCount({ groupId, date });
+        const count = await eventMonthCount({ groupId, date });
         setEventCount(count);
       } else {
         console.log('GroupId not found');
@@ -34,7 +34,7 @@ const HomeScreen = () => {
       <Calendar showEvents={true} onDayPress={day => setSelectedDate(day)}/>
       {eventCount !== null && (
         <View style={styles.eventCountContainer}>
-          <Text style={styles.eventCountText}>Event {eventCount}</Text>
+          <Text style={styles.eventCountText}>Events: {eventCount}</Text>
         </View>
       )}
     </View>

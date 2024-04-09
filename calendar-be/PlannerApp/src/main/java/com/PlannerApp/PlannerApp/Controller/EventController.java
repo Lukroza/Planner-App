@@ -38,12 +38,11 @@ public class EventController {
         return eventService.getEventDetails(eventId);
     }
 
-    @GetMapping("/countEventsByGroup/{groupId}")
-    public long countEventsByGroupOnDate(
+    @GetMapping("/countEventsByGroup/{groupId}/{date}")
+    public long countEventsByGroupInMonth(
             @PathVariable UUID groupId,
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date date) {
-        java.sql.Date sqlDate = new java.sql.Date(date.getTime());
-        return eventService.countGroupEventsOnDate(groupId, sqlDate);
+            @PathVariable @DateTimeFormat(pattern = "yyyy-MM-dd") Date date) {
+        return eventService.countGroupEventsInMonth(groupId, date);
     }
 
     @GetMapping("/getAttendees/{eventId}")
