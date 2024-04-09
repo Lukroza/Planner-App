@@ -31,4 +31,10 @@ public class GroupController {
     public Optional<Group> getGroupName(@PathVariable UUID groupId) {
         return groupService.getGroupName(groupId);
     }
+
+    @PutMapping("/removeUser/{userId}")
+    @ResponseStatus(HttpStatus.OK)
+    public void removeUserFromGroup(@PathVariable UUID userId) {
+        groupService.removeUserFromGroup(userId);
+    }
 }
