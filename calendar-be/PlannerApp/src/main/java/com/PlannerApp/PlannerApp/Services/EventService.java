@@ -5,19 +5,15 @@ import com.PlannerApp.PlannerApp.Entities.UserEntity;
 import com.PlannerApp.PlannerApp.Models.Event;
 import com.PlannerApp.PlannerApp.Models.EventDetails;
 import com.PlannerApp.PlannerApp.Models.EventHeader;
-import com.PlannerApp.PlannerApp.Models.Group;
 import com.PlannerApp.PlannerApp.Repositories.EventRepository;
-import com.PlannerApp.PlannerApp.Repositories.GroupRepository;
 import com.PlannerApp.PlannerApp.Repositories.UserRepository;
-import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
-import java.sql.Date;
+import java.time.LocalDate;
+import java.time.ZoneId;
 
-import java.sql.Time;
 import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Optional;
@@ -81,8 +77,22 @@ public class EventService {
                 .build();
     }
 
-    public int countEventsOnDate(UUID userId, Date date) {
-        return eventRepository.countEventsByUserIdAndDate(userId, date);
+
+    public int countGroupEventsOnDate(UUID groupId, java.sql.Date date) {
+        List<EventEntity> groupEvents = eventRepository.getGroupEvents(groupId);
+
+        LocalDate targetDate = date.toLocalDate();
+
+        long count = groupEvents.stream()
+                .filter(event -> {
+                    LocalDate eventDate = event.getDate().toInstant()
+                            .atZone(ZoneId.systemDefault())
+                            .toLocalDate();
+                    return eventDate.equals(targetDate);
+                })
+                .count();
+
+        return (int) count;
     }
 
     public List<String> getAttendees(UUID eventId){

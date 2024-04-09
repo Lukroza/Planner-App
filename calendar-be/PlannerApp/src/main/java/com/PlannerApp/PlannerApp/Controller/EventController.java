@@ -37,13 +37,14 @@ public class EventController {
     public EventDetails getEventDetails(@PathVariable UUID eventId){
         return eventService.getEventDetails(eventId);
     }
-    @GetMapping("/countEvents/{userId}")
-    public int countEventsOnDate(@PathVariable UUID userId,
-         @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date date) {
-        java.sql.Date sqlDate = new java.sql.Date(date.getTime());
-        return eventService.countEventsOnDate(userId, sqlDate);
-    }
 
+    @GetMapping("/countEventsByGroup/{groupId}")
+    public int countEventsByGroupOnDate(
+            @PathVariable UUID groupId,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date date) {
+        java.sql.Date sqlDate = new java.sql.Date(date.getTime());
+        return eventService.countGroupEventsOnDate(groupId, sqlDate);
+    }
 
     @GetMapping("/getAttendees/{eventId}")
     public List<String> getAttendees(@PathVariable UUID eventId){
