@@ -72,6 +72,7 @@ public class EventService {
     public EventDetails getEventDetails(UUID eventId){
         EventEntity eventEntity = eventRepository.getEventDetails(eventId);
         return EventDetails.builder()
+                .userId(eventEntity.getUser_id())
                 .name(eventEntity.getEvent_name())
                 .description(eventEntity.getEvent_description())
                 .date(eventEntity.getDate())

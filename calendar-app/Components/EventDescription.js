@@ -2,6 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { Modal, Text, View, StyleSheet, TouchableOpacity } from 'react-native';
 import { GlobalFont, GlobalSecondaryColor } from '../Styles';
 import { getEventDetails } from './API/Events/EventDetails';
+import { getUserId } from './Storage/userDataStorage';
+import { joinEvent } from './API/Events/JoinEvent';
+import { getUserById } from './API/Users/UserGetById';
 
 const CloseButton = ({ onPress }) => (
   <TouchableOpacity style={styles.closeButton} onPress={onPress}>
@@ -9,14 +12,41 @@ const CloseButton = ({ onPress }) => (
   </TouchableOpacity>
 );
 
+async function getUser() {
+  const userId = await getUserId();
+  return userId;
+}
+
+async function getUsername(userId) {
+  const username = await getUserById({ userId });
+  return username.username;
+}
+
 const EventDescription = ({ isVisible, onClose, event }) => {
   const [eventDetails, setEventDetails] = useState(null);
+  const [userId, setUserId] = useState(null);
+  const [username, setUsername] = useState(null);
 
   useEffect(() => {
-    if (event) {
+    getUser().then(setUserId);
+  }, []);
+
+  useEffect(() => {
+    if (userId !== null) {
+      getUsername(userId).then(setUsername);
+    }
+  }, [userId]);
+
+  useEffect(() => {
+    if (event && username !== null) {
       getEventDetails({eventId: event.id}).then(setEventDetails);
     }
-  }, [event]);
+  }, [username]);
+
+  const JoinEvent = async () => {
+    await joinEvent({eventId: event.id, userId});
+    getEventDetails({eventId: event.id}).then(setEventDetails);
+  };
 
   return (
     <Modal
@@ -36,9 +66,11 @@ const EventDescription = ({ isVisible, onClose, event }) => {
           <Text style={styles.descriptionText}>{eventDetails?.description}</Text>
           <Text style={styles.attendeesTitle}>Attendees</Text>
           <Text style={styles.attendeesText}>{eventDetails?.attendees.map(name => name + " ") || "Be The First One!"}</Text>
-          <TouchableOpacity style={styles.joinButton} onPress={() => {}}>
+          { userId !== eventDetails?.userId && !eventDetails?.attendees?.includes(username) ? (
+            <TouchableOpacity style={styles.joinButton} onPress={JoinEvent}>
             <Text style={styles.joinButtonText}>Join</Text>
-          </TouchableOpacity>
+            </TouchableOpacity>
+          ) : null }
         </View>
       </TouchableOpacity>
     </Modal>
