@@ -30,4 +30,7 @@ public interface UserRepository {
 
     @Select("SELECT * FROM users WHERE id = #{id}")
     Optional<UserEntity> getUserById(@Param("id") UUID id);
+
+    @Update("UPDATE users SET group_id = NULL WHERE id = #{userId}")
+    void removeUserFromGroup(@Param("userId") UUID userId);
 }
