@@ -57,7 +57,7 @@ const ProfileScreen = () => {
                 </View>
                 <View style={styles.segment}>
                     <Text style={styles.value}>Email:</Text>
-                    <Text style={styles.value}>----</Text>
+                    <Text style={styles.value}></Text>
                 </View>
                 <View style={styles.buttonContainer}>
                 <ButtonComp text="Log Out"/>
