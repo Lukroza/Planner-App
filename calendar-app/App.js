@@ -8,6 +8,7 @@ import Footer from './Components/Footer';
 import { getIsLoggedIn, getUserId, storeUserInfo } from './Components/Storage/userDataStorage'; 
 import { Provider } from 'react-native-paper';
 import { getUserById } from './Components/API/Users/UserGetById';
+import ProfileScreen from './Screens/ProfileScreen';
 
 async function getUser() {
   const userId = await getUserId();
@@ -25,19 +26,19 @@ const App = () => {
   };
 
   useEffect(() => {
-    checkLoginStatus(); // Checks if the user is logged in
-    getUser().then(setUserId); // Gets the user id and sets it
+    checkLoginStatus();
+    getUser().then(setUserId);
   }, []);
 
-  useEffect(() => { // Updates the user data if the user is logged in
-    if (userId && isRegistered) { // If the user is logged in and the userId is updated then the user data is updated
-      updateUserData(); // Updates the user data
+  useEffect(() => { 
+    if (userId && isRegistered) { 
+      updateUserData();
     }
-  }, [userId]); // Depends on the isRegistered state
+  }, [userId]);
   
   const updateUserData = async () => {
-    const userData = await getUserById({ userId }); // Gets the user data by the userId
-    if(userData != null) { // If the user data is not null then updates the user info depending on if the user is in a group or not
+    const userData = await getUserById({ userId });
+    if(userData != null) {
       if(userData.group_id != null) {
         await storeUserInfo(userData.id, true, true, userData.group_id);
       }
@@ -57,7 +58,7 @@ const App = () => {
   return (
     <Provider>
     <SafeAreaProvider>
-      {isRegistered ? (
+    {isRegistered ? (
         <Footer />
       ) : (
         <RegistrationScreen key={refreshKey} onRefresh={handleRefresh} />
