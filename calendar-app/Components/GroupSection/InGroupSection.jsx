@@ -6,6 +6,8 @@ import { loginUserAPI } from '../API/Users/UsernameCheck';
 import { inviteToGroup } from '../API/Invites/InviteToGroup';
 import { getGroupMembers } from '../API/Groups/GroupMembers';
 import { getGroupId } from "../Storage/userDataStorage";
+import { getUserId } from "../Storage/userDataStorage";
+import { deleteUser } from "../API/Groups/RemoveUser";
 import { GlobalColor, GlobalFont, GlobalSecondaryColor, GlobalTextColor } from '../../Styles';
 
 async function getGroup() {
@@ -13,11 +15,15 @@ async function getGroup() {
   return groupId;
 }
 
-const GroupInput = () => {
+async function getUser() {
+  const userId = await getUserId();
+  return userId;
+}
+
+const GroupInput = ({ onRefresh }) => {
   const [username, setUsername] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [members, setMembers] = useState([]);
-
 
   useEffect(() => {
     const fetchGroupMembers = async () => {
@@ -56,11 +62,25 @@ const GroupInput = () => {
       }
     } catch (error) {
       Alert.alert('Failed to send invitation');
-      console.error(error);
     } finally {
       setIsLoading(false);
     }
   };
+
+  const handleLeaveGroup = async () => {
+    try {
+      const userId = await getUser();
+      await deleteUser({userId: userId});
+      onRefresh();
+      Alert.alert('You have left the group');
+    } 
+    catch (error) {
+      Alert.alert('Failed to leave group');
+    } 
+    finally {
+      setIsLoading(false);
+    }
+  }
 
   const renderMember = ({ item }) => (
     <View style={styles.memberItem}>
@@ -85,6 +105,9 @@ const GroupInput = () => {
           keyExtractor={item => item.id}
           style={styles.membersList}
         />
+      </View>
+      <View style={styles.leaveButton}>
+        <ButtonComp text="Leave Group" onPress={handleLeaveGroup} />
       </View>
     </>
   );
@@ -132,6 +155,11 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 10,
     textAlign: 'center',
+  },
+  leaveButton: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: -5,
   },
 });
 

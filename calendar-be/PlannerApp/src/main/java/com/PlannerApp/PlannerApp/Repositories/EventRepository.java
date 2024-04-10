@@ -1,12 +1,10 @@
 package com.PlannerApp.PlannerApp.Repositories;
 
+import com.PlannerApp.PlannerApp.Entities.EventAttendeeEntity;
 import com.PlannerApp.PlannerApp.Entities.EventEntity;
-import com.PlannerApp.PlannerApp.Models.Event;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
-import org.springframework.stereotype.Repository;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import org.apache.ibatis.annotations.*;
 import java.sql.Date;
@@ -19,7 +17,7 @@ import java.util.UUID;
 public interface EventRepository {
 
     @Insert("INSERT INTO event (event_id, user_id, event_name, date, time_from, time_to, event_description, attendees) " +
-            "VALUES (#{event.id}, #{event.user_id}, #{event.name}, #{event.date}, #{event.from}, #{event.to}, #{event.description}, #{event.attendees})")
+            "VALUES (#{event.event_id}, #{event.user_id}, #{event.event_name}, #{event.date}, #{event.time_from}, #{event.time_to}, #{event.event_description}, #{event.attendees})")
     void insertEvent(@Param("event") EventEntity event);
 
     @Select("SELECT * FROM event WHERE user_id IN (SELECT id FROM users WHERE group_id = #{groupID})")
@@ -33,5 +31,8 @@ public interface EventRepository {
 
     @Select("SELECT users.username FROM event_attendees JOIN users ON event_attendees.user_id = users.id WHERE event_id = #{eventId}")
     List<String> getAttendees(@Param("eventId") UUID eventId);
+
+    @Insert("INSERT INTO event_attendees (event_id, user_id) VALUES (#{attendee.event_id}, #{attendee.user_id})")
+    void joinEvent(@Param("attendee") EventAttendeeEntity attendee);
 }
 

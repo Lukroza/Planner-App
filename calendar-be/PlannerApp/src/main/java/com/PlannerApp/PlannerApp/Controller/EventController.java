@@ -1,5 +1,6 @@
 package com.PlannerApp.PlannerApp.Controller;
 
+import com.PlannerApp.PlannerApp.Entities.EventAttendeeEntity;
 import com.PlannerApp.PlannerApp.Entities.EventEntity;
 import com.PlannerApp.PlannerApp.Models.Event;
 import com.PlannerApp.PlannerApp.Models.EventDetails;
@@ -43,6 +44,9 @@ public class EventController {
             @PathVariable UUID groupId,
             @PathVariable @DateTimeFormat(pattern = "yyyy-MM-dd") Date date) {
         return eventService.countGroupEventsInMonth(groupId, date);
+    @PostMapping("/join")
+    public void joinEvent(@RequestBody EventAttendeeEntity attendee){
+        eventService.joinEvent(attendee);
     }
 
     @GetMapping("/getAttendees/{eventId}")
