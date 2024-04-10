@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from 'react';
-import { Modal, Text, View, StyleSheet, TouchableOpacity } from 'react-native';
-import { GlobalFont, GlobalSecondaryColor } from '../Styles';
-import { getEventDetails } from './API/Events/EventDetails';
-import { getUserId } from './Storage/userDataStorage';
-import { joinEvent } from './API/Events/JoinEvent';
-import { getUserById } from './API/Users/UserGetById';
+import React, { useEffect, useState } from "react";
+import { Modal, Text, View, StyleSheet, TouchableOpacity } from "react-native";
+import { GlobalFont, GlobalSecondaryColor } from "../Styles";
+import { getEventDetails } from "./API/Events/EventDetails";
+import { getUserId } from "./Storage/userDataStorage";
+import { joinEvent } from "./API/Events/JoinEvent";
+import { getUserById } from "./API/Users/UserGetById";
 
 const CloseButton = ({ onPress }) => (
   <TouchableOpacity style={styles.closeButton} onPress={onPress}>
@@ -33,19 +33,18 @@ const EventDescription = ({ isVisible, onClose, event }) => {
 
   useEffect(() => {
     if (userId !== null) {
-      getUsername(userId).then(setUsername);
+      getUsername(userId).then((username) => {
+        setUsername(username);
+        if (event) {
+          getEventDetails({ eventId: event.id }).then(setEventDetails);
+        }
+      });
     }
-  }, [userId]);
-
-  useEffect(() => {
-    if (event && username !== null) {
-      getEventDetails({eventId: event.id}).then(setEventDetails);
-    }
-  }, [username]);
+  }, [event, userId]);
 
   const JoinEvent = async () => {
-    await joinEvent({eventId: event.id, userId});
-    getEventDetails({eventId: event.id}).then(setEventDetails);
+    await joinEvent({ eventId: event.id, userId });
+    getEventDetails({ eventId: event.id }).then(setEventDetails);
   };
 
   return (
@@ -53,24 +52,32 @@ const EventDescription = ({ isVisible, onClose, event }) => {
       animationType="fade"
       transparent={true}
       visible={isVisible}
-      onRequestClose={onClose}>
+      onRequestClose={onClose}
+    >
       <TouchableOpacity
         style={styles.modalOverlay}
         onPress={onClose}
-        activeOpacity={1}>
+        activeOpacity={1}
+      >
         <View style={styles.modalContent}>
           <CloseButton onPress={onClose} />
           <Text style={styles.eventName}>{event?.name}</Text>
           <Text style={styles.eventTime}>{event?.time}</Text>
           <Text style={styles.descriptionTitle}>Description</Text>
-          <Text style={styles.descriptionText}>{eventDetails?.description}</Text>
+          <Text style={styles.descriptionText}>
+            {eventDetails?.description}
+          </Text>
           <Text style={styles.attendeesTitle}>Attendees</Text>
-          <Text style={styles.attendeesText}>{eventDetails?.attendees.map(name => name + " ") || "Be The First One!"}</Text>
-          { userId !== eventDetails?.userId && !eventDetails?.attendees?.includes(username) ? (
+          <Text style={styles.attendeesText}>
+            {eventDetails?.attendees.map((name) => name + " ") ||
+              "Be The First One!"}
+          </Text>
+          {userId !== eventDetails?.userId &&
+          !eventDetails?.attendees?.includes(username) ? (
             <TouchableOpacity style={styles.joinButton} onPress={JoinEvent}>
-            <Text style={styles.joinButtonText}>Join</Text>
+              <Text style={styles.joinButtonText}>Join</Text>
             </TouchableOpacity>
-          ) : null }
+          ) : null}
         </View>
       </TouchableOpacity>
     </Modal>
@@ -80,70 +87,70 @@ const EventDescription = ({ isVisible, onClose, event }) => {
 const styles = StyleSheet.create({
   modalOverlay: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.8)',
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.8)",
   },
   modalContent: {
-    width: '80%',
+    width: "80%",
     backgroundColor: GlobalSecondaryColor,
     borderRadius: 15,
     padding: 20,
-    alignItems: 'center',
+    alignItems: "center",
     elevation: 5,
   },
   closeButton: {
-    alignSelf: 'flex-end',
+    alignSelf: "flex-end",
     padding: 10,
   },
   closeButtonText: {
-    color: 'white',
+    color: "white",
     fontSize: 24,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   eventName: {
     fontFamily: GlobalFont,
-    color: 'white',
+    color: "white",
     fontSize: 20,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginVertical: 8,
   },
   eventTime: {
     fontFamily: GlobalFont,
-    color: 'white',
+    color: "white",
     fontSize: 18,
     marginBottom: 16,
   },
   descriptionTitle: {
     fontFamily: GlobalFont,
-    color: 'white',
-    alignSelf: 'flex-start',
+    color: "white",
+    alignSelf: "flex-start",
     fontSize: 16,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginBottom: 4,
   },
   descriptionText: {
     fontFamily: GlobalFont,
-    color: 'white',
-    alignSelf: 'flex-start',
+    color: "white",
+    alignSelf: "flex-start",
     marginBottom: 16,
   },
   attendeesTitle: {
     fontFamily: GlobalFont,
-    color: 'white',
-    alignSelf: 'flex-start',
+    color: "white",
+    alignSelf: "flex-start",
     fontSize: 16,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginBottom: 4,
   },
   attendeesText: {
     fontFamily: GlobalFont,
-    color: 'white',
-    alignSelf: 'flex-start',
+    color: "white",
+    alignSelf: "flex-start",
     marginBottom: 16,
   },
   joinButton: {
-    backgroundColor: '#58a700',
+    backgroundColor: "#58a700",
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 20,
@@ -151,9 +158,9 @@ const styles = StyleSheet.create({
   },
   joinButtonText: {
     fontFamily: GlobalFont,
-    color: 'white',
+    color: "white",
     fontSize: 16,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
 });
 
