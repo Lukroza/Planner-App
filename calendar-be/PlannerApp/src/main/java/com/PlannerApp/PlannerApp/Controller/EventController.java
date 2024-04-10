@@ -43,7 +43,8 @@ public class EventController {
     public long countEventsByGroupInMonth(
             @PathVariable UUID groupId,
             @PathVariable @DateTimeFormat(pattern = "yyyy-MM-dd") Date date) {
-        return eventService.countGroupEventsInMonth(groupId, date);
+        return eventService.countGroupEventsInMonth(groupId, date);}
+
     @PostMapping("/join")
     public void joinEvent(@RequestBody EventAttendeeEntity attendee){
         eventService.joinEvent(attendee);
@@ -53,5 +54,6 @@ public class EventController {
     public List<String> getAttendees(@PathVariable UUID eventId){
         return eventService.getAttendees(eventId);
     }
+
 }
 
