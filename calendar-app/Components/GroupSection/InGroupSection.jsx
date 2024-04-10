@@ -25,7 +25,6 @@ const GroupInput = ({ onRefresh }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [members, setMembers] = useState([]);
 
-
   useEffect(() => {
     const fetchGroupMembers = async () => {
       setIsLoading(true);

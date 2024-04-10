@@ -1,5 +1,6 @@
 package com.PlannerApp.PlannerApp.Services;
 
+import com.PlannerApp.PlannerApp.Entities.EventAttendeeEntity;
 import com.PlannerApp.PlannerApp.Entities.EventEntity;
 import com.PlannerApp.PlannerApp.Entities.UserEntity;
 import com.PlannerApp.PlannerApp.Models.Event;
@@ -71,6 +72,7 @@ public class EventService {
     public EventDetails getEventDetails(UUID eventId){
         EventEntity eventEntity = eventRepository.getEventDetails(eventId);
         return EventDetails.builder()
+                .userId(eventEntity.getUser_id())
                 .name(eventEntity.getEvent_name())
                 .description(eventEntity.getEvent_description())
                 .date(eventEntity.getDate())
@@ -82,5 +84,9 @@ public class EventService {
 
     public List<String> getAttendees(UUID eventId){
         return eventRepository.getAttendees(eventId);
+    }
+
+    public void joinEvent(EventAttendeeEntity attendee){
+        eventRepository.joinEvent(attendee);
     }
 }
