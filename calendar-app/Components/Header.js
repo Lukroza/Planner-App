@@ -5,29 +5,22 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useFonts, Poppins_700Bold } from '@expo-google-fonts/poppins';
 import { GlobalColor, GlobalSecondaryColor, GlobalFont } from '../Styles';
 import { storeUserInfo } from "./Storage/userDataStorage";
-import NotificationChip from "./NotificationChip";
+import Toast from 'react-native-toast-message';
 
 const Header = ({title}) => {
 
     const [fontsLoaded] = useFonts({
         Poppins_700Bold,
     });
-    const [showNotification, setShowNotification] = useState(false);
-
-    useEffect(() => {
-        if (showNotification) {
-            const timer = setTimeout(() => {
-                setShowNotification(false);
-            }, 3000);
-
-            return () => clearTimeout(timer);
-        }
-    }, [showNotification]);
 
     const handleProfilePress = () => {
         console.log('Profile icon pressed');
         storeUserInfo("0", false, false, "0");
-        setShowNotification(true);
+        Toast.show({
+            type: 'success',
+            text1: 'Logged out',
+            text2: 'You have been logged out',
+        });
     };
 
     if (!fontsLoaded) {
@@ -40,7 +33,6 @@ const Header = ({title}) => {
                   <TouchableOpacity onPress={handleProfilePress}>
                       <Avatar.Text size={40} label="VT" style={styles.avatar} />
                   </TouchableOpacity>
-                  {showNotification && <NotificationChip message="Profile icon pressed" isSuccess={true}/>}
               </View>
               <View style={styles.line} />
           </SafeAreaView>
