@@ -7,7 +7,8 @@ import GroupScreen from '../Screens/GroupScreen';
 import HomeScreen from '../Screens/HomeScreen';
 import CreateEventScreen from '../Screens/CreateEventScreen';
 import { GlobalColor, GlobalSecondaryColor, GlobalFont } from '../Styles';
-
+import Toast from 'react-native-toast-message';
+import { toastConfig } from './NotificationConfig';
 const HomeRoute = () => <HomeScreen/>;
 
 const PlusRoute = () => <CreateEventScreen/>;
@@ -36,13 +37,16 @@ const Footer = () => {
   };
 
   return (
-    <BottomNavigation
-      barStyle={{height: 75, backgroundColor: GlobalSecondaryColor}}
-      navigationState={{ index, routes }}
-      onIndexChange={setIndex}
-      renderScene={renderScene}
-      renderIcon={renderIcon}
-    />
+    <>
+      <BottomNavigation
+        barStyle={{height: 75, backgroundColor: GlobalSecondaryColor}}
+        navigationState={{ index, routes }}
+        onIndexChange={setIndex}
+        renderScene={renderScene}
+        renderIcon={renderIcon}
+      />
+      <Toast config={toastConfig}/>
+    </>
   );
 };
 

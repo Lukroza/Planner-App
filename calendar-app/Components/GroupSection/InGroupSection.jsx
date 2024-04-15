@@ -9,6 +9,7 @@ import { getGroupId } from "../Storage/userDataStorage";
 import { getUserId } from "../Storage/userDataStorage";
 import { deleteUser } from "../API/Groups/RemoveUser";
 import { GlobalColor, GlobalFont, GlobalSecondaryColor, GlobalTextColor } from '../../Styles';
+import Toast from 'react-native-toast-message';
 
 async function getGroup() {
   const groupId = await getGroupId();
@@ -42,26 +43,47 @@ const GroupInput = ({ onRefresh }) => {
 
   const handleSendInvite = async () => {
     if (!username) {
-      Alert.alert('Please enter a username');
+      Toast.show({
+        type: 'error',
+        text1: 'Error',
+        text2: 'Please enter a username',
+      });
       return;
     }
 
     try {
       const fetchedUser = await loginUserAPI({ username });
       if (fetchedUser && fetchedUser.group_id) {
-        Alert.alert('User already in a group');
+        Toast.show({
+          type: 'error',
+          text1: 'Error',
+          text2: 'User already in a group',
+        });
         return;
       }
 
       if (fetchedUser && !fetchedUser.group_id) {
         const group_id = await getGroupId();
         await inviteToGroup({ user_id: fetchedUser.id, group_id });
-        Alert.alert('Invitation sent!');
+        Toast.show({
+          type: 'success',
+          text1: 'Success',
+          text2: 'Invitation sent!',
+        });
+
       } else {
-        Alert.alert('User not found');
+        Toast.show({
+          type: 'error',
+          text1: 'Error',
+          text2: 'User not found',
+        });
       }
     } catch (error) {
-      Alert.alert('Failed to send invitation');
+      Toast.show({
+        type: 'error',
+        text1: 'Error',
+        text2: 'Failed to send invitation',
+      });
     } finally {
       setIsLoading(false);
     }
@@ -70,13 +92,21 @@ const GroupInput = ({ onRefresh }) => {
   const handleLeaveGroup = async () => {
     try {
       const userId = await getUser();
-      await deleteUser({userId: userId});
+      await deleteUser({ userId: userId });
       onRefresh();
-      Alert.alert('You have left the group');
-    } 
+      Toast.show({
+        type: 'success',
+        text1: 'Success',
+        text2: 'You have left the group',
+      });
+    }
     catch (error) {
-      Alert.alert('Failed to leave group');
-    } 
+      Toast.show({
+        type: 'error',
+        text1: 'Error',
+        text2: 'Failed to leave group',
+      });
+    }
     finally {
       setIsLoading(false);
     }
@@ -84,11 +114,11 @@ const GroupInput = ({ onRefresh }) => {
 
   const renderMember = ({ item }) => (
     <View style={styles.memberItem}>
-        <Text style={styles.memberText}>{item.username}</Text>
-        <TouchableOpacity onPress={() => alert('Remove member')}>
-          <Text style={styles.removeIcon}>×</Text>
-        </TouchableOpacity>
-    </View>    
+      <Text style={styles.memberText}>{item.username}</Text>
+      <TouchableOpacity onPress={() => alert('Remove member')}>
+        <Text style={styles.removeIcon}>×</Text>
+      </TouchableOpacity>
+    </View>
   );
 
   return (
