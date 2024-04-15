@@ -6,22 +6,15 @@ import com.PlannerApp.PlannerApp.Entities.UserEntity;
 import com.PlannerApp.PlannerApp.Models.Event;
 import com.PlannerApp.PlannerApp.Models.EventDetails;
 import com.PlannerApp.PlannerApp.Models.EventHeader;
-import com.PlannerApp.PlannerApp.Models.Group;
 import com.PlannerApp.PlannerApp.Repositories.EventRepository;
-import com.PlannerApp.PlannerApp.Repositories.GroupRepository;
 import com.PlannerApp.PlannerApp.Repositories.UserRepository;
-import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
-import java.sql.Time;
 import java.text.SimpleDateFormat;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -80,6 +73,30 @@ public class EventService {
                 .to(eventEntity.getTime_to())
                 .attendees(getAttendees(eventId))
                 .build();
+    }
+
+
+    public long countGroupEventsInMonth(UUID groupId, Date date) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+
+        calendar.set(Calendar.DAY_OF_MONTH, 1);
+        java.sql.Date monthStart = new java.sql.Date(calendar.getTimeInMillis());
+
+        calendar.set(Calendar.DAY_OF_MONTH, calendar.getActualMaximum(Calendar.DAY_OF_MONTH));
+        java.sql.Date monthEnd = new java.sql.Date(calendar.getTimeInMillis());
+
+        List<EventEntity> groupEvents = eventRepository.getGroupEvents(groupId);
+
+        long count = groupEvents.stream()
+                .filter(event -> {
+                    java.sql.Date eventDate = new java.sql.Date(event.getDate().getTime());
+                    return (eventDate.equals(monthStart) || eventDate.after(monthStart)) &&
+                            (eventDate.equals(monthEnd) || eventDate.before(monthEnd));
+                })
+                .count();
+
+        return count;
     }
 
     public List<String> getAttendees(UUID eventId){

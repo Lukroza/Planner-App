@@ -1,45 +1,74 @@
-import React, { useEffect, useState } from 'react';
-import { View, StyleSheet } from 'react-native';
+import React, { useEffect, useState, useCallback } from 'react';
+import { View, Text, StyleSheet } from 'react-native';
 import { Calendar } from 'react-native-calendars';
 import Events from './Events';
 import { getUserId } from './Storage/userDataStorage';
 import { getAllEvents } from './API/Events/AllEventFetcher';
 
-const App = ({ showEvents , onDayPress}) => {
-  const [selected, setSelected] = useState('');
+const CalendarComponent = ({ showEvents, onDayPress, eventMonthCount, getGroupId }) => {
+  const [selectedDate, setSelectedDate] = useState('');
   const [calendarHeight, setCalendarHeight] = useState(350);
   const [events, setEvents] = useState({});
   const [selectedEvents, setSelectedEvents] = useState([]);
+  const [eventCount, setEventCount] = useState(null);
+  const [currentDate, setCurrentDate] = useState(() => {
+    const date = new Date();
+    return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
+  });
 
   useEffect(() => {
     fetchEventHeaders();
   }, []);
 
+  useEffect(() => {
+    if (currentDate) {
+      fetchEventCount(currentDate);
+    }
+  }, [currentDate, fetchEventCount]);
+
   const fetchEventHeaders = async () => {
     const userId = await getUserId();
-
-    const fetchedEvents = await getAllEvents({userId});
+    const fetchedEvents = await getAllEvents({ userId });
     setEvents(fetchedEvents);
   };
 
+  const fetchEventCount = useCallback(async (date) => {
+    try {
+      const groupId = await getGroupId();
+      if (groupId) {
+        const count = await eventMonthCount({ groupId, date });
+        setEventCount(count);
+      } else {
+        console.log('GroupId not found');
+      }
+    } catch (error) {
+      console.error('Failed to fetch event count:', error);
+    }
+  }, [getGroupId, eventMonthCount]);
+
   useEffect(() => {
-    if (events) {
-      const filteredEvents = Object.values(events).filter(event =>
-        new Date(event.date).toLocaleDateString() === new Date(selected).toLocaleDateString()
+    if (selectedDate) {
+      fetchEventCount(selectedDate);
+      const filteredEvents = Object.values(events).filter((event) =>
+        new Date(event.date).toLocaleDateString() === new Date(selectedDate).toLocaleDateString()
       );
       setSelectedEvents(filteredEvents);
     }
-  }, [selected]);
-
+  }, [selectedDate, fetchEventCount]);
 
   const computeMarkedDates = () => {
     const dates = Object.keys(events).reduce((acc, curr) => {
-      acc[curr] = {...events[curr], marked: true, dotColor: 'red'};
+      acc[curr] = { ...events[curr], marked: true, dotColor: 'red' };
       return acc;
     }, {});
 
-    if (selected) {
-      dates[selected] = {...dates[selected], selected: true, disableTouchEvent: true, selectedDotColor: 'orange'};
+    if (selectedDate) {
+      dates[selectedDate] = {
+        ...dates[selectedDate],
+        selected: true,
+        disableTouchEvent: true,
+        selectedDotColor: 'orange',
+      };
     }
 
     return dates;
@@ -54,18 +83,26 @@ const App = ({ showEvents , onDayPress}) => {
         }}
       >
         <Calendar
-          onDayPress={day => {
-            setSelected(day.dateString);
-            if(onDayPress)
-            {
+          onDayPress={(day) => {
+            setSelectedDate(day.dateString);
+            if (onDayPress) {
               onDayPress(day.dateString);
             }
+          }}
+          onVisibleMonthsChange={(months) => {
+            const currentSelectedDate = `${months[0].year}-${String(months[0].month).padStart(2, '0')}`;
+            setCurrentDate(currentSelectedDate);
           }}
           markedDates={computeMarkedDates()}
         />
       </View>
-      {showEvents && selected && (
-        <Events events={selectedEvents} selectedDate={selected} calendarHeight={calendarHeight} />
+      {showEvents && selectedDate && (
+        <Events events={selectedEvents} selectedDate={selectedDate} calendarHeight={calendarHeight} />
+      )}
+      {eventCount !== null && (
+        <View style={styles.eventCountContainer}>
+          <Text style={styles.eventCountText}>Events this month: {eventCount}</Text>
+        </View>
       )}
     </View>
   );
@@ -75,6 +112,12 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
+  eventCountContainer: {
+    
+  },
+  eventCountText: {
+    
+  },
 });
 
-export default App;
+export default CalendarComponent;

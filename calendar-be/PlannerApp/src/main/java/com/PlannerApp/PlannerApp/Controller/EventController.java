@@ -10,6 +10,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.format.annotation.DateTimeFormat;
+import java.util.Date;
 
 import java.util.List;
 import java.util.UUID;
@@ -37,6 +39,12 @@ public class EventController {
         return eventService.getEventDetails(eventId);
     }
 
+    @GetMapping("/countEventsByGroup/{groupId}/{date}")
+    public long countEventsByGroupInMonth(
+            @PathVariable UUID groupId,
+            @PathVariable @DateTimeFormat(pattern = "yyyy-MM") Date date) {
+        return eventService.countGroupEventsInMonth(groupId, date);}
+
     @PostMapping("/join")
     public void joinEvent(@RequestBody EventAttendeeEntity attendee){
         eventService.joinEvent(attendee);
@@ -46,5 +54,6 @@ public class EventController {
     public List<String> getAttendees(@PathVariable UUID eventId){
         return eventService.getAttendees(eventId);
     }
+
 }
 
