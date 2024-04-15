@@ -11,6 +11,7 @@ import { deleteUser } from "../API/Groups/RemoveUser";
 import { GlobalColor, GlobalFont, GlobalSecondaryColor, GlobalTextColor } from '../../Styles';
 import Toast from 'react-native-toast-message';
 import { getGroupName } from "../API/Groups/GroupName";
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 async function getGroup() {
   const groupId = await getGroupId();
@@ -159,6 +160,9 @@ const GroupInput = ({ onRefresh }) => {
         <TouchableOpacity onPress={() => handleRemoveFromGroup(item.id, item.username)}>
           <Text style={styles.removeIcon}>×</Text>
         </TouchableOpacity>
+        )}
+         { item.id === ownerId &&(
+          <MaterialCommunityIcons name="crown" style={styles.removeIcon} />
         )}
     </View>    
   );
