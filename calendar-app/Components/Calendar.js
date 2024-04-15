@@ -13,9 +13,7 @@ const CalendarComponent = ({ showEvents, onDayPress, eventMonthCount, getGroupId
   const [eventCount, setEventCount] = useState(null);
   const [currentDate, setCurrentDate] = useState(() => {
     const date = new Date();
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    return `${year}-${month}-01`;
+    return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
   });
 
   useEffect(() => {
@@ -92,7 +90,7 @@ const CalendarComponent = ({ showEvents, onDayPress, eventMonthCount, getGroupId
             }
           }}
           onVisibleMonthsChange={(months) => {
-            const currentSelectedDate = `${months[0].year}-${String(months[0].month).padStart(2, '0')}-01`;
+            const currentSelectedDate = `${months[0].year}-${String(months[0].month).padStart(2, '0')}`;
             setCurrentDate(currentSelectedDate);
           }}
           markedDates={computeMarkedDates()}

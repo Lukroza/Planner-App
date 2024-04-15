@@ -42,7 +42,7 @@ public class EventController {
     @GetMapping("/countEventsByGroup/{groupId}/{date}")
     public long countEventsByGroupInMonth(
             @PathVariable UUID groupId,
-            @PathVariable @DateTimeFormat(pattern = "yyyy-MM-dd") Date date) {
+            @PathVariable @DateTimeFormat(pattern = "yyyy-MM") Date date) {
         return eventService.countGroupEventsInMonth(groupId, date);}
 
     @PostMapping("/join")
