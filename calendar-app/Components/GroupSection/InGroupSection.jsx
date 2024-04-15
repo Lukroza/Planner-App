@@ -10,6 +10,7 @@ import { getUserId } from "../Storage/userDataStorage";
 import { deleteUser } from "../API/Groups/RemoveUser";
 import { GlobalColor, GlobalFont, GlobalSecondaryColor, GlobalTextColor } from '../../Styles';
 import Toast from 'react-native-toast-message';
+import { getGroupName } from "../API/Groups/GroupName";
 
 async function getGroup() {
   const groupId = await getGroupId();
@@ -25,6 +26,8 @@ const GroupInput = ({ onRefresh }) => {
   const [username, setUsername] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [members, setMembers] = useState([]);
+  const [userId, setUserId] = useState(null);
+  const [ownerId, setOwnerId] = useState(null);
 
   useEffect(() => {
     const fetchGroupMembers = async () => {
@@ -38,7 +41,17 @@ const GroupInput = ({ onRefresh }) => {
       }
       setIsLoading(false);
     }
+
+    const fetchUserId = async () => {
+      const userId = await getUser();
+      const groupId = await getGroup();
+      const groupNameData = await getGroupName({ groupId: groupId });
+      setOwnerId(groupNameData.owner_id);
+      setUserId(userId);
+    }
+
     fetchGroupMembers();
+    fetchUserId();
   }, []);
 
   const handleSendInvite = async () => {
@@ -112,13 +125,42 @@ const GroupInput = ({ onRefresh }) => {
     }
   }
 
+  const handleRemoveFromGroup = async (userId, usernameToRemove) => {
+    try {
+      setIsLoading(true);
+  
+      await deleteUser({ userId: userId });
+      
+      const updatedMembers = members.filter(member => member.username !== usernameToRemove);
+      setMembers(updatedMembers);
+  
+      Toast.show({
+        type: 'success',
+        text1: 'Success',
+        text2: `${usernameToRemove} has been removed from the group`,
+      });
+  
+    } catch (error) {
+      Toast.show({
+        type: 'error',
+        text1: 'Error',
+        text2: `Failed to remove ${usernameToRemove} from the group`,
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  
+
   const renderMember = ({ item }) => (
     <View style={styles.memberItem}>
-      <Text style={styles.memberText}>{item.username}</Text>
-      <TouchableOpacity onPress={() => alert('Remove member')}>
-        <Text style={styles.removeIcon}>×</Text>
-      </TouchableOpacity>
-    </View>
+        <Text style={styles.memberText}>{item.username}</Text>
+        { userId === ownerId && item.id !== ownerId &&(
+        <TouchableOpacity onPress={() => handleRemoveFromGroup(item.id, item.username)}>
+          <Text style={styles.removeIcon}>×</Text>
+        </TouchableOpacity>
+        )}
+    </View>    
   );
 
   return (
@@ -136,9 +178,11 @@ const GroupInput = ({ onRefresh }) => {
           style={styles.membersList}
         />
       </View>
+      { userId !== ownerId && (
       <View style={styles.leaveButton}>
-        <ButtonComp text="Leave Group" onPress={handleLeaveGroup} />
+        <ButtonComp text="Leave Group" onPress={handleLeaveGroup}/>
       </View>
+    )}
     </>
   );
 };
@@ -177,7 +221,7 @@ const styles = StyleSheet.create({
   },
   membersList: {
     flexGrow: 0,
-    height: 425,
+    height: 325,
   },
   header: {
     color: GlobalTextColor,
