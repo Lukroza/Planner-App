@@ -37,4 +37,11 @@ public class GroupController {
     public void removeUserFromGroup(@PathVariable UUID userId) {
         groupService.removeUserFromGroup(userId);
     }
+
+    @DeleteMapping("/delete/{groupId}")
+    @ResponseStatus(HttpStatus.OK)
+    public void deleteGroup(@PathVariable UUID groupId) {
+        groupService.deleteGroup(groupId);
+    }
+
 }

@@ -33,4 +33,7 @@ public interface UserRepository {
 
     @Update("UPDATE users SET group_id = NULL WHERE id = #{userId}")
     void removeUserFromGroup(@Param("userId") UUID userId);
+
+    @Update("UPDATE users SET group_id = NULL WHERE group_id = #{groupId}")
+    void removeGroupFromUsers(@Param("groupId") UUID groupId);
 }

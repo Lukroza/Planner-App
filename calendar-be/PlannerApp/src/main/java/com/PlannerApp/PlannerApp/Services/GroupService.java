@@ -48,4 +48,19 @@ public class GroupService {
     public void removeUserFromGroup(UUID userId) {
         userRepository.removeUserFromGroup(userId);
     }
+
+    public void deleteGroup(UUID groupId) {
+        removeGroupAssociationsFromInvites(groupId);
+        removeGroupAssociationsFromUsers(groupId);
+
+        groupRepository.deleteGroup(groupId);
+    }
+
+    private void removeGroupAssociationsFromInvites(UUID groupId) {
+        groupRepository.deleteInvitesByGroupId(groupId);
+    }
+
+    private void removeGroupAssociationsFromUsers(UUID groupId) {
+        userRepository.removeGroupFromUsers(groupId);
+    }
 }

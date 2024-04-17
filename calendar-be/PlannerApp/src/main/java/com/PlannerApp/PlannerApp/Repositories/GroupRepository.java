@@ -2,10 +2,7 @@ package com.PlannerApp.PlannerApp.Repositories;
 
 import com.PlannerApp.PlannerApp.Entities.GroupEntity;
 import com.PlannerApp.PlannerApp.Entities.UserEntity;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
@@ -20,4 +17,15 @@ public interface GroupRepository {
 
     @Select("SELECT * FROM groups WHERE id = #{id}")
     Optional<GroupEntity> getGroupName(@Param("id") UUID id);
+
+
+    @Delete("DELETE FROM groups WHERE id = #{groupId}")
+    void deleteGroup(@Param("groupId") UUID groupId);
+
+    @Delete("DELETE FROM invites WHERE group_id = #{groupId}")
+    void deleteInvitesByGroupId(@Param("groupId") UUID groupId);
+
+    @Update("UPDATE users SET group_id = NULL WHERE group_id = #{groupId}")
+    void removeGroupFromUsers(@Param("groupId") UUID groupId);
+
 }
