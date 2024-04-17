@@ -4,6 +4,7 @@ import { GlobalFont, GlobalSecondaryColor } from "../Styles";
 import { getEventDetails } from "./API/Events/EventDetails";
 import { getUserId } from "./Storage/userDataStorage";
 import { joinEvent } from "./API/Events/JoinEvent";
+import { leaveEvent } from "./API/Events/LeaveEvent";
 import { getUserById } from "./API/Users/UserGetById";
 
 const CloseButton = ({ onPress }) => (
@@ -47,6 +48,11 @@ const EventDescription = ({ isVisible, onClose, event }) => {
     getEventDetails({ eventId: event.id }).then(setEventDetails);
   };
 
+  const LeaveEvent = async () => {
+    await leaveEvent({ eventId: event.id, userId });
+    getEventDetails({ eventId: event.id }).then(setEventDetails);
+  };
+
   return (
     <Modal
       animationType="fade"
@@ -72,12 +78,17 @@ const EventDescription = ({ isVisible, onClose, event }) => {
             {eventDetails?.attendees.map((name) => name + " ") ||
               "Be The First One!"}
           </Text>
-          {userId !== eventDetails?.userId &&
-          !eventDetails?.attendees?.includes(username) ? (
-            <TouchableOpacity style={styles.joinButton} onPress={JoinEvent}>
-              <Text style={styles.joinButtonText}>Join</Text>
+          {userId === eventDetails?.userId ? null :
+          eventDetails?.attendees?.includes(username) ? (
+            <TouchableOpacity style={styles.leaveButton} onPress={LeaveEvent}>
+              <Text style={styles.buttonText}>Leave</Text>
             </TouchableOpacity>
-          ) : null}
+          ) : (
+            <TouchableOpacity style={styles.joinButton} onPress={JoinEvent}>
+              <Text style={styles.buttonText}>Join</Text>
+            </TouchableOpacity>
+          )
+        }
         </View>
       </TouchableOpacity>
     </Modal>
@@ -150,13 +161,26 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   joinButton: {
+    justifyContent: 'center',
+    alignItems: 'center',
     backgroundColor: "#58a700",
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 20,
     elevation: 2,
+    width: '35%',
   },
-  joinButtonText: {
+  leaveButton: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: "#FF0000",
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 20,
+    elevation: 2,
+    width: '35%',
+  },
+  buttonText: {
     fontFamily: GlobalFont,
     color: "white",
     fontSize: 16,
