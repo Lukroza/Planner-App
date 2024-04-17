@@ -5,6 +5,7 @@ import com.PlannerApp.PlannerApp.Entities.EventEntity;
 import com.PlannerApp.PlannerApp.Models.Event;
 import com.PlannerApp.PlannerApp.Models.EventDetails;
 import com.PlannerApp.PlannerApp.Models.EventHeader;
+import com.PlannerApp.PlannerApp.Models.User;
 import com.PlannerApp.PlannerApp.Services.EventService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,6 +15,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import java.util.Date;
 
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @RestController
@@ -27,6 +29,11 @@ public class EventController {
     @ResponseStatus(HttpStatus.CREATED)
     public void insertEvent(@RequestBody Event event){
         eventService.insertEvent(event);
+    }
+    @DeleteMapping("/delete/{eventId}")
+    public void deleteEvent(@PathVariable UUID eventId, @RequestBody Map<String, UUID> body){
+        UUID userId = body.get("user_id");
+        eventService.deleteEvent(eventId, userId);
     }
 
     @GetMapping("/getEvents/{userId}")
