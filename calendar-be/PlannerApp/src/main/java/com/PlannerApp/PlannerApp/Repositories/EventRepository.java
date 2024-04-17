@@ -34,5 +34,8 @@ public interface EventRepository {
 
     @Insert("INSERT INTO event_attendees (event_id, user_id) VALUES (#{attendee.event_id}, #{attendee.user_id})")
     void joinEvent(@Param("attendee") EventAttendeeEntity attendee);
+
+    @Delete("DELETE FROM event_attendees WHERE event_id = #{attendee.event_id} AND user_id = #{attendee.user_id}")
+    int leaveEvent(@Param("attendee") EventAttendeeEntity attendee);
 }
 
