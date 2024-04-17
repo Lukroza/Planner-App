@@ -27,6 +27,7 @@ const EventDescription = ({ isVisible, onClose, event }) => {
   const [eventDetails, setEventDetails] = useState(null);
   const [userId, setUserId] = useState(null);
   const [username, setUsername] = useState(null);
+  const [isButtonDisabled, setButtonDisabled] = useState(false);
 
   useEffect(() => {
     getUser().then(setUserId);
@@ -43,15 +44,19 @@ const EventDescription = ({ isVisible, onClose, event }) => {
     }
   }, [event, userId]);
 
-  const JoinEvent = async () => {
-    await joinEvent({ eventId: event.id, userId });
-    getEventDetails({ eventId: event.id }).then(setEventDetails);
-  };
+const JoinEvent = async () => {
+  setButtonDisabled(true);
+  await joinEvent({eventId: event.id, userId});
+  getEventDetails({eventId: event.id}).then(setEventDetails);
+  setTimeout(() => setButtonDisabled(false), 5000); // 5 seconds cooldown
+};
 
-  const LeaveEvent = async () => {
-    await leaveEvent({ eventId: event.id, userId });
-    getEventDetails({ eventId: event.id }).then(setEventDetails);
-  };
+const LeaveEvent = async () => {
+  setButtonDisabled(true);
+  await leaveEvent({eventId: event.id, userId});
+  getEventDetails({eventId: event.id}).then(setEventDetails);
+  setTimeout(() => setButtonDisabled(false), 5000); // 5 seconds cooldown
+};
 
   return (
     <Modal
@@ -79,12 +84,12 @@ const EventDescription = ({ isVisible, onClose, event }) => {
               "Be The First One!"}
           </Text>
           {userId === eventDetails?.userId ? null :
-          eventDetails?.attendees?.includes(username) ? (
-            <TouchableOpacity style={styles.leaveButton} onPress={LeaveEvent}>
+            eventDetails?.attendees?.includes(username) ? (
+             <TouchableOpacity disabled={isButtonDisabled} style={styles.leaveButton} onPress={LeaveEvent}>
               <Text style={styles.buttonText}>Leave</Text>
             </TouchableOpacity>
           ) : (
-            <TouchableOpacity style={styles.joinButton} onPress={JoinEvent}>
+            <TouchableOpacity disabled={isButtonDisabled} style={styles.joinButton} onPress={JoinEvent}>
               <Text style={styles.buttonText}>Join</Text>
             </TouchableOpacity>
           )
