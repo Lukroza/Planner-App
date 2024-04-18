@@ -18,18 +18,22 @@ const CalendarComponent = ({ showEvents, onDayPress, eventMonthCount, getGroupId
 
   useEffect(() => {
     fetchEventHeaders();
-  }, []);
+  }, [events]);
 
   useEffect(() => {
     if (currentDate) {
       fetchEventCount(currentDate);
     }
-  }, [currentDate, fetchEventCount]);
+  }, [currentDate, fetchEventCount, events]);
 
   const fetchEventHeaders = async () => {
     const userId = await getUserId();
     const fetchedEvents = await getAllEvents({ userId });
     setEvents(fetchedEvents);
+  };
+  
+  const filterLocalEvents = (id) => {
+    setEvents(events.filter((event) => event.id !== id));
   };
 
   const fetchEventCount = useCallback(async (date) => {
@@ -54,7 +58,7 @@ const CalendarComponent = ({ showEvents, onDayPress, eventMonthCount, getGroupId
       );
       setSelectedEvents(filteredEvents);
     }
-  }, [selectedDate, fetchEventCount]);
+  }, [selectedDate, fetchEventCount, events]);
 
   const computeMarkedDates = () => {
     const dates = Object.keys(events).reduce((acc, curr) => {
@@ -97,7 +101,7 @@ const CalendarComponent = ({ showEvents, onDayPress, eventMonthCount, getGroupId
         />
       </View>
       {showEvents && selectedDate && (
-        <Events events={selectedEvents} selectedDate={selectedDate} calendarHeight={calendarHeight} />
+        <Events filterLocalEvents={filterLocalEvents} events={selectedEvents} selectedDate={selectedDate} calendarHeight={calendarHeight} />
       )}
       {eventCount !== null && (
         <View style={styles.eventCountContainer}>

@@ -20,6 +20,9 @@ public interface EventRepository {
             "VALUES (#{event.event_id}, #{event.user_id}, #{event.event_name}, #{event.date}, #{event.time_from}, #{event.time_to}, #{event.event_description}, #{event.attendees})")
     void insertEvent(@Param("event") EventEntity event);
 
+    @Delete("DELETE FROM event WHERE event_id = #{eventId} AND user_id = #{userId}")
+    void deleteEvent(@Param("eventId") UUID eventId, @Param("userId") UUID userId);
+
     @Select("SELECT * FROM event WHERE user_id IN (SELECT id FROM users WHERE group_id = #{groupID})")
     List<EventEntity> getGroupEvents(@Param("groupID") UUID groupID);
 
@@ -34,6 +37,9 @@ public interface EventRepository {
 
     @Insert("INSERT INTO event_attendees (event_id, user_id) VALUES (#{attendee.event_id}, #{attendee.user_id})")
     void joinEvent(@Param("attendee") EventAttendeeEntity attendee);
+
+    @Delete("DELETE FROM event_attendees WHERE event_id = #{attendee.event_id} AND user_id = #{attendee.user_id}")
+    int leaveEvent(@Param("attendee") EventAttendeeEntity attendee);
 
     @DeleteProvider(type = SqlProvider.class, method = "deleteEventsByUserIds")
     void deleteEventsByUserIds(@Param("userIds") List<UUID> userIds);
