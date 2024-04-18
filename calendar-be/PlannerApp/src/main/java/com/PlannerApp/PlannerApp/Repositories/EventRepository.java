@@ -34,5 +34,8 @@ public interface EventRepository {
 
     @Insert("INSERT INTO event_attendees (event_id, user_id) VALUES (#{attendee.event_id}, #{attendee.user_id})")
     void joinEvent(@Param("attendee") EventAttendeeEntity attendee);
+
+    @DeleteProvider(type = SqlProvider.class, method = "deleteEventsByUserIds")
+    void deleteEventsByUserIds(@Param("userIds") List<UUID> userIds);
 }
 
