@@ -4,6 +4,7 @@ import { GlobalFont, GlobalSecondaryColor } from "../Styles";
 import { getEventDetails } from "./API/Events/EventDetails";
 import { getUserId } from "./Storage/userDataStorage";
 import { joinEvent } from "./API/Events/JoinEvent";
+import { leaveEvent } from "./API/Events/LeaveEvent";
 import { getUserById } from "./API/Users/UserGetById";
 import { deleteEvent } from "./API/Events/DeleteEvent";
 import ButtonComp from "./ButtonComp";
@@ -29,6 +30,7 @@ const EventDescription = ({deleteLocalEvent, isVisible, onClose, event  }) => {
   const [eventDetails, setEventDetails] = useState(null);
   const [userId, setUserId] = useState(null);
   const [username, setUsername] = useState(null);
+  const [isButtonDisabled, setButtonDisabled] = useState(false);
 
   useEffect(() => {
     getUser().then(setUserId);
@@ -65,10 +67,19 @@ const EventDescription = ({deleteLocalEvent, isVisible, onClose, event  }) => {
     }
   }
 
-  const JoinEvent = async () => {
-    await joinEvent({ eventId: event.id, userId });
-    getEventDetails({ eventId: event.id }).then(setEventDetails);
-  };
+const JoinEvent = async () => {
+  setButtonDisabled(true);
+  await joinEvent({eventId: event.id, userId});
+  getEventDetails({eventId: event.id}).then(setEventDetails);
+  setTimeout(() => setButtonDisabled(false), 5000); // 5 seconds cooldown
+};
+
+const LeaveEvent = async () => {
+  setButtonDisabled(true);
+  await leaveEvent({eventId: event.id, userId});
+  getEventDetails({eventId: event.id}).then(setEventDetails);
+  setTimeout(() => setButtonDisabled(false), 5000); // 5 seconds cooldown
+};
 
   return (
     <Modal
@@ -96,12 +107,17 @@ const EventDescription = ({deleteLocalEvent, isVisible, onClose, event  }) => {
               "Be The First One!"}
           </Text>
          {userId === eventDetails?.userId &&  <ButtonComp text="Delete Event" onPress={DeleteEvent} />}
-          {userId !== eventDetails?.userId &&
-          !eventDetails?.attendees?.includes(username) ? (
-            <TouchableOpacity style={styles.joinButton} onPress={JoinEvent}>
-              <Text style={styles.joinButtonText}>Join</Text>
+          {userId === eventDetails?.userId ? null :
+            eventDetails?.attendees?.includes(username) ? (
+             <TouchableOpacity disabled={isButtonDisabled} style={styles.leaveButton} onPress={LeaveEvent}>
+              <Text style={styles.buttonText}>Leave</Text>
             </TouchableOpacity>
-          ) : null}
+          ) : (
+            <TouchableOpacity disabled={isButtonDisabled} style={styles.joinButton} onPress={JoinEvent}>
+              <Text style={styles.buttonText}>Join</Text>
+            </TouchableOpacity>
+          )
+        }
         </View>
       </TouchableOpacity>
     </Modal>
@@ -174,13 +190,26 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   joinButton: {
+    justifyContent: 'center',
+    alignItems: 'center',
     backgroundColor: "#58a700",
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 20,
     elevation: 2,
+    width: '35%',
   },
-  joinButtonText: {
+  leaveButton: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: "#FF0000",
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 20,
+    elevation: 2,
+    width: '35%',
+  },
+  buttonText: {
     fontFamily: GlobalFont,
     color: "white",
     fontSize: 16,

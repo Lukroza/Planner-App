@@ -110,4 +110,8 @@ public class EventService {
     public void joinEvent(EventAttendeeEntity attendee){
         eventRepository.joinEvent(attendee);
     }
+
+    public int leaveEvent(EventAttendeeEntity attendee){
+        return eventRepository.leaveEvent(attendee);
+    }
 }

@@ -10,6 +10,7 @@ import com.PlannerApp.PlannerApp.Services.EventService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.format.annotation.DateTimeFormat;
 import java.util.Date;
@@ -55,6 +56,15 @@ public class EventController {
     @PostMapping("/join")
     public void joinEvent(@RequestBody EventAttendeeEntity attendee){
         eventService.joinEvent(attendee);
+    }
+
+    @DeleteMapping("/leave")
+    public ResponseEntity<String> leaveEvent(@RequestBody EventAttendeeEntity attendee){
+        int rowsAffected = eventService.leaveEvent(attendee);
+        if(rowsAffected == 1){
+            return new ResponseEntity<>("Attendee successfully removed from the event.", HttpStatus.OK);
+        }
+        return new ResponseEntity<>("Failed to find or remove attendee from the event.", HttpStatus.NOT_FOUND);
     }
 
     @GetMapping("/getAttendees/{eventId}")
