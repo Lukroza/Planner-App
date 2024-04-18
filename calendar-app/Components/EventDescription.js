@@ -6,6 +6,9 @@ import { getUserId } from "./Storage/userDataStorage";
 import { joinEvent } from "./API/Events/JoinEvent";
 import { leaveEvent } from "./API/Events/LeaveEvent";
 import { getUserById } from "./API/Users/UserGetById";
+import { deleteEvent } from "./API/Events/DeleteEvent";
+import ButtonComp from "./ButtonComp";
+import Toast from "react-native-toast-message";
 
 const CloseButton = ({ onPress }) => (
   <TouchableOpacity style={styles.closeButton} onPress={onPress}>
@@ -23,7 +26,7 @@ async function getUsername(userId) {
   return username.username;
 }
 
-const EventDescription = ({ isVisible, onClose, event }) => {
+const EventDescription = ({deleteLocalEvent, isVisible, onClose, event  }) => {
   const [eventDetails, setEventDetails] = useState(null);
   const [userId, setUserId] = useState(null);
   const [username, setUsername] = useState(null);
@@ -43,6 +46,26 @@ const EventDescription = ({ isVisible, onClose, event }) => {
       });
     }
   }, [event, userId]);
+
+  const DeleteEvent = async () => {
+    try{
+      await deleteEvent({ eventId: event.id, userId: userId });
+      deleteLocalEvent();
+      onClose();
+      Toast.show({
+        type: 'success',
+        text1: 'Success',
+        text2: 'Event deleted',
+      });
+    }
+    catch(e){
+      Toast.show({
+        type: 'error',
+        text1: 'Error',
+        text2: 'Something went wrong',
+      });
+    }
+  }
 
 const JoinEvent = async () => {
   setButtonDisabled(true);
@@ -83,6 +106,7 @@ const LeaveEvent = async () => {
             {eventDetails?.attendees.map((name) => name + " ") ||
               "Be The First One!"}
           </Text>
+         {userId === eventDetails?.userId &&  <ButtonComp text="Delete Event" onPress={DeleteEvent} />}
           {userId === eventDetails?.userId ? null :
             eventDetails?.attendees?.includes(username) ? (
              <TouchableOpacity disabled={isButtonDisabled} style={styles.leaveButton} onPress={LeaveEvent}>

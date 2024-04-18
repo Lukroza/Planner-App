@@ -20,6 +20,9 @@ public interface EventRepository {
             "VALUES (#{event.event_id}, #{event.user_id}, #{event.event_name}, #{event.date}, #{event.time_from}, #{event.time_to}, #{event.event_description}, #{event.attendees})")
     void insertEvent(@Param("event") EventEntity event);
 
+    @Delete("DELETE FROM event WHERE event_id = #{eventId} AND user_id = #{userId}")
+    void deleteEvent(@Param("eventId") UUID eventId, @Param("userId") UUID userId);
+
     @Select("SELECT * FROM event WHERE user_id IN (SELECT id FROM users WHERE group_id = #{groupID})")
     List<EventEntity> getGroupEvents(@Param("groupID") UUID groupID);
 
