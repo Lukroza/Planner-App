@@ -4,6 +4,7 @@ import Header from '../Components/Header';
 import Calendar from '../Components/Calendar';
 import { eventMonthCount } from '../Components/API/Events/EventMonthCount';
 import { getGroupId } from '../Components/Storage/userDataStorage';
+import { GlobalColor } from '../Styles';
 
 const HomeScreen = () => {
   return (
@@ -21,7 +22,7 @@ const HomeScreen = () => {
 const styles = StyleSheet.create({
   view: {
     flex: 1,
-    backgroundColor: '#2F3855',
+    backgroundColor: GlobalColor,
   },
 });
 

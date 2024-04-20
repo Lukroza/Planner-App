@@ -1,9 +1,10 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import { Calendar } from 'react-native-calendars';
+import { Calendar, LocaleConfig } from 'react-native-calendars';
 import Events from './Events';
 import { getUserId } from './Storage/userDataStorage';
 import { getAllEvents } from './API/Events/AllEventFetcher';
+import { GlobalBackgroundTextColor, GlobalColor, GlobalHeaderColor, GlobalSecondaryColor, GlobalTextColor } from '../Styles';
 
 const CalendarComponent = ({ showEvents, onDayPress, eventMonthCount, getGroupId }) => {
   const [selectedDate, setSelectedDate] = useState('');
@@ -22,9 +23,9 @@ const CalendarComponent = ({ showEvents, onDayPress, eventMonthCount, getGroupId
 
   useEffect(() => {
     if (currentDate) {
-      fetchEventCount(currentDate);
+   //   fetchEventCount(currentDate);
     }
-  }, [currentDate, fetchEventCount, events]);
+  }, [currentDate, events]);
 
   const fetchEventHeaders = async () => {
     const userId = await getUserId();
@@ -36,29 +37,29 @@ const CalendarComponent = ({ showEvents, onDayPress, eventMonthCount, getGroupId
     setEvents(events.filter((event) => event.id !== id));
   };
 
-  const fetchEventCount = useCallback(async (date) => {
-    try {
-      const groupId = await getGroupId();
-      if (groupId) {
-        const count = await eventMonthCount({ groupId, date });
-        setEventCount(count);
-      } else {
-        console.log('GroupId not found');
-      }
-    } catch (error) {
-      console.error('Failed to fetch event count:', error);
-    }
-  }, [getGroupId, eventMonthCount]);
+  // const fetchEventCount = useCallback(async (date) => {
+  //   try {
+  //     const groupId = await getGroupId();
+  //     if (groupId) {
+  //       const count = await eventMonthCount({ groupId, date });
+  //       setEventCount(count);
+  //     } else {
+  //       console.log('GroupId not found');
+  //     }
+  //   } catch (error) {
+  //     console.error('Failed to fetch event count:', error);
+  //   }
+  // }, [getGroupId]);
 
-  useEffect(() => {
-    if (selectedDate) {
-      fetchEventCount(selectedDate);
-      const filteredEvents = Object.values(events).filter((event) =>
-        new Date(event.date).toLocaleDateString() === new Date(selectedDate).toLocaleDateString()
-      );
-      setSelectedEvents(filteredEvents);
-    }
-  }, [selectedDate, fetchEventCount, events]);
+  // useEffect(() => {
+  //   if (selectedDate) {
+  //     fetchEventCount(selectedDate);
+  //     const filteredEvents = Object.values(events).filter((event) =>
+  //       new Date(event.date).toLocaleDateString() === new Date(selectedDate).toLocaleDateString()
+  //     );
+  //     setSelectedEvents(filteredEvents);
+  //   }
+  // }, [selectedDate, events]);
 
   const computeMarkedDates = () => {
     const dates = Object.keys(events).reduce((acc, curr) => {
@@ -98,6 +99,17 @@ const CalendarComponent = ({ showEvents, onDayPress, eventMonthCount, getGroupId
             setCurrentDate(currentSelectedDate);
           }}
           markedDates={computeMarkedDates()}
+          theme={{
+            calendarBackground: GlobalColor,
+            backgroundColor: GlobalColor,
+            monthTextColor: GlobalHeaderColor,
+            selectedDayBackgroundColor: GlobalHeaderColor,
+            selectedDayTextColor: GlobalColor,
+            todayTextColor: GlobalHeaderColor,
+            dayTextColor: GlobalTextColor,
+            textDisabledColor: GlobalBackgroundTextColor,
+
+          }}
         />
       </View>
       {showEvents && selectedDate && (
@@ -120,7 +132,7 @@ const styles = StyleSheet.create({
     
   },
   eventCountText: {
-    
+    color: GlobalHeaderColor,
   },
 });
 
