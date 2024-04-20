@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Modal, Text, View, StyleSheet, TouchableOpacity } from "react-native";
-import { GlobalFont, GlobalSecondaryColor } from "../Styles";
+import { GlobalFont, GlobalHeaderColor, GlobalSecondaryColor } from "../Styles";
 import { getEventDetails } from "./API/Events/EventDetails";
 import { getUserId } from "./Storage/userDataStorage";
 import { joinEvent } from "./API/Events/JoinEvent";
@@ -150,7 +150,7 @@ const styles = StyleSheet.create({
   },
   eventName: {
     fontFamily: GlobalFont,
-    color: "white",
+    color: GlobalHeaderColor,
     fontSize: 20,
     fontWeight: "bold",
     marginVertical: 8,
@@ -163,7 +163,7 @@ const styles = StyleSheet.create({
   },
   descriptionTitle: {
     fontFamily: GlobalFont,
-    color: "white",
+    color: GlobalHeaderColor,
     alignSelf: "flex-start",
     fontSize: 16,
     fontWeight: "bold",
@@ -177,7 +177,7 @@ const styles = StyleSheet.create({
   },
   attendeesTitle: {
     fontFamily: GlobalFont,
-    color: "white",
+    color: GlobalHeaderColor,
     alignSelf: "flex-start",
     fontSize: 16,
     fontWeight: "bold",
