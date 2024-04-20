@@ -12,6 +12,7 @@ import { GlobalColor, GlobalFont, GlobalHeaderColor, GlobalSecondaryColor, Globa
 import Toast from 'react-native-toast-message';
 import { getGroupName } from "../API/Groups/GroupName";
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import { deleteGroup } from "../API/Groups/DeleteGroup";
 
 async function getGroup() {
   const groupId = await getGroupId();
@@ -126,6 +127,28 @@ const GroupInput = ({ onRefresh }) => {
     }
   }
 
+  const handleDeleteGroup = async () => {
+    try {
+      setIsLoading(true);
+      const groupId = await getGroupId();
+      await deleteGroup({ group_id: groupId });
+      onRefresh();
+      Toast.show({
+        type: 'success',
+        text1: 'Success',
+        text2: 'Group has been deleted',
+      });
+    } catch (error) {
+      Toast.show({
+        type: 'error',
+        text1: 'Error',
+        text2: 'Failed to delete group',
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const handleRemoveFromGroup = async (userId, usernameToRemove) => {
     try {
       setIsLoading(true);
@@ -182,11 +205,16 @@ const GroupInput = ({ onRefresh }) => {
           style={styles.membersList}
         />
       </View>
-      {userId !== ownerId && (
-        <View style={styles.leaveButton}>
-          <ButtonComp text="Leave Group" onPress={handleLeaveGroup} />
-        </View>
-      )}
+      { userId !== ownerId && (
+      <View style={styles.leaveButton}>
+        <ButtonComp text="Leave Group" onPress={handleLeaveGroup}/>
+      </View>
+    )}
+      { userId === ownerId && (
+      <View style={styles.leaveButton}>
+        <ButtonComp text="Delete Group" onPress={handleDeleteGroup}/>
+      </View>
+    )}
     </>
   );
 };
@@ -225,7 +253,7 @@ const styles = StyleSheet.create({
   },
   membersList: {
     flexGrow: 0,
-    height: 325,
+    height: 200,
   },
   header: {
     color: GlobalHeaderColor,

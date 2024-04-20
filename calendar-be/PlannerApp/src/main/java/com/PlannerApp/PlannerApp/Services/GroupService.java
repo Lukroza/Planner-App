@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.PlannerApp.PlannerApp.Entities.GroupEntity;
+import com.PlannerApp.PlannerApp.Repositories.EventRepository;
 
 import java.util.List;
 import java.util.Optional;
@@ -22,6 +23,7 @@ public class GroupService {
 
     private final GroupRepository groupRepository;
     private final UserRepository userRepository;
+    private final EventRepository eventRepository;
 
     public UUID insertGroup(Group group){
         UUID groupId = UUID.randomUUID();
@@ -47,5 +49,23 @@ public class GroupService {
 
     public void removeUserFromGroup(UUID userId) {
         userRepository.removeUserFromGroup(userId);
+    }
+
+    private void removeGroupAssociationsFromInvites(UUID groupId) {
+        groupRepository.deleteInvitesByGroupId(groupId);
+    }
+
+    private void removeGroupAssociationsFromUsers(UUID groupId) {
+        userRepository.removeGroupFromUsers(groupId);
+    }
+
+    public void deleteGroup(UUID groupId) {
+        List<UUID> userIds = userRepository.getUserIdsByGroupId(groupId);
+        eventRepository.deleteEventsByUserIds(userIds);
+
+        removeGroupAssociationsFromInvites(groupId);
+        removeGroupAssociationsFromUsers(groupId);
+
+        groupRepository.deleteGroup(groupId);
     }
 }

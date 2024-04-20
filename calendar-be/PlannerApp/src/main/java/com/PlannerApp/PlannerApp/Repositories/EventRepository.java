@@ -40,5 +40,8 @@ public interface EventRepository {
 
     @Delete("DELETE FROM event_attendees WHERE event_id = #{attendee.event_id} AND user_id = #{attendee.user_id}")
     int leaveEvent(@Param("attendee") EventAttendeeEntity attendee);
+
+    @DeleteProvider(type = SqlProvider.class, method = "deleteEventsByUserIds")
+    void deleteEventsByUserIds(@Param("userIds") List<UUID> userIds);
 }
 
