@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { Keyboard, View, StyleSheet, TextInput, Text, Button, ScrollView, KeyboardAvoidingView, TouchableWithoutFeedback } from 'react-native';
-
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import Header from '../Components/Header';
 import Calendar from '../Components/Calendar';
@@ -9,6 +8,8 @@ import {createEventApi} from '../Components/API/Events/EventCreator';
 import { GlobalBorderColor, GlobalColor, GlobalFont, GlobalHeaderColor } from '../Styles';
 import { getUserId } from '../Components/Storage/userDataStorage';
 import TextInputBar from '../Components/TextInputBar';
+import { useNavigation } from '@react-navigation/native';
+
 
 function CreateEvent() {
     const [name, setName] = React.useState('');
@@ -18,6 +19,9 @@ function CreateEvent() {
     const [isToPickerVisible, setToPickerVisibility] = React.useState(false);
     const [description, setDescription] = React.useState('');
     const [selectedDate, setSelectedDate] = React.useState(new Date());
+
+
+    const navigation = useNavigation();
 
     const showFromPicker = () => {
         setFromPickerVisibility(true);
@@ -83,6 +87,7 @@ function CreateEvent() {
             description: description,
         };
         createEventApi(eventData);
+        navigation.navigate('Home');
     };
 
     return (

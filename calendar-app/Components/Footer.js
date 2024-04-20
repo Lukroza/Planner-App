@@ -1,53 +1,70 @@
-import { CurrentRenderContext } from '@react-navigation/native';
-import * as React from 'react';
-import { View, StyleSheet, TouchableOpacity } from "react-native";
-import { BottomNavigation, Text } from 'react-native-paper';
+import React from "react";
+import { createStackNavigator } from "@react-navigation/stack";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { NavigationContainer } from "@react-navigation/native";
+import HomeScreen from "../Screens/HomeScreen";
+import CreateEventScreen from "../Screens/CreateEventScreen";
+import GroupScreen from "../Screens/GroupScreen";
+import ProfileScreen from "../Screens/ProfileScreen";
+import RegistrationScreen from "../Screens/RegistrationScreen";
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import GroupScreen from '../Screens/GroupScreen';
-import HomeScreen from '../Screens/HomeScreen';
-import CreateEventScreen from '../Screens/CreateEventScreen';
-import { GlobalAccentColor, GlobalColor, GlobalSecondaryColor, GlobalTextColor,  } from '../Styles';
-import Toast from 'react-native-toast-message';
-import { toastConfig } from './NotificationConfig';
-const HomeRoute = () => <HomeScreen/>;
+import { GlobalAccentColor, GlobalColor, GlobalSecondaryColor, GlobalTextColor  } from '../Styles';
 
-const PlusRoute = () => <CreateEventScreen/>;
 
-const GroupRoute = () => <GroupScreen />;
+const Stack = createStackNavigator();
+const Tab = createBottomTabNavigator();
 
-const Footer = () => {
-  const [index, setIndex] = React.useState(0);
-  const [routes] = React.useState([
-    { key: 'home', focusedIcon: 'home', unfocusedIcon: 'home-outline'},
-    { key: 'plus', focusedIcon: 'plus-thick', unfocusedIcon: 'plus-outline'},
-    { key: 'group', focusedIcon: 'account-group', unfocusedIcon: 'account-group-outline'},
-  ]);
-
-  const renderScene = BottomNavigation.SceneMap({
-    home: HomeRoute,
-    plus: PlusRoute,
-    group: GroupRoute,
-  });
-
-  const renderIcon = ({ route, focused }) => {
-    const { focusedIcon, unfocusedIcon } = routes.find(r => r.key === route.key);
-    const iconName = focused ? focusedIcon : unfocusedIcon;
-    return <MaterialCommunityIcons name={iconName} size={24} color={GlobalTextColor} />;
-  };
-
+function MainTabNavigator() {
   return (
-    <>
-      <BottomNavigation
-        barStyle={{height: 75, backgroundColor: GlobalSecondaryColor}}
-        activeIndicatorStyle={{backgroundColor: GlobalAccentColor}}
-        navigationState={{ index, routes }}
-        onIndexChange={setIndex}
-        renderScene={renderScene}
-        renderIcon={renderIcon}
-      />
-      <Toast config={toastConfig}/>
-    </>
+    <Tab.Navigator 
+    screenOptions={({ route }) => ({
+      tabBarIcon: ({ focused, color, size }) => {
+      let iconName;
+
+      if (route.name === 'Home') {
+        iconName = focused ? 'home' : 'home-outline';
+      } else if (route.name === 'CreateEvent') {
+        iconName = focused ? 'plus-thick' : 'plus-outline';
+      } else if (route.name === 'Group') {
+        iconName = focused ? 'account-group' : 'account-group-outline';
+      }
+
+      return <MaterialCommunityIcons name={iconName} size={focused ? 40 : 24} color={GlobalAccentColor} />;
+    },
+    tabBarStyle: {
+    height: 75,
+    backgroundColor: GlobalSecondaryColor,
+    },
+      })}
+>
+      <Tab.Screen name="Home" component={HomeScreen} options={{headerShown: false, title:""}}/>
+      <Tab.Screen name="CreateEvent" component={CreateEventScreen} options={{headerShown: false, title:""}}/>
+      <Tab.Screen name="Group" component={GroupScreen} options={{headerShown: false, title:""}}/>
+      <Tab.Screen name="Profile" component={ProfileScreen} options={{ tabBarButton: () => null, headerShown: false, title:""}} />
+    </Tab.Navigator>
+  );
+}
+
+const AppNavigation = () => {
+  return (
+    <NavigationContainer>
+      <Stack.Navigator screenOptions={{headerShown: false}}>
+        <Stack.Screen 
+        name="Main" 
+        component={MainTabNavigator} 
+        />
+        <Stack.Screen
+        name="Profile"
+        component={ProfileScreen}
+        tabBarVisible={true}
+        />
+        <Stack.Screen
+        name="Registration"
+        component={RegistrationScreen}
+        />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 };
 
-export default Footer;
+export default AppNavigation;

@@ -10,8 +10,9 @@
   },
   "dependencies": {
     "@expo-google-fonts/poppins": "^0.2.3",
-    "@react-navigation/native": "^6.1.12",
-    "@react-navigation/stack": "^6.3.21",
+    "@react-navigation/bottom-tabs": "^6.5.20",
+    "@react-navigation/native": "^6.1.17",
+    "@react-navigation/stack": "^6.3.29",
     "@reduxjs/toolkit": "^2.2.1",
     "@types/react": "~18.2.45",
     "axios": "^1.6.8",
