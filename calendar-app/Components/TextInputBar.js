@@ -1,9 +1,9 @@
 import * as React from 'react';
 import { TextInput } from 'react-native-paper';
 import { View, StyleSheet } from 'react-native';
-import { GlobalColor, GlobalFont, GlobalSecondaryColor, GlobalTextColor } from '../Styles';
+import { GlobalColor, GlobalFont, GlobalHeaderColor, GlobalSecondaryColor, GlobalTextColor } from '../Styles';
 
-const TextInputBar = ({ label, onChangeText }) => {
+const TextInputBar = ({ label, onChangeText, multiline }) => {
   return (
     <TextInput
       underlineColor ="transparent"
@@ -11,6 +11,16 @@ const TextInputBar = ({ label, onChangeText }) => {
       onChangeText={onChangeText}
       style={styles.textBar}
       textColor= {GlobalTextColor}
+      numberOfLines={multiline ? 4 : 1}
+      multiline={multiline}
+      activeOutlineColor= {GlobalHeaderColor}
+      theme={{
+        colors: {
+          primary: GlobalHeaderColor,
+          underlineColor: 'transparent',
+          onSurfaceVariant: GlobalHeaderColor,
+        },
+      }}
     />
   );
 };

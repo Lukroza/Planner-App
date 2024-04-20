@@ -8,7 +8,7 @@ import { getGroupMembers } from '../API/Groups/GroupMembers';
 import { getGroupId } from "../Storage/userDataStorage";
 import { getUserId } from "../Storage/userDataStorage";
 import { deleteUser } from "../API/Groups/RemoveUser";
-import { GlobalColor, GlobalFont, GlobalSecondaryColor, GlobalTextColor } from '../../Styles';
+import { GlobalColor, GlobalFont, GlobalHeaderColor, GlobalSecondaryColor, GlobalTextColor } from '../../Styles';
 import Toast from 'react-native-toast-message';
 import { getGroupName } from "../API/Groups/GroupName";
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -152,18 +152,18 @@ const GroupInput = ({ onRefresh }) => {
   const handleRemoveFromGroup = async (userId, usernameToRemove) => {
     try {
       setIsLoading(true);
-  
+
       await deleteUser({ userId: userId });
-      
+
       const updatedMembers = members.filter(member => member.username !== usernameToRemove);
       setMembers(updatedMembers);
-  
+
       Toast.show({
         type: 'success',
         text1: 'Success',
         text2: `${usernameToRemove} has been removed from the group`,
       });
-  
+
     } catch (error) {
       Toast.show({
         type: 'error',
@@ -174,20 +174,20 @@ const GroupInput = ({ onRefresh }) => {
       setIsLoading(false);
     }
   };
-  
+
 
   const renderMember = ({ item }) => (
     <View style={styles.memberItem}>
-        <Text style={styles.memberText}>{item.username}</Text>
-        { userId === ownerId && item.id !== ownerId &&(
+      <Text style={styles.memberText}>{item.username}</Text>
+      {userId === ownerId && item.id !== ownerId && (
         <TouchableOpacity onPress={() => handleRemoveFromGroup(item.id, item.username)}>
           <Text style={styles.removeIcon}>×</Text>
         </TouchableOpacity>
-        )}
-         { item.id === ownerId &&(
-          <MaterialCommunityIcons name="crown" style={styles.removeIcon} />
-        )}
-    </View>    
+      )}
+      {item.id === ownerId && (
+        <MaterialCommunityIcons name="crown" style={styles.removeIcon} />
+      )}
+    </View>
   );
 
   return (
@@ -227,7 +227,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   container: {
-    backgroundColor: '#8EBBFF',
+    backgroundColor: GlobalSecondaryColor,
     borderRadius: 10,
     padding: 10,
     margin: 20,
@@ -239,7 +239,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 10,
     marginVertical: 5,
-    backgroundColor: '#8EBBFF',
+    backgroundColor: { GlobalSecondaryColor },
   },
   memberText: {
     color: GlobalTextColor,
@@ -256,7 +256,7 @@ const styles = StyleSheet.create({
     height: 200,
   },
   header: {
-    color: GlobalTextColor,
+    color: GlobalHeaderColor,
     fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 10,

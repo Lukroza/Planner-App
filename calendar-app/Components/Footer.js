@@ -6,7 +6,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import GroupScreen from '../Screens/GroupScreen';
 import HomeScreen from '../Screens/HomeScreen';
 import CreateEventScreen from '../Screens/CreateEventScreen';
-import { GlobalColor, GlobalSecondaryColor, GlobalFont } from '../Styles';
+import { GlobalAccentColor, GlobalColor, GlobalSecondaryColor, GlobalTextColor,  } from '../Styles';
 import Toast from 'react-native-toast-message';
 import { toastConfig } from './NotificationConfig';
 const HomeRoute = () => <HomeScreen/>;
@@ -32,14 +32,14 @@ const Footer = () => {
   const renderIcon = ({ route, focused }) => {
     const { focusedIcon, unfocusedIcon } = routes.find(r => r.key === route.key);
     const iconName = focused ? focusedIcon : unfocusedIcon;
-    const color = focused ? '#24293E' : '#F4F5FC';
-    return <MaterialCommunityIcons name={iconName} size={24} color={color} />;
+    return <MaterialCommunityIcons name={iconName} size={24} color={GlobalTextColor} />;
   };
 
   return (
     <>
       <BottomNavigation
         barStyle={{height: 75, backgroundColor: GlobalSecondaryColor}}
+        activeIndicatorStyle={{backgroundColor: GlobalAccentColor}}
         navigationState={{ index, routes }}
         onIndexChange={setIndex}
         renderScene={renderScene}

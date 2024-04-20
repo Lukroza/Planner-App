@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, FlatList, TouchableOpacity, StyleSheet, Dimensions } from 'react-native';
 import EventDescription from './EventDescription';
-import { GlobalColor, GlobalSecondaryColor,GlobalFont } from '../Styles';
+import { GlobalColor, GlobalSecondaryColor,GlobalFont, GlobalTextColor, GlobalHeaderColor } from '../Styles';
 
 const Events = ({ events, selectedDate, calendarHeight, filterLocalEvents }) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -51,11 +51,11 @@ const createStyles = (calendarHeight) => StyleSheet.create({
   },
   eventsContainer: {
     maxHeight: Dimensions.get('window').height - calendarHeight - 5,
-    backgroundColor: '#f0f0f0',
+    backgroundColor: GlobalColor,
     padding: 10,
   },
   event: {
-    backgroundColor: 'white',
+    backgroundColor: GlobalSecondaryColor,
     padding: 10,
     marginVertical: 5,
     borderRadius: 5,
@@ -63,13 +63,13 @@ const createStyles = (calendarHeight) => StyleSheet.create({
     borderColor: '#ddd',
   },
   eventText: {
-    color: 'black',
+    color: GlobalTextColor,
     fontFamily: GlobalFont,
   },
   noEventsText: {
     fontFamily: GlobalFont,
     textAlign: 'center',
-    color: '#999',
+    color: GlobalHeaderColor,
     marginTop: 20,
   },
 });

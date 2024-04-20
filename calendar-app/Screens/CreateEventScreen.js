@@ -1,12 +1,14 @@
 import * as React from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { View, StyleSheet, TextInput, Text, Button, ScrollView, KeyboardAvoidingView } from 'react-native';
+import { Keyboard, View, StyleSheet, TextInput, Text, Button, ScrollView, KeyboardAvoidingView, TouchableWithoutFeedback } from 'react-native';
+
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import Header from '../Components/Header';
 import Calendar from '../Components/Calendar';
 import {createEventApi} from '../Components/API/Events/EventCreator';
-import { GlobalColor, GlobalFont } from '../Styles';
+import { GlobalBorderColor, GlobalColor, GlobalFont, GlobalHeaderColor } from '../Styles';
 import { getUserId } from '../Components/Storage/userDataStorage';
+import TextInputBar from '../Components/TextInputBar';
 
 function CreateEvent() {
     const [name, setName] = React.useState('');
@@ -85,21 +87,24 @@ function CreateEvent() {
 
     return (
         <SafeAreaProvider style={styles.safeArea}>
+            
             <Header title="Create Event"/>
+            <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
             <ScrollView style={styles.scrollView}>
                 <View style={styles.eventInputContainer}>
                     <Text style={styles.label}>Event Name</Text>
-                    <TextInput
-                        style={styles.input}
-                        value={name}
-                        onChangeText={setName}
-                    />
+                    <TextInputBar label="Write your event name" onChangeText={setName}/>
+                </View>
+                <View style={styles.descriptionContainer}>
+                    <Text style={styles.label}>Description</Text>
+                    <TextInputBar label="Write about the event" onChangeText={setDescription} multiline={true}/>
                 </View>
                 <Calendar showEvents={false} onDayPress={day => handleDateChange(day)}/>
                 <View style={styles.timeContainer}>
                     <Text style={styles.fromToLabel}>From</Text>
                     <Button title={fromTimeString} onPress={showFromPicker} />
                     <DateTimePickerModal
+                        
                         isVisible={isFromPickerVisible}
                         mode="time"
                         onConfirm={handleFromConfirm}
@@ -109,23 +114,11 @@ function CreateEvent() {
                     <Text style={styles.fromToLabel}>To</Text>
                     <Button title={toTimeString} onPress={showToPicker} />
                     <DateTimePickerModal
-                        isVisible={isToPickerVisible}
+                        isVisible={isToPickerVisible}   
                         mode="time"
                         onConfirm={handleToConfirm}
                         onCancel={hideToPicker}
                         date = {toTime}    
-                    />
-                </View>
-                <View style={styles.descriptionContainer}>
-                    <Text style={styles.label}>Description</Text>
-                    <TextInput
-                        style={styles.descriptionInput}
-                        value={description}
-                        onChangeText={setDescription}
-                        multiline
-                        numberOfLines={4}
-                        placeholder="Write about the event place"
-                        placeholderTextColor="#9CA3AF"
                     />
                 </View>
                 <View style={styles.buttonContainer}>
@@ -133,7 +126,7 @@ function CreateEvent() {
                     <Button style = {styles.button} title="Create" onPress={handleCreate} color="#3DDC84" />
                 </View>
             </ScrollView>
-            
+            </TouchableWithoutFeedback>
         </SafeAreaProvider>
     );
 }
@@ -152,19 +145,6 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         padding: 20,
     },
-    input: {
-        fontFamily: GlobalFont,
-        borderColor: '#007AFF',
-        borderWidth: 1,
-        borderRadius: 10,
-        marginVertical: 10,
-        padding: 10,
-        color: 'white',
-        placeholderTextColor: '#9CA3AF',
-        width: '90%',
-        fontFamily: 'System',
-        fontSize: 18,
-    },
     timeContainer: {
         flexDirection: 'row',
         alignItems: 'center',
@@ -176,12 +156,12 @@ const styles = StyleSheet.create({
         color: 'white',
         fontSize: 20,
         fontWeight: 'bold',
-        alignSelf: 'flex-start',
         marginLeft: '5%',
+        marginBottom: 10,
     },
     fromToLabel: {
         fontFamily: GlobalFont, 
-        color: 'white',
+        color: GlobalHeaderColor,
         fontSize: 20,
         fontWeight: 'bold',
         padding: 10,
@@ -191,18 +171,6 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         padding: 20,
-    },
-    descriptionInput: {
-        borderColor: '#007AFF',
-        borderWidth: 1,
-        borderRadius: 10,
-        marginVertical: 10,
-        padding: 10,
-        color: 'white',
-        width: '90%',
-        fontFamily: GlobalFont, 
-        fontSize: 18,
-        textAlignVertical: 'top',
     },
     buttonContainer: {
         flexDirection: 'row',

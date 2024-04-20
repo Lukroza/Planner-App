@@ -5,7 +5,7 @@ import { getGroupName } from "../API/Groups/GroupName";
 import { declineInvite } from "../API/Invites/DeclineInvite";
 import { acceptInvite } from "../API/Invites/AcceptInvite";
 import { getUserId } from "../Storage/userDataStorage";
-import { GlobalSecondaryColor, GlobalTextColor } from "../../Styles";
+import { GlobalHeaderColor, GlobalSecondaryColor, GlobalTextColor } from "../../Styles";
 import { Card, Button } from 'react-native-paper';
 
 async function getUser() {
@@ -49,14 +49,14 @@ const Invites = ({ onAccept }) => {
       <Card key={index} style={styles.container}>
         <Card.Content>
           <Text style={styles.textStyles}>
-            You have been invited to join {groupNames[invite.group_id]}
+            You have been invited to join <Text style={styles.textGroupStyles}>{groupNames[invite.group_id]}</Text>
           </Text>
         </Card.Content>
         <Card.Actions>
-          <Button onPress={() => handleDeclineInvite(invite.id)} color="red">
+          <Button textColor={GlobalTextColor} onPress={() => handleDeclineInvite(invite.id)} >
             Decline
           </Button>
-          <Button onPress={() => handleAcceptInvite(invite.id, invite.group_id)} color="green">
+          <Button buttonColor="green" textColor={GlobalTextColor} onPress={() => handleAcceptInvite(invite.id, invite.group_id)}>
             Accept
           </Button>
         </Card.Actions>
@@ -84,6 +84,9 @@ const styles = StyleSheet.create({
     fontSize: 20,
     color: GlobalTextColor,
 
+  },
+  textGroupStyles: {
+    color: GlobalHeaderColor,
   },
 
   buttonStyles: {
