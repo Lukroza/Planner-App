@@ -6,21 +6,16 @@ import { useFonts, Poppins_700Bold } from '@expo-google-fonts/poppins';
 import { GlobalColor, GlobalSecondaryColor, GlobalFont } from '../Styles';
 import { storeUserInfo } from "./Storage/userDataStorage";
 import Toast from 'react-native-toast-message';
+import { useNavigation } from '@react-navigation/native';
 
 const Header = ({title}) => {
-
+    const navigation = useNavigation();
     const [fontsLoaded] = useFonts({
         Poppins_700Bold,
     });
 
     const handleProfilePress = () => {
-        console.log('Profile icon pressed');
-        storeUserInfo("0", false, false, "0");
-        Toast.show({
-            type: 'success',
-            text1: 'Logged out',
-            text2: 'You have been logged out',
-        });
+        navigation.navigate('Profile');
     };
 
     if (!fontsLoaded) {

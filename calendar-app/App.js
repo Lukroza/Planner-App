@@ -4,7 +4,7 @@ import { View, StyleSheet } from 'react-native';
 import { GlobalColor, GlobalSecondaryColor, GlobalFont } from './Styles';
 import RegistrationScreen from './Screens/RegistrationScreen';
 import { useState, useEffect } from 'react';
-import Footer from './Components/Footer';
+import AppNavigation from './Components/Footer';
 import { getIsLoggedIn, getUserId, storeUserInfo } from './Components/Storage/userDataStorage'; 
 import { Provider } from 'react-native-paper';
 import { getUserById } from './Components/API/Users/UserGetById';
@@ -57,13 +57,13 @@ const App = () => {
   
   return (
     <Provider>
-    <SafeAreaProvider>
-    {isRegistered ? (
-        <Footer />
-      ) : (
-        <RegistrationScreen key={refreshKey} onRefresh={handleRefresh} />
-      )}
-    </SafeAreaProvider>
+        <SafeAreaProvider>
+          {isRegistered ? (
+          <AppNavigation />
+          ) : (
+          <RegistrationScreen key={refreshKey} onRefresh={handleRefresh} />
+          )}
+        </SafeAreaProvider>
     </Provider>
   );
 };
