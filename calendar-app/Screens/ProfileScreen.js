@@ -14,7 +14,6 @@ const ProfileScreen = () => {
     const [groupNameData, setGroupName] = useState('');
     const [inGroup, setInGroup] = useState(null);
     const [username, setUsername] = useState('');
-    const [refreshKey, setRefreshKey] = useState(0);
 
     async function getGroupStatus() {
         const inGroup = await getInGroupStatus();
