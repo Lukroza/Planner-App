@@ -7,11 +7,14 @@ import { View, Text, StyleSheet } from 'react-native';
 import { getGroupName } from '../Components/API/Groups/GroupName';
 import { getInGroupStatus } from '../Components/Storage/userDataStorage';
 import { getUserById } from '../Components/API/Users/UserGetById';
+import Toast from 'react-native-toast-message';
+import { useNavigation } from '@react-navigation/native';
 
 const ProfileScreen = () => {
     const [groupNameData, setGroupName] = useState('');
     const [inGroup, setInGroup] = useState(null);
     const [username, setUsername] = useState('');
+    const [refreshKey, setRefreshKey] = useState(0);
 
     async function getGroupStatus() {
         const inGroup = await getInGroupStatus();
@@ -29,14 +32,25 @@ const ProfileScreen = () => {
         if (user) {
             setUsername(user.username);
         }
-    }
-
+    };
 
     useEffect(() => {
         fetchUsername();
         fetchGroupName();
         getGroupStatus().then(setInGroup);
     }, []);
+
+    const navigation = useNavigation();
+
+    const handleLogOut = () => {
+        storeUserInfo("0", false, false, "0");
+        Toast.show({
+            type: 'success',
+            text1: 'Logged out',
+            text2: 'You have been logged out',
+        });
+        navigation.navigate('Registration');
+    };
 
     return (
         <View style={styles.wrapper}>
@@ -60,7 +74,7 @@ const ProfileScreen = () => {
                     <Text style={styles.value}></Text>
                 </View>
                 <View style={styles.buttonContainer}>
-                <ButtonComp text="Log Out"/>
+                <ButtonComp text="Log Out" onPress={handleLogOut}/>
                 </View>
             </View>
         </View>
