@@ -103,21 +103,26 @@ const LeaveEvent = async () => {
           </Text>
           <Text style={styles.attendeesTitle}>Attendees</Text>
           <Text style={styles.attendeesText}>
-            {eventDetails?.attendees.map((name) => name + " ") ||
-              "Be The First One!"}
+          {userId && eventDetails?.userId && username && eventDetails?.attendees ? (
+            eventDetails?.attendees.map((name) => name + " ") ||
+              "Be The First One!"
+            ) : null
+          }
           </Text>
-         {userId === eventDetails?.userId &&  <ButtonComp text="Delete Event" onPress={DeleteEvent} />}
-          {userId === eventDetails?.userId ? null :
-            eventDetails?.attendees?.includes(username) ? (
-             <TouchableOpacity disabled={isButtonDisabled} style={styles.leaveButton} onPress={LeaveEvent}>
-              <Text style={styles.buttonText}>Leave</Text>
-            </TouchableOpacity>
-          ) : (
-            <TouchableOpacity disabled={isButtonDisabled} style={styles.joinButton} onPress={JoinEvent}>
-              <Text style={styles.buttonText}>Join</Text>
-            </TouchableOpacity>
-          )
-        }
+          {userId && eventDetails?.userId && username && eventDetails?.attendees ? (
+          userId === eventDetails?.userId ? (
+            <ButtonComp text="Delete Event" onPress={DeleteEvent} />
+            ) : eventDetails?.attendees?.includes(username) ? (
+              <TouchableOpacity disabled={isButtonDisabled} style={styles.leaveButton} onPress={LeaveEvent}>
+                <Text style={styles.buttonText}>Leave</Text>
+              </TouchableOpacity>
+            ) : !eventDetails?.attendees?.includes(username) ? (
+              <TouchableOpacity disabled={isButtonDisabled} style={styles.joinButton} onPress={JoinEvent}>
+                <Text style={styles.buttonText}>Join</Text>
+              </TouchableOpacity>
+            ) : null
+          ) : null
+          }
         </View>
       </TouchableOpacity>
     </Modal>

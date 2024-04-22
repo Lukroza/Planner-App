@@ -11,13 +11,22 @@ const CalendarComponent = ({ showEvents, onDayPress}) => {
   const [calendarHeight, setCalendarHeight] = useState(350);
   const [events, setEvents] = useState({});
   const [selectedEvents, setSelectedEvents] = useState([]);
+  const [userId, setUserId] = useState(null);
 
   useEffect(() => {
-    fetchEventHeaders();
-  }, [events]);
+    getUserId().then(setUserId);
+  }, []);
+
+  useEffect(() => {
+    if (userId) {
+      fetchEventHeaders();
+    }
+  }, [userId, events]);
 
   const fetchEventHeaders = async () => {
-    const userId = await getUserId();
+    if (!userId) {
+      return;
+    }
     const fetchedEvents = await getAllEvents({ userId });
     setEvents(fetchedEvents);
   };
@@ -36,20 +45,35 @@ const CalendarComponent = ({ showEvents, onDayPress}) => {
   }, [selectedDate, events]);
 
   const computeMarkedDates = () => {
-    const dates = Object.keys(events).reduce((acc, curr) => {
-      acc[curr] = { ...events[curr], marked: true, dotColor: 'red' };
+    const dates = Object.values(events).reduce((acc, curr) => {
+      const date = new Date(curr.date);
+      date.setDate(date.getDate() + 1); 
+      const dateKey = date.toISOString().split('T')[0]; 
+      if (!acc[dateKey]) {
+        acc[dateKey] = { ...curr, marked: true, dotColor: 'green', count: 1 };
+      } else {
+        let count = acc[dateKey].count + 1;
+        let dotColor;
+        if (count <= 2) {
+          dotColor = 'green';
+        } else if (count <= 4) {
+          dotColor = 'yellow';
+        } else {
+          dotColor = 'red';
+        }
+        acc[dateKey] = { ...acc[dateKey], ...curr, marked: true, dotColor, count };
+      }
       return acc;
     }, {});
-
+  
     if (selectedDate) {
       dates[selectedDate] = {
         ...dates[selectedDate],
         selected: true,
         disableTouchEvent: true,
-        selectedDotColor: 'orange',
       };
     }
-
+  
     return dates;
   };
 
@@ -78,7 +102,6 @@ const CalendarComponent = ({ showEvents, onDayPress}) => {
             todayTextColor: GlobalHeaderColor,
             dayTextColor: GlobalTextColor,
             textDisabledColor: GlobalBackgroundTextColor,
-
           }}
         />
       </View>
