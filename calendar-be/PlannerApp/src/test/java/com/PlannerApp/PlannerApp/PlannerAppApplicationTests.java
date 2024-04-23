@@ -45,7 +45,7 @@ class EventServiceTests {
 	private EventService eventService;
 
 	@Test
-	public void whenCountGroupEventsInMonth_thenReturnCorrectCount() {
+	public void countGroupEventsInMonth_ReturnsCorrectCount() {
 		UUID groupId = UUID.randomUUID();
 		Calendar calendar = Calendar.getInstance();
 		calendar.set(2024, Calendar.FEBRUARY, 15);
@@ -84,7 +84,7 @@ class GroupServiceTest {
 	private GroupService groupService;
 
 	@Test
-	public void groupWithMostEvents_WhenOneGroupHasMost_ReturnsThatGroup() {
+	public void groupWithMostEvents_ReturnsThatGroup() {
 		UUID groupId1 = UUID.randomUUID();
 		UUID groupId2 = UUID.randomUUID();
 		GroupEntity group1 = new GroupEntity(groupId1, "Group1", UUID.randomUUID());
@@ -105,14 +105,14 @@ class GroupServiceTest {
 	}
 
 	@Test
-	public void groupWithMostEvents_WhenNoGroupsAvailable_ThrowsException() {
+	public void groupWithMostEvents_ThrowsException() {
 		when(groupRepository.findAllGroups()).thenReturn(Collections.emptyList());
 
 		assertThrows(IllegalStateException.class, () -> groupService.groupWithMostEvents());
 	}
 
 	@Test
-	public void groupWithMostEvents_WhenGroupsHaveSameEventCount_ReturnsFirst() {
+	public void groupWithMostEvents_ReturnsFirst() {
 		UUID groupId1 = UUID.randomUUID();
 		UUID groupId2 = UUID.randomUUID();
 		GroupEntity group1 = new GroupEntity(groupId1, "Group1", UUID.randomUUID());
@@ -133,7 +133,7 @@ class GroupServiceTest {
 @ExtendWith(MockitoExtension.class)
 class SqlProviderTests {
 	@Test
-	public void whenDeleteEventsByUserIdsIsCalled_thenReturnsCorrectSql() {
+	public void deleteEventsByUserIds_ReturnsCorrectSql() {
 		List<UUID> userIds = Arrays.asList(UUID.randomUUID(), UUID.randomUUID(), UUID.randomUUID());
 		HashMap<String, Object> params = new HashMap<>();
 		params.put("userIds", userIds);
@@ -148,7 +148,7 @@ class SqlProviderTests {
 	}
 
 	@Test
-	public void whenDeleteEventsByUserIdsWithEmptyList_thenReturnsCorrectSqlWithoutIds() {
+	public void deleteEventsByUserIds_ReturnsCorrectSqlWithoutIds() {
 		List<UUID> userIds = Arrays.asList();
 		HashMap<String, Object> params = new HashMap<>();
 		params.put("userIds", userIds);
@@ -169,14 +169,15 @@ class UserServiceTest {
 	private UserService userService;
 
 	@Test
-	public void testCountUsersWithSimilarName() {
+	public void countUsersWithSimilarName_ReturnsCorrectCount() {
 		String baseName = "Lukas";
 		List<UserEntity> mockedUsers = Arrays.asList(
 				UserEntity.builder().username("Lukas").build(),
 				UserEntity.builder().username("Lukas2").build(),
 				UserEntity.builder().username("Lukas3").build(),
 				UserEntity.builder().username("Lukasnaujas").build(),
-				UserEntity.builder().username("lukasismazosios").build()
+				UserEntity.builder().username("lukasismazosios").build(),
+				UserEntity.builder().username("Benas").build()
 		);
 
 		when(userRepository.findUsersByUsernamePattern(baseName + "%")).thenReturn(mockedUsers);
@@ -188,7 +189,7 @@ class UserServiceTest {
 	}
 
 	@Test
-	public void testCountUsersWithNoMatches() {
+	public void countUsersWithSimilarName_ReturnsZero() {
 		String baseName = "TestName";
 
 		when(userRepository.findUsersByUsernamePattern(baseName + "%")).thenReturn(Arrays.asList());

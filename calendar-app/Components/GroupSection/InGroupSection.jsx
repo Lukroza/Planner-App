@@ -15,6 +15,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import { deleteGroup } from "../API/Groups/DeleteGroup";
 import { changeOwnership } from "../API/Groups/ChangeOwnership";
 
+
 async function getGroup() {
   const groupId = await getGroupId();
   return groupId;
@@ -32,7 +33,12 @@ const GroupInput = ({ onRefresh }) => {
   const [userId, setUserId] = useState(null);
   const [ownerId, setOwnerId] = useState(null);
   const [groupId, setGroupId] = useState(null);
+  const [refreshKey, setRefreshKey] = useState(0); 
 
+
+  const handleRefrsh = () => {
+    setRefreshKey(oldKey => oldKey + 1);
+  }
 
   useEffect(() => {
     const fetchGroupMembers = async () => {
@@ -58,7 +64,7 @@ const GroupInput = ({ onRefresh }) => {
 
     fetchGroupMembers();
     fetchUserId();
-  }, []);
+  }, [refreshKey]);
 
   const handleSendInvite = async () => {
     if (!username) {
@@ -190,6 +196,7 @@ const GroupInput = ({ onRefresh }) => {
             text1: 'Ownership Change',
             text2: `Group ownership has been successfully changed.`,
         });
+        handleRefrsh();
 
     } catch (error) {
         Toast.show({

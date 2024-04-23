@@ -29,7 +29,7 @@ const App = () => {
   useEffect(() => {
     checkLoginStatus();
     getUser().then(setUserId);
-  }, []);
+  }, [refreshKey]);
 
   useEffect(() => { 
     if (userId && isRegistered) { 
