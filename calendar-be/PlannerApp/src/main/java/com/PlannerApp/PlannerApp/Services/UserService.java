@@ -26,7 +26,6 @@ public class UserService {
                         .group_id(userEntity.getGroup_id())
                         .build());
     }
-
     public UUID insertUser(String username) {
         UUID userID = UUID.randomUUID();
         UserEntity userEntity = UserEntity.builder()
@@ -37,7 +36,6 @@ public class UserService {
         userRepository.insertUser(userEntity);
         return userID;
     }
-
     public List<User> getGroupUsers(UUID groupId) {
         return userRepository.getGroupUsers(groupId).stream()
                 .map(userEntity -> User.builder()
@@ -47,7 +45,6 @@ public class UserService {
                         .build())
                 .toList();
     }
-
     public Optional<User> getUserByID(UUID userId) {
         return userRepository.getUserById(userId)
                 .map(userEntity -> User.builder()
@@ -55,6 +52,21 @@ public class UserService {
                         .username(userEntity.getUsername())
                         .group_id(userEntity.getGroup_id())
                         .build());
+    }
+    public int countUsersWithSimilarName(String baseName) {
+        String searchPattern = baseName + "%";
+        List<UserEntity> users = userRepository.findUsersByUsernamePattern(searchPattern);
+        int count = 0;
+
+        for (UserEntity user : users) {
+            String username = user.getUsername();
+
+            if (username.toLowerCase().startsWith(baseName.toLowerCase())) {
+                count++;
+            }
+        }
+
+        return count;
     }
     
 }

@@ -1,5 +1,14 @@
 package com.PlannerApp.PlannerApp;
 
+import com.PlannerApp.PlannerApp.Entities.EventEntity;
+import com.PlannerApp.PlannerApp.Entities.GroupEntity;
+import com.PlannerApp.PlannerApp.Entities.UserEntity;
+import com.PlannerApp.PlannerApp.Models.Group;
+import com.PlannerApp.PlannerApp.Repositories.GroupRepository;
+import com.PlannerApp.PlannerApp.Repositories.UserRepository;
+import com.PlannerApp.PlannerApp.Services.GroupService;
+import com.PlannerApp.PlannerApp.Services.SqlProvider;
+import com.PlannerApp.PlannerApp.Services.UserService;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import com.PlannerApp.PlannerApp.Repositories.EventRepository;
@@ -10,9 +19,11 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import com.PlannerApp.PlannerApp.Services.EventService;
 
 import java.sql.Date;
-import java.util.Calendar;
+import java.sql.Time;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -34,59 +45,157 @@ class EventServiceTests {
 	private EventService eventService;
 
 	@Test
-	public void whenCountEventsByDate_thenReturnCorrectCount() {
-		Date testDate = new Date(System.currentTimeMillis());
-		Long expectedCount = 5L;
-
-		when(eventRepository.countByDate(testDate)).thenReturn(expectedCount);
-
-		Long actualCount = eventService.countEventsByDate(testDate);
-
-		assertEquals(expectedCount, actualCount, "The count of events should be equal to the expected count");
-	}
-	@Test
-	public void countEventsByDate_NoEvents_ShouldReturnZero() {
-
-		Date testDate = new Date(Calendar.getInstance().getTimeInMillis());
-		long expectedCount = 0L;
-		when(eventRepository.countByDate(testDate)).thenReturn(expectedCount);
-
-		long actualCount = eventService.countEventsByDate(testDate);
-
-		assertEquals(expectedCount, actualCount, "The actual count should be zero when there are no events.");
-	}
-	@Test
-	public void countEventsByDate_RepositoryThrowsException_ShouldPropagateException() {
-
-		Date testDate = new Date(Calendar.getInstance().getTimeInMillis());
-		when(eventRepository.countByDate(testDate)).thenThrow(new RuntimeException("Database error"));
-
-		assertThrows(RuntimeException.class, () -> eventService.countEventsByDate(testDate), "Should throw the same exception as the repository");
-	}
-	@Test
-	public void countEventsByDate_EventsOnLeapDay_ShouldReturnCorrectCount() {
-
+	public void whenCountGroupEventsInMonth_thenReturnCorrectCount() {
+		UUID groupId = UUID.randomUUID();
 		Calendar calendar = Calendar.getInstance();
-		calendar.set(2024, Calendar.FEBRUARY, 29);
-		Date leapDay = new Date(calendar.getTimeInMillis());
+		calendar.set(2024, Calendar.FEBRUARY, 15);
+		Date testDate = new Date(calendar.getTimeInMillis());
+		Time startTime = Time.valueOf("10:00:00");
+		Time endTime = Time.valueOf("12:00:00");
+
+		List<EventEntity> mockEvents = new ArrayList<>(Arrays.asList(
+				new EventEntity(UUID.randomUUID(), groupId, "Event 1", "Location 1", testDate, startTime, endTime, "Description 1"),
+				new EventEntity(UUID.randomUUID(), groupId, "Event 2", "Location 2", testDate, startTime, endTime, "Description 2")
+		));
+
+		calendar.set(2024, Calendar.MARCH, 1);
+		Date marchDate = new Date(calendar.getTimeInMillis());
+		mockEvents.add(new EventEntity(UUID.randomUUID(), groupId, "Event 3", "Location 3", marchDate, startTime, endTime, "Description 3"));
+
+		when(eventRepository.getGroupEvents(groupId)).thenReturn(mockEvents);
+
+		long actualCount = eventService.countGroupEventsInMonth(groupId, testDate);
+
 		long expectedCount = 2L;
-		when(eventRepository.countByDate(leapDay)).thenReturn(expectedCount);
-
-		long actualCount = eventService.countEventsByDate(leapDay);
-
-		assertEquals(expectedCount, actualCount, "The actual count should match expected events on a leap day.");
+		assertEquals(expectedCount, actualCount, "The count should match the number of events in February.");
 	}
+}
+
+@ExtendWith(MockitoExtension.class)
+class GroupServiceTest {
+
+	@Mock
+	private GroupRepository groupRepository;
+
+	@Mock
+	private EventRepository eventRepository;
+
+	@InjectMocks
+	private GroupService groupService;
+
 	@Test
-	public void countEventsByDate_EventsInFuture_ShouldReturnCorrectCount() {
+	public void groupWithMostEvents_WhenOneGroupHasMost_ReturnsThatGroup() {
+		UUID groupId1 = UUID.randomUUID();
+		UUID groupId2 = UUID.randomUUID();
+		GroupEntity group1 = new GroupEntity(groupId1, "Group1", UUID.randomUUID());
+		GroupEntity group2 = new GroupEntity(groupId2, "Group2", UUID.randomUUID());
+		List<GroupEntity> allGroups = Arrays.asList(group1, group2);
 
-		Calendar calendar = Calendar.getInstance();
-		calendar.add(Calendar.YEAR, 1);
-		Date futureDate = new Date(calendar.getTimeInMillis());
-		long expectedCount = 3L;
-		when(eventRepository.countByDate(futureDate)).thenReturn(expectedCount);
+		when(groupRepository.findAllGroups()).thenReturn(allGroups);
+		when(eventRepository.getGroupEvents(groupId1)).thenReturn(Collections.nCopies(5, new EventEntity()));
+		when(eventRepository.getGroupEvents(groupId2)).thenReturn(Collections.nCopies(10, new EventEntity()));
 
-		long actualCount = eventService.countEventsByDate(futureDate);
+		Group result = groupService.groupWithMostEvents();
 
-		assertEquals(expectedCount, actualCount, "The actual count should match expected events on a future date.");
+		assertEquals(groupId2, result.getId());
+		assertEquals("Group2", result.getName());
+		verify(groupRepository).findAllGroups();
+		verify(eventRepository).getGroupEvents(groupId1);
+		verify(eventRepository).getGroupEvents(groupId2);
+	}
+
+	@Test
+	public void groupWithMostEvents_WhenNoGroupsAvailable_ThrowsException() {
+		when(groupRepository.findAllGroups()).thenReturn(Collections.emptyList());
+
+		assertThrows(IllegalStateException.class, () -> groupService.groupWithMostEvents());
+	}
+
+	@Test
+	public void groupWithMostEvents_WhenGroupsHaveSameEventCount_ReturnsFirst() {
+		UUID groupId1 = UUID.randomUUID();
+		UUID groupId2 = UUID.randomUUID();
+		GroupEntity group1 = new GroupEntity(groupId1, "Group1", UUID.randomUUID());
+		GroupEntity group2 = new GroupEntity(groupId2, "Group2", UUID.randomUUID());
+		List<GroupEntity> allGroups = Arrays.asList(group1, group2);
+
+		when(groupRepository.findAllGroups()).thenReturn(allGroups);
+		when(eventRepository.getGroupEvents(groupId1)).thenReturn(Collections.nCopies(10, new EventEntity()));
+		when(eventRepository.getGroupEvents(groupId2)).thenReturn(Collections.nCopies(10, new EventEntity()));
+
+		Group result = groupService.groupWithMostEvents();
+
+		assertEquals(groupId1, result.getId());
+		assertEquals("Group1", result.getName());
+	}
+}
+
+@ExtendWith(MockitoExtension.class)
+class SqlProviderTests {
+	@Test
+	public void whenDeleteEventsByUserIdsIsCalled_thenReturnsCorrectSql() {
+		List<UUID> userIds = Arrays.asList(UUID.randomUUID(), UUID.randomUUID(), UUID.randomUUID());
+		HashMap<String, Object> params = new HashMap<>();
+		params.put("userIds", userIds);
+		String expectedSql = "DELETE FROM event WHERE user_id IN (" +
+				"#{userIds[0]}," +
+				"#{userIds[1]}," +
+				"#{userIds[2]})";
+
+		String actualSql = SqlProvider.deleteEventsByUserIds(params);
+
+		assertEquals(expectedSql, actualSql, "Sql statement should match the expected sql");
+	}
+
+	@Test
+	public void whenDeleteEventsByUserIdsWithEmptyList_thenReturnsCorrectSqlWithoutIds() {
+		List<UUID> userIds = Arrays.asList();
+		HashMap<String, Object> params = new HashMap<>();
+		params.put("userIds", userIds);
+		String expectedSql = "DELETE FROM event WHERE user_id IN ()";
+
+		String actualSql = SqlProvider.deleteEventsByUserIds(params);
+		assertEquals(expectedSql, actualSql, "Sql should not contain any ID's if the list is empty");
+	}
+}
+
+@ExtendWith(MockitoExtension.class)
+class UserServiceTest {
+
+	@Mock
+	private UserRepository userRepository;
+
+	@InjectMocks
+	private UserService userService;
+
+	@Test
+	public void testCountUsersWithSimilarName() {
+		String baseName = "Lukas";
+		List<UserEntity> mockedUsers = Arrays.asList(
+				UserEntity.builder().username("Lukas").build(),
+				UserEntity.builder().username("Lukas2").build(),
+				UserEntity.builder().username("Lukas3").build(),
+				UserEntity.builder().username("Lukasnaujas").build(),
+				UserEntity.builder().username("lukasismazosios").build()
+		);
+
+		when(userRepository.findUsersByUsernamePattern(baseName + "%")).thenReturn(mockedUsers);
+
+		int result = userService.countUsersWithSimilarName(baseName);
+
+		assertEquals(5, result);
+		verify(userRepository).findUsersByUsernamePattern(baseName + "%");
+	}
+
+	@Test
+	public void testCountUsersWithNoMatches() {
+		String baseName = "TestName";
+
+		when(userRepository.findUsersByUsernamePattern(baseName + "%")).thenReturn(Arrays.asList());
+
+		int result = userService.countUsersWithSimilarName(baseName);
+
+		assertEquals(0, result);
+		verify(userRepository).findUsersByUsernamePattern(baseName + "%");
 	}
 }

@@ -7,24 +7,29 @@ import { createUserApi } from '../Components/API/Users/UserRegister';
 import { storeUserInfo } from '../Components/Storage/userDataStorage';
 import { GlobalColor } from '../Styles';
 import { loginUserAPI } from '../Components/API/Users/UsernameCheck';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, CommonActions } from '@react-navigation/native';
 
 const RegistrationScreen = (props) => {
   const [username, setUsername] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
+  const navigation = useNavigation();
 
   const handleRegistration = async () => {
     try {
       await createUserApi({ username }).then(async (response) => {
         await storeUserInfo(response, false, true, "0");
-        navigation.navigate('Home');
+        navigation.dispatch(
+          CommonActions.reset({
+            index: 0,
+            routes: [{ name: 'Main', params: { screen: 'Home' } }],
+          })
+        );
       });
     } catch (error) {
       setErrorMessage(error.message);
     }
   };
 
-  const navigation = useNavigation();
 
   const handleLogin = async () => {
     const userData = await loginUserAPI({username});
@@ -35,7 +40,12 @@ const RegistrationScreen = (props) => {
       else{
         await storeUserInfo(userData.id, false, true, "0");
       }
-      navigation.navigate('Home');
+      navigation.dispatch(
+        CommonActions.reset({
+          index: 0,
+          routes: [{ name: 'Main', params: { screen: 'Home' } }],
+        })
+      );
     } 
     else {
       console.log("User not found");

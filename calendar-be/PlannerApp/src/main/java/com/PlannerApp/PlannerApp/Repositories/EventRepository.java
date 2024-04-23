@@ -2,12 +2,12 @@ package com.PlannerApp.PlannerApp.Repositories;
 
 import com.PlannerApp.PlannerApp.Entities.EventAttendeeEntity;
 import com.PlannerApp.PlannerApp.Entities.EventEntity;
+import com.PlannerApp.PlannerApp.Services.SqlProvider;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 import org.apache.ibatis.annotations.*;
-import java.sql.Date;
 
 import java.util.List;
 import java.util.UUID;

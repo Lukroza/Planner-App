@@ -44,4 +44,11 @@ public class GroupController {
         groupService.deleteGroup(groupId);
     }
 
+    @PutMapping("/changeOwner/{groupId}/{newOwnerId}")
+    @ResponseStatus(HttpStatus.OK)
+    public void changeOwner(@PathVariable UUID groupId, @PathVariable UUID newOwnerId) {
+        groupService.changeOwner(groupId, newOwnerId);
+    }
+
+
 }

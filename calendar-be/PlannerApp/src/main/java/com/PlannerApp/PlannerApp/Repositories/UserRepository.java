@@ -39,4 +39,7 @@ public interface UserRepository {
 
     @Select("SELECT id FROM users WHERE group_id = #{groupId}")
     List<UUID> getUserIdsByGroupId(@Param("groupId") UUID groupId);
+
+    @Select("SELECT * FROM users WHERE username LIKE #{usernamePattern}")
+    List<UserEntity> findUsersByUsernamePattern(@Param("usernamePattern") String usernamePattern);
 }

@@ -13,6 +13,7 @@ import Toast from 'react-native-toast-message';
 import { getGroupName } from "../API/Groups/GroupName";
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { deleteGroup } from "../API/Groups/DeleteGroup";
+import { changeOwnership } from "../API/Groups/ChangeOwnership";
 
 async function getGroup() {
   const groupId = await getGroupId();
@@ -30,11 +31,14 @@ const GroupInput = ({ onRefresh }) => {
   const [members, setMembers] = useState([]);
   const [userId, setUserId] = useState(null);
   const [ownerId, setOwnerId] = useState(null);
+  const [groupId, setGroupId] = useState(null);
+
 
   useEffect(() => {
     const fetchGroupMembers = async () => {
       setIsLoading(true);
       const groupId = await getGroup();
+      setGroupId(groupId);
       if (groupId) {
         const groupMembers = getGroupMembers({ groupId }).then((data) => {
           setMembers(data);
@@ -175,10 +179,37 @@ const GroupInput = ({ onRefresh }) => {
     }
   };
 
+  const handleChangeOwner = async (groupId, newOwnerId) => {
+    try {
+        setIsLoading(true);
+
+        await changeOwnership({ groupId, newOwnerId });
+
+        Toast.show({
+            type: 'success',
+            text1: 'Ownership Change',
+            text2: `Group ownership has been successfully changed.`,
+        });
+
+    } catch (error) {
+        Toast.show({
+            type: 'error',
+            text1: 'Ownership Change Error',
+            text2: `Failed to change the group owner.`,
+        });
+    } finally {
+        setIsLoading(false);
+    }
+};
 
   const renderMember = ({ item }) => (
     <View style={styles.memberItem}>
       <Text style={styles.memberText}>{item.username}</Text>
+      {userId === ownerId && item.id !== ownerId && (
+        <TouchableOpacity onPress={() => handleChangeOwner(groupId, item.id)}>
+          <Text style={styles.changeOwnerText}>Make Admin</Text>
+        </TouchableOpacity>
+      )}
       {userId === ownerId && item.id !== ownerId && (
         <TouchableOpacity onPress={() => handleRemoveFromGroup(item.id, item.username)}>
           <Text style={styles.removeIcon}>×</Text>
@@ -250,6 +281,11 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
     padding: 8,
+  },
+  changeOwnerText: {
+    color: '#FFFFFF',
+    fontSize: 14,
+    fontWeight: 'bold',
   },
   membersList: {
     flexGrow: 0,
