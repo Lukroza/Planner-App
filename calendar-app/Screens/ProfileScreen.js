@@ -9,11 +9,13 @@ import { getInGroupStatus } from '../Components/Storage/userDataStorage';
 import { getUserById } from '../Components/API/Users/UserGetById';
 import Toast from 'react-native-toast-message';
 import { useNavigation, CommonActions } from '@react-navigation/native';
+import GroupStats from '../Components/GroupStats';
 
 const ProfileScreen = () => {
     const [groupNameData, setGroupName] = useState('');
     const [inGroup, setInGroup] = useState(null);
     const [username, setUsername] = useState('');
+    const [isModalVisible, setModalVisible] = useState(false);
 
     async function getGroupStatus() {
         const inGroup = await getInGroupStatus();
@@ -78,6 +80,10 @@ const ProfileScreen = () => {
                     <Text style={styles.value}></Text>
                 </View>
                 <View style={styles.buttonContainer}>
+                <ButtonComp text="GroupStats" onPress={() => setModalVisible(true)} />
+                <GroupStats isVisible={isModalVisible} onClose={() => setModalVisible(false)} />
+                </View>
+                <View style={styles.buttonContainer}>
                 <ButtonComp text="Log Out" onPress={handleLogOut}/>
                 </View>
             </View>
@@ -112,6 +118,7 @@ const styles = StyleSheet.create({
     },
     buttonContainer: {
         justifyContent: 'center',
+        padding: 10,
         alignItems: 'center',
     },
 });
