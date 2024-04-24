@@ -38,11 +38,9 @@ public class EventService {
                         .build()
         );
     }
-
     public void deleteEvent(UUID eventId, UUID userId){
         eventRepository.deleteEvent(eventId, userId);
     }
-
     //returns All possible events
     public List<EventHeader> getEvents(UUID userId){
         Optional<UserEntity> user = userRepository.getUserById(userId);
@@ -65,7 +63,6 @@ public class EventService {
                         .date(EventEntity.getDate())
                         .build()).toList();
     }
-
     public EventDetails getEventDetails(UUID eventId){
         EventEntity eventEntity = eventRepository.getEventDetails(eventId);
         return EventDetails.builder()
@@ -78,8 +75,6 @@ public class EventService {
                 .attendees(getAttendees(eventId))
                 .build();
     }
-
-
     public long countGroupEventsInMonth(UUID groupId, Date date) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
@@ -102,15 +97,12 @@ public class EventService {
 
         return count;
     }
-
     public List<String> getAttendees(UUID eventId){
         return eventRepository.getAttendees(eventId);
     }
-
     public void joinEvent(EventAttendeeEntity attendee){
         eventRepository.joinEvent(attendee);
     }
-
     public int leaveEvent(EventAttendeeEntity attendee){
         return eventRepository.leaveEvent(attendee);
     }

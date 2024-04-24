@@ -31,7 +31,6 @@ public class InviteService {
         inviteRepository.insertInvite(inviteEntity);
         return invite_id;
     }
-
     public List<Invite> getUserInvites(UUID userId) {
         return inviteRepository.getUserInvites(userId).stream()
                 .map(inviteEntity -> Invite.builder()
@@ -41,7 +40,6 @@ public class InviteService {
                         .build())
                 .toList();
     }
-
     public UUID acceptInvite(UUID inviteId){
         InviteEntity inviteEntity = inviteRepository.getInviteById(inviteId);
         userRepository.addUserToGroup(inviteEntity.getGroup_id(), inviteEntity.getUser_id());

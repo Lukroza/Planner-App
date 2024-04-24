@@ -7,9 +7,8 @@ import { createUserApi } from '../Components/API/Users/UserRegister';
 import { storeUserInfo } from '../Components/Storage/userDataStorage';
 import { GlobalColor } from '../Styles';
 import { loginUserAPI } from '../Components/API/Users/UsernameCheck';
-import { useNavigation } from '@react-navigation/native';
 
-const RegistrationScreen = (props) => {
+const RegistrationScreen = ({ onRefresh }) => {
   const [username, setUsername] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
 
@@ -17,14 +16,12 @@ const RegistrationScreen = (props) => {
     try {
       await createUserApi({ username }).then(async (response) => {
         await storeUserInfo(response, false, true, "0");
-        navigation.navigate('Home');
+        onRefresh();
       });
     } catch (error) {
       setErrorMessage(error.message);
     }
   };
-
-  const navigation = useNavigation();
 
   const handleLogin = async () => {
     const userData = await loginUserAPI({username});
@@ -35,7 +32,7 @@ const RegistrationScreen = (props) => {
       else{
         await storeUserInfo(userData.id, false, true, "0");
       }
-      navigation.navigate('Home');
+      onRefresh();
     } 
     else {
       console.log("User not found");

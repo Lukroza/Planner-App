@@ -1,4 +1,4 @@
-package com.PlannerApp.PlannerApp.Repositories;
+package com.PlannerApp.PlannerApp.Services;
 
 import java.util.List;
 import java.util.Map;

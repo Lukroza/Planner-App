@@ -8,7 +8,7 @@ import { getGroupName } from '../Components/API/Groups/GroupName';
 import { getInGroupStatus } from '../Components/Storage/userDataStorage';
 import { getUserById } from '../Components/API/Users/UserGetById';
 import Toast from 'react-native-toast-message';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, CommonActions } from '@react-navigation/native';
 
 const ProfileScreen = () => {
     const [groupNameData, setGroupName] = useState('');
@@ -48,7 +48,12 @@ const ProfileScreen = () => {
             text1: 'Logged out',
             text2: 'You have been logged out',
         });
-        navigation.navigate('Registration');
+        navigation.dispatch(
+            CommonActions.reset({
+              index: 0,
+              routes: [{ name: 'Registration' }],
+            })
+          );
     };
 
     return (

@@ -9,6 +9,7 @@ import { getIsLoggedIn, getUserId, storeUserInfo } from './Components/Storage/us
 import { Provider } from 'react-native-paper';
 import { getUserById } from './Components/API/Users/UserGetById';
 import ProfileScreen from './Screens/ProfileScreen';
+import { NavigationContainer } from '@react-navigation/native';
 
 async function getUser() {
   const userId = await getUserId();
@@ -28,7 +29,7 @@ const App = () => {
   useEffect(() => {
     checkLoginStatus();
     getUser().then(setUserId);
-  }, []);
+  }, [refreshKey]);
 
   useEffect(() => { 
     if (userId && isRegistered) { 
@@ -61,7 +62,9 @@ const App = () => {
           {isRegistered ? (
           <AppNavigation />
           ) : (
-          <RegistrationScreen key={refreshKey} onRefresh={handleRefresh} />
+            <NavigationContainer>
+                <RegistrationScreen key={refreshKey} onRefresh={handleRefresh} />
+            </NavigationContainer>
           )}
         </SafeAreaProvider>
     </Provider>
