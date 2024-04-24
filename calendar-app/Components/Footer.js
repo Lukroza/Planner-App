@@ -9,7 +9,8 @@ import ProfileScreen from "../Screens/ProfileScreen";
 import RegistrationScreen from "../Screens/RegistrationScreen";
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { GlobalAccentColor, GlobalColor, GlobalSecondaryColor, GlobalTextColor  } from '../Styles';
-
+import Toast from 'react-native-toast-message';
+import { toastConfig } from './NotificationConfig';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -63,6 +64,7 @@ const AppNavigation = () => {
         component={RegistrationScreen}
         />
       </Stack.Navigator>
+      <Toast config={toastConfig}/>
     </NavigationContainer>
   );
 };
