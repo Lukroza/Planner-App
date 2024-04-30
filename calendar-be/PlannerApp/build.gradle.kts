@@ -2,6 +2,18 @@ plugins {
 	java
 	id("org.springframework.boot") version "3.2.2"
 	id("io.spring.dependency-management") version "1.1.4"
+	id("pmd")
+}
+
+sourceSets {
+	create("pmdSourceSet") {
+		java {
+			srcDir("src/main/java")
+			include("com/plannerapp/controller/EventController.java")  // Specify the files here
+			include("com/plannerapp/service/EventService.java")
+			include("com/plannerapp/model/EventModel.java")
+		}
+	}
 }
 
 group = "com.PlannerApp"
@@ -33,4 +45,18 @@ dependencies {
 
 tasks.withType<Test> {
 	useJUnitPlatform()
+}
+
+pmd {
+	toolVersion = "6.44.0"
+	ruleSetFiles = files("$rootDir/config/snake_case_rules.xml")
+	ruleSets = emptyList()
+	isConsoleOutput = true
+}
+
+tasks.withType<Pmd> {
+	reports {
+		html.required.set(true)
+		xml.required.set(false)
+	}
 }
