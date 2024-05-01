@@ -43,5 +43,12 @@ public interface EventRepository {
 
     @DeleteProvider(type = SqlProvider.class, method = "deleteEventsByUserIds")
     void deleteEventsByUserIds(@Param("userIds") List<UUID> userIds);
+
+    @Select("SELECT * FROM event WHERE is_public = true")
+    List<EventEntity> getPublicEvents();
+
+    @Update("UPDATE event SET is_public = NOT is_public WHERE event_id = #{eventId}")
+    void togglePublic(@Param("eventId") UUID eventId);
+
 }
 
