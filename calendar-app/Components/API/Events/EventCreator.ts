@@ -8,6 +8,7 @@ interface IEvent {
     to: string;
     description: string;
     attendees?: string;
+    isPublic?: boolean;
 }
 
 export async function createEventApi(props: IEvent) {
@@ -19,7 +20,6 @@ export async function createEventApi(props: IEvent) {
             },
             body: JSON.stringify(props),
         });
-
         if (!response.ok) {
             throw new Error('Failed to create event');
         }

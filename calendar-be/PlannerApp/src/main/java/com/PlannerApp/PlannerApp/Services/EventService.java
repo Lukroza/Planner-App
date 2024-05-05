@@ -36,6 +36,7 @@ public class EventService {
                         .date(event.getDate())
                         .time_from(event.getFrom())
                         .time_to(event.getTo())
+                        .is_public(event.getIsPublic())
                         .build()
         );
     }
@@ -114,6 +115,7 @@ public class EventService {
                         .id(EventEntity.getEvent_id())
                         .name(EventEntity.getEvent_name())
                         .date(EventEntity.getDate())
+                        .from(String.valueOf(EventEntity.getTime_from()))
                         .build()).toList();
     }
     public PublicEventDetails getPublicEventDetails(UUID eventId){

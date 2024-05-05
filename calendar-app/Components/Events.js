@@ -3,7 +3,7 @@ import { View, Text, FlatList, TouchableOpacity, StyleSheet, Dimensions } from '
 import EventDescription from './EventDescription';
 import { GlobalColor, GlobalSecondaryColor,GlobalFont, GlobalTextColor, GlobalHeaderColor } from '../Styles';
 
-const Events = ({ events, calendarHeight, filterLocalEvents }) => {
+const Events = ({ events, calendarHeight, filterLocalEvents, showAttendees }) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [refreshKey, setRefreshKey] = useState(0);
@@ -36,6 +36,7 @@ const Events = ({ events, calendarHeight, filterLocalEvents }) => {
       />
       {isModalVisible && (
         <EventDescription 
+          showAttendees={showAttendees}
           deleteLocalEvent={deleteLocalEvent}
           isVisible={isModalVisible} 
           event={selectedEvent} 

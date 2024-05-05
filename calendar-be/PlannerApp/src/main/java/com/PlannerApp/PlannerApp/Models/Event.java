@@ -22,4 +22,5 @@ public class Event {
     private Time to;
     private String description;
     private String attendees;
+    private Boolean isPublic;
 }
