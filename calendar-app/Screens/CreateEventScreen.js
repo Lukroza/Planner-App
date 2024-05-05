@@ -9,6 +9,7 @@ import { GlobalBorderColor, GlobalColor, GlobalFont, GlobalHeaderColor } from '.
 import { getUserId } from '../Components/Storage/userDataStorage';
 import TextInputBar from '../Components/TextInputBar';
 import { useNavigation } from '@react-navigation/native';
+import { Switch } from 'react-native-gesture-handler';
 
 
 function CreateEvent() {
@@ -19,6 +20,7 @@ function CreateEvent() {
     const [isToPickerVisible, setToPickerVisibility] = React.useState(false);
     const [description, setDescription] = React.useState('');
     const [selectedDate, setSelectedDate] = React.useState(new Date());
+    const [isPublic, setIsPublic] = React.useState(false);
 
 
     const navigation = useNavigation();
@@ -85,6 +87,7 @@ function CreateEvent() {
             from: fromTimeString,
             to: toTimeString,
             description: description,
+            isPublic: isPublic,
         };
         createEventApi(eventData);
         navigation.navigate('Home');
@@ -126,6 +129,8 @@ function CreateEvent() {
                         date = {toTime}    
                     />
                 </View>
+                <Text style={styles.timeContainer}> Is public?</Text>
+                 <Switch value={isPublic} onValueChange={setIsPublic}/>
                 <View style={styles.buttonContainer}>
                     <Button style = {styles.button} title="Cancel" onPress={handleCancel} color="#767577" />
                     <Button style = {styles.button} title="Create" onPress={handleCreate} color="#3DDC84" />

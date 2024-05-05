@@ -26,7 +26,7 @@ async function getUsername(userId) {
   return username.username;
 }
 
-const EventDescription = ({deleteLocalEvent, isVisible, onClose, event  }) => {
+const EventDescription = ({deleteLocalEvent, isVisible, onClose, event, showAttendees=true  }) => {
   const [eventDetails, setEventDetails] = useState(null);
   const [userId, setUserId] = useState(null);
   const [username, setUsername] = useState(null);
@@ -96,18 +96,26 @@ const LeaveEvent = async () => {
         <View style={styles.modalContent}>
           <CloseButton onPress={onClose} />
           <Text style={styles.eventName}>{event?.name}</Text>
-          <Text style={styles.eventTime}>{event?.time}</Text>
+          <Text style={styles.eventTime}>
+            {new Date(event?.time ? event.time : event.date).toLocaleDateString()}
+          </Text>
           <Text style={styles.descriptionTitle}>Description</Text>
           <Text style={styles.descriptionText}>
             {eventDetails?.description}
           </Text>
           <Text style={styles.attendeesTitle}>Attendees</Text>
           <Text style={styles.attendeesText}>
-          {userId && eventDetails?.userId && username && eventDetails?.attendees ? (
-            eventDetails?.attendees.map((name) => name + " ") ||
-              "Be The First One!"
-            ) : null
-          }
+            {userId && eventDetails?.userId && username && eventDetails?.attendees ? (
+              showAttendees ? (
+                eventDetails?.attendees.length > 0 ? (
+                  eventDetails?.attendees.map((name) => name + " ")
+                ) : (
+                  "Be The First One!"
+                )
+              ) : (
+                `People joined: ${eventDetails?.attendees.length}`
+              )
+            ) : null}
           </Text>
           {userId && eventDetails?.userId && username && eventDetails?.attendees ? (
           userId === eventDetails?.userId ? (

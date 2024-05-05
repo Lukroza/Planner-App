@@ -23,5 +23,5 @@ public class EventEntity {
     private Time time_from;
     private Time time_to;
     private String attendees;
-
+    private Boolean is_public;
 }

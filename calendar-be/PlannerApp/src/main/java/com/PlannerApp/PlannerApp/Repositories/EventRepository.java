@@ -16,8 +16,8 @@ import java.util.UUID;
 @Mapper
 public interface EventRepository {
 
-    @Insert("INSERT INTO event (event_id, user_id, event_name, date, time_from, time_to, event_description, attendees) " +
-            "VALUES (#{event.event_id}, #{event.user_id}, #{event.event_name}, #{event.date}, #{event.time_from}, #{event.time_to}, #{event.event_description}, #{event.attendees})")
+    @Insert("INSERT INTO event (event_id, user_id, event_name, date, time_from, time_to, event_description, attendees, is_public) " +
+            "VALUES (#{event.event_id}, #{event.user_id}, #{event.event_name}, #{event.date}, #{event.time_from}, #{event.time_to}, #{event.event_description}, #{event.attendees}, #{event.is_public})")
     void insertEvent(@Param("event") EventEntity event);
 
     @Delete("DELETE FROM event WHERE event_id = #{eventId} AND user_id = #{userId}")
@@ -43,5 +43,12 @@ public interface EventRepository {
 
     @DeleteProvider(type = SqlProvider.class, method = "deleteEventsByUserIds")
     void deleteEventsByUserIds(@Param("userIds") List<UUID> userIds);
+
+    @Select("SELECT * FROM event WHERE is_public = true")
+    List<EventEntity> getPublicEvents();
+
+    @Update("UPDATE event SET is_public = NOT is_public WHERE event_id = #{eventId}")
+    void togglePublic(@Param("eventId") UUID eventId);
+
 }
 

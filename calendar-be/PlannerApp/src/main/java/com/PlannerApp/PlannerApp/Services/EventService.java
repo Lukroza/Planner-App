@@ -6,6 +6,7 @@ import com.PlannerApp.PlannerApp.Entities.UserEntity;
 import com.PlannerApp.PlannerApp.Models.Event;
 import com.PlannerApp.PlannerApp.Models.EventDetails;
 import com.PlannerApp.PlannerApp.Models.EventHeader;
+import com.PlannerApp.PlannerApp.Models.PublicEventDetails;
 import com.PlannerApp.PlannerApp.Repositories.EventRepository;
 import com.PlannerApp.PlannerApp.Repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -35,6 +36,7 @@ public class EventService {
                         .date(event.getDate())
                         .time_from(event.getFrom())
                         .time_to(event.getTo())
+                        .is_public(event.getIsPublic())
                         .build()
         );
     }
@@ -105,5 +107,30 @@ public class EventService {
     }
     public int leaveEvent(EventAttendeeEntity attendee){
         return eventRepository.leaveEvent(attendee);
+    }
+
+    public List<EventHeader> getPublicEvents(){
+        return eventRepository.getPublicEvents().stream()
+                .map(EventEntity -> EventHeader.builder()
+                        .id(EventEntity.getEvent_id())
+                        .name(EventEntity.getEvent_name())
+                        .date(EventEntity.getDate())
+                        .from(String.valueOf(EventEntity.getTime_from()))
+                        .build()).toList();
+    }
+    public PublicEventDetails getPublicEventDetails(UUID eventId){
+        EventEntity eventEntity = eventRepository.getEventDetails(eventId);
+        return PublicEventDetails.builder()
+                .name(eventEntity.getEvent_name())
+                .description(eventEntity.getEvent_description())
+                .date(eventEntity.getDate())
+                .from(eventEntity.getTime_from())
+                .to(eventEntity.getTime_to())
+                .attendees(eventRepository.getAttendees(eventId).size())
+                .build();
+    }
+
+    public void togglePublic(UUID eventId){
+        eventRepository.togglePublic(eventId);
     }
 }
