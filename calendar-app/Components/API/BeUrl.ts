@@ -1,5 +1,5 @@
 import config from '../../config.json';
 
-const backendURL = 'http://' + config.IP + ':8000';
+const backendURL = 'https://my-backend-latest.onrender.com';
 
 export default backendURL;
