@@ -1,21 +1,33 @@
-import * as React from 'react';
-import { Button } from 'react-native-paper';
-import { View, StyleSheet } from 'react-native';
-import { GlobalBorderColor, GlobalColor, GlobalFont, GlobalSecondaryColor, GlobalTextColor } from '../Styles';
+import * as React from "react";
+import { Button } from "react-native-paper";
+import { View, StyleSheet } from "react-native";
+import {
+  GlobalAccentColor,
+  GlobalBorderColor,
+  GlobalColor,
+  GlobalFont,
+  GlobalHeaderColor,
+  GlobalSecondaryColor,
+  GlobalTextColor,
+} from "../Styles";
 
-const ButtonComp = ({text, onPress}) => (
-  <Button style={styles.buttonStyle} mode="contained" onPress={onPress }>
+const ButtonComp = ({ text, onPress, color = GlobalAccentColor }) => (
+  <Button
+    style={[styles.buttonStyle, { backgroundColor: color }]}
+    mode="contained"
+    onPress={onPress}
+  >
     {text}
   </Button>
 );
 
 const styles = StyleSheet.create({
   buttonStyle: {
-    backgroundColor: GlobalSecondaryColor,
-    width: '50%',
-    borderRadius: 20,
+    width: 150,
+    borderRadius: 12,
     borderWidth: 0.5,
     borderColor: GlobalBorderColor,
+    color: GlobalHeaderColor,
   },
 });
 
