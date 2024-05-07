@@ -8,7 +8,7 @@ import { getGroupMembers } from '../API/Groups/GroupMembers';
 import { getGroupId } from "../Storage/userDataStorage";
 import { getUserId } from "../Storage/userDataStorage";
 import { deleteUser } from "../API/Groups/RemoveUser";
-import { GlobalColor, GlobalFont, GlobalHeaderColor, GlobalSecondaryColor, GlobalTextColor } from '../../Styles';
+import { GlobalColor, GlobalFont, GlobalHeaderColor, GlobalRedButtonColor, GlobalSecondaryColor, GlobalTextColor } from '../../Styles';
 import Toast from 'react-native-toast-message';
 import { getGroupName } from "../API/Groups/GroupName";
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -245,12 +245,12 @@ const GroupInput = ({ onRefresh }) => {
       </View>
       { userId !== ownerId && (
       <View style={styles.leaveButton}>
-        <ButtonComp text="Leave Group" onPress={handleLeaveGroup}/>
+        <ButtonComp text="Leave Group" onPress={handleLeaveGroup} color={GlobalRedButtonColor}/>
       </View>
     )}
       { userId === ownerId && (
       <View style={styles.leaveButton}>
-        <ButtonComp text="Delete Group" onPress={handleDeleteGroup}/>
+        <ButtonComp text="Delete Group" onPress={handleDeleteGroup} color={GlobalRedButtonColor}/>
       </View>
     )}
     </>

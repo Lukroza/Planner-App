@@ -10,25 +10,23 @@ import { getAllPublicEvents } from "../Components/API/Events/PublicEventDetails"
 import Events from "../Components/Events";
 import { Text } from "react-native";
 import { GlobalFont } from "../Styles";
-import { useFocusEffect } from '@react-navigation/native';
-
+import { useFocusEffect } from "@react-navigation/native";
 
 const PublicEventScreen = () => {
   const [publicEvents, setPublicEvents] = useState([]);
 
- useFocusEffect(
-  React.useCallback(() => {
-    const fetchPublicEvents = async () => {
-      const publicEvents = await getAllPublicEvents();
-      setPublicEvents(publicEvents);
-      console.log(publicEvents);
-    };
+  useFocusEffect(
+    React.useCallback(() => {
+      const fetchPublicEvents = async () => {
+        const publicEvents = await getAllPublicEvents();
+        setPublicEvents(publicEvents);
+      };
 
-    fetchPublicEvents();
+      fetchPublicEvents();
 
-    return () => {};
-  }, [])
-);
+      return () => {};
+    }, [])
+  );
 
   return (
     <View style={styles.view}>
@@ -44,7 +42,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: GlobalColor,
   },
-  
+
   Text: {
     color: "white",
     fontSize: 20,

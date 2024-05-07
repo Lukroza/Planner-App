@@ -110,12 +110,13 @@ public class EventService {
     }
 
     public List<EventHeader> getPublicEvents(){
+        SimpleDateFormat formatter = new SimpleDateFormat("HH:mm");
         return eventRepository.getPublicEvents().stream()
                 .map(EventEntity -> EventHeader.builder()
                         .id(EventEntity.getEvent_id())
                         .name(EventEntity.getEvent_name())
                         .date(EventEntity.getDate())
-                        .from(String.valueOf(EventEntity.getTime_from()))
+                        .from(formatter.format(EventEntity.getTime_from()))
                         .build()).toList();
     }
     public PublicEventDetails getPublicEventDetails(UUID eventId){

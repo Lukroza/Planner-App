@@ -1,6 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { Modal, Text, View, StyleSheet, TouchableOpacity } from "react-native";
-import { GlobalFont, GlobalHeaderColor, GlobalSecondaryColor } from "../Styles";
+import {
+  GlobalFont,
+  GlobalHeaderColor,
+  GlobalRedButtonColor,
+  GlobalSecondaryColor,
+} from "../Styles";
 import { getEventDetails } from "./API/Events/EventDetails";
 import { getUserId } from "./Storage/userDataStorage";
 import { joinEvent } from "./API/Events/JoinEvent";
@@ -26,11 +31,18 @@ async function getUsername(userId) {
   return username.username;
 }
 
-const EventDescription = ({deleteLocalEvent, isVisible, onClose, event, showAttendees=true  }) => {
+const EventDescription = ({
+  deleteLocalEvent,
+  isVisible,
+  onClose,
+  event,
+  showAttendees = true,
+}) => {
   const [eventDetails, setEventDetails] = useState(null);
   const [userId, setUserId] = useState(null);
   const [username, setUsername] = useState(null);
   const [isButtonDisabled, setButtonDisabled] = useState(false);
+  const [ownerUsername, setOwnerUsername] = useState(null);
 
   useEffect(() => {
     getUser().then(setUserId);
@@ -41,45 +53,47 @@ const EventDescription = ({deleteLocalEvent, isVisible, onClose, event, showAtte
       getUsername(userId).then((username) => {
         setUsername(username);
         if (event) {
-          getEventDetails({ eventId: event.id }).then(setEventDetails);
+          getEventDetails({ eventId: event.id }).then((details) => {
+            setEventDetails(details),
+              getUsername(details.userId).then(setOwnerUsername);
+          });
         }
       });
     }
   }, [event, userId]);
 
   const DeleteEvent = async () => {
-    try{
+    try {
       await deleteEvent({ eventId: event.id, userId: userId });
       deleteLocalEvent();
       onClose();
       Toast.show({
-        type: 'success',
-        text1: 'Success',
-        text2: 'Event deleted',
+        type: "success",
+        text1: "Success",
+        text2: "Event deleted",
       });
-    }
-    catch(e){
+    } catch (e) {
       Toast.show({
-        type: 'error',
-        text1: 'Error',
-        text2: 'Something went wrong',
+        type: "error",
+        text1: "Error",
+        text2: "Something went wrong",
       });
     }
-  }
+  };
 
-const JoinEvent = async () => {
-  setButtonDisabled(true);
-  await joinEvent({eventId: event.id, userId});
-  getEventDetails({eventId: event.id}).then(setEventDetails);
-  setTimeout(() => setButtonDisabled(false), 5000); // 5 seconds cooldown
-};
+  const JoinEvent = async () => {
+    setButtonDisabled(true);
+    await joinEvent({ eventId: event.id, userId });
+    getEventDetails({ eventId: event.id }).then(setEventDetails);
+    setTimeout(() => setButtonDisabled(false), 5000); // 5 seconds cooldown
+  };
 
-const LeaveEvent = async () => {
-  setButtonDisabled(true);
-  await leaveEvent({eventId: event.id, userId});
-  getEventDetails({eventId: event.id}).then(setEventDetails);
-  setTimeout(() => setButtonDisabled(false), 5000); // 5 seconds cooldown
-};
+  const LeaveEvent = async () => {
+    setButtonDisabled(true);
+    await leaveEvent({ eventId: event.id, userId });
+    getEventDetails({ eventId: event.id }).then(setEventDetails);
+    setTimeout(() => setButtonDisabled(false), 5000); // 5 seconds cooldown
+  };
 
   return (
     <Modal
@@ -97,40 +111,57 @@ const LeaveEvent = async () => {
           <CloseButton onPress={onClose} />
           <Text style={styles.eventName}>{event?.name}</Text>
           <Text style={styles.eventTime}>
-            {new Date(event?.time ? event.time : event.date).toLocaleDateString()}
+            {new Date(
+              event?.time ? event.time : event.date
+            ).toLocaleDateString()}
           </Text>
+          <Text style={styles.descriptionTitle}>Created by</Text>
+          <Text style={styles.descriptionText}>{ownerUsername}</Text>
           <Text style={styles.descriptionTitle}>Description</Text>
           <Text style={styles.descriptionText}>
             {eventDetails?.description}
           </Text>
           <Text style={styles.attendeesTitle}>Attendees</Text>
           <Text style={styles.attendeesText}>
-            {userId && eventDetails?.userId && username && eventDetails?.attendees ? (
-              showAttendees ? (
-                eventDetails?.attendees.length > 0 ? (
-                  eventDetails?.attendees.map((name) => name + " ")
-                ) : (
-                  "Be The First One!"
-                )
-              ) : (
-                `People joined: ${eventDetails?.attendees.length}`
-              )
-            ) : null}
+            {userId &&
+            eventDetails?.userId &&
+            username &&
+            eventDetails?.attendees
+              ? showAttendees
+                ? eventDetails?.attendees.length > 0
+                  ? eventDetails?.attendees.map((name) => name + " ")
+                  : "Be The First One!"
+                : `People joined: ${eventDetails?.attendees.length}`
+              : null}
           </Text>
-          {userId && eventDetails?.userId && username && eventDetails?.attendees ? (
-          userId === eventDetails?.userId ? (
-            <ButtonComp text="Delete Event" onPress={DeleteEvent} />
+          {userId &&
+          eventDetails?.userId &&
+          username &&
+          eventDetails?.attendees ? (
+            userId === eventDetails?.userId ? (
+              <ButtonComp
+                text="Delete Event"
+                onPress={DeleteEvent}
+                color={GlobalRedButtonColor}
+              />
             ) : eventDetails?.attendees?.includes(username) ? (
-              <TouchableOpacity disabled={isButtonDisabled} style={styles.leaveButton} onPress={LeaveEvent}>
+              <TouchableOpacity
+                disabled={isButtonDisabled}
+                style={styles.leaveButton}
+                onPress={LeaveEvent}
+              >
                 <Text style={styles.buttonText}>Leave</Text>
               </TouchableOpacity>
             ) : !eventDetails?.attendees?.includes(username) ? (
-              <TouchableOpacity disabled={isButtonDisabled} style={styles.joinButton} onPress={JoinEvent}>
+              <TouchableOpacity
+                disabled={isButtonDisabled}
+                style={styles.joinButton}
+                onPress={JoinEvent}
+              >
                 <Text style={styles.buttonText}>Join</Text>
               </TouchableOpacity>
             ) : null
-          ) : null
-          }
+          ) : null}
         </View>
       </TouchableOpacity>
     </Modal>
@@ -203,24 +234,24 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   joinButton: {
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
     backgroundColor: "#58a700",
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 20,
     elevation: 2,
-    width: '35%',
+    width: "35%",
   },
   leaveButton: {
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
     backgroundColor: "#FF0000",
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 20,
     elevation: 2,
-    width: '35%',
+    width: "35%",
   },
   buttonText: {
     fontFamily: GlobalFont,
