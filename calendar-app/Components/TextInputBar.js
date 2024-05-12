@@ -9,9 +9,10 @@ import {
   GlobalTextColor,
 } from "../Styles";
 
-const TextInputBar = ({ label, onChangeText, multiline }) => {
+const TextInputBar = ({ label, onChangeText, multiline, value }) => {
   return (
     <TextInput
+      value={value}
       underlineColor="transparent"
       label={label}
       onChangeText={onChangeText}
