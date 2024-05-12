@@ -15,6 +15,9 @@ export async function inviteToGroup({ user_id, group_id }: InviteParams) {
       body: JSON.stringify({ user_id, group_id }),
     });
 
+    if (response.status === 409) {
+      return null;
+    }
     if (!response.ok) {
       throw new Error('Failed to invite the user');
     }

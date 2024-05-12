@@ -28,7 +28,11 @@ public class InviteService {
                 .group_id(invite.getGroup_id())
                 .build();
 
-        inviteRepository.insertInvite(inviteEntity);
+        try {
+            inviteRepository.insertInvite(inviteEntity);
+        } catch (Exception e) {
+            return null;
+        }
         return invite_id;
     }
     public List<Invite> getUserInvites(UUID userId) {
