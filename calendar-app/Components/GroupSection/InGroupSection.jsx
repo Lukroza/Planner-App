@@ -92,7 +92,6 @@ const GroupInput = ({ onRefresh }) => {
         const invite = await inviteToGroup({ user_id: fetchedUser.id, group_id });
 
         if(invite === null) {
-          console.log("User already invited");
           Toast.show({
             type: 'error',
             text1: 'Error',
