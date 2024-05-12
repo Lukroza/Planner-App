@@ -81,13 +81,14 @@ function CreateEvent() {
   const fromTimeString = formatTime(fromTime);
   const toTimeString = formatTime(toTime);
 
-  const handleCancel = () => {
+  const clearFields = () => {
     setName("");
     setFromTime(new Date());
     setToTime(new Date());
     setFromPickerVisibility(false);
     setToPickerVisibility(false);
     setDescription("");
+    setIsPublic(false);
   };
 
   const handleDateChange = (date) => {
@@ -107,6 +108,7 @@ function CreateEvent() {
       isPublic: isPublic,
     };
     createEventApi(eventData);
+    clearFields();
     navigation.navigate("Home");
   };
 
@@ -118,6 +120,7 @@ function CreateEvent() {
           <View style={styles.eventInputContainer}>
             <Text style={styles.label}>Event Name</Text>
             <TextInputBar
+              value={name}
               label="Write your event name"
               onChangeText={setName}
             />
@@ -126,6 +129,7 @@ function CreateEvent() {
             <Text style={styles.label}>Description</Text>
             <TextInputBar
               label="Write about the event"
+              value={description}
               onChangeText={setDescription}
               multiline={true}
             />
@@ -165,7 +169,7 @@ function CreateEvent() {
           <View style={styles.buttonContainer}>
             <ButtonComp
               text="Cancel"
-              onPress={handleCancel}
+              onPress={clearFields}
               style={styles.button}
               color={GlobalRedButtonColor}
             />
