@@ -14,8 +14,10 @@ import {
   GlobalFont,
   GlobalTextColor,
   GlobalHeaderColor,
+  GlobalAccentColor,
 } from "../Styles";
-
+import ButtonComp from "./ButtonComp";
+import { IconButton, MD3Colors } from "react-native-paper";
 const Events = ({
   events,
   calendarHeight,
@@ -26,6 +28,7 @@ const Events = ({
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [refreshKey, setRefreshKey] = useState(0);
   const [ownerUsername, setOwnerUsername] = useState(null);
+  const [sortOrder, setSortOrder] = useState("asc");
 
   const styles = createStyles(calendarHeight);
 
@@ -38,6 +41,35 @@ const Events = ({
     console.log("Deleting event");
     filterLocalEvents(selectedEvent.id);
   };
+
+  const toggleSortOrder = () => {
+    setSortOrder(sortOrder === "asc" ? "desc" : "asc");
+  };
+
+  const sortedEvents = [...events].sort((a, b) => {
+    const dateA = new Date(a.date);
+    const dateB = new Date(b.date);
+
+    const timeA = a.from ? a.from.split(":") : ["00", "00"];
+    const timeB = b.from ? b.from.split(":") : ["00", "00"];
+
+    const minutesA = parseInt(timeA[0], 10) * 60 + parseInt(timeA[1], 10);
+    const minutesB = parseInt(timeB[0], 10) * 60 + parseInt(timeB[1], 10);
+
+    if (dateA < dateB) {
+      return sortOrder === "asc" ? -1 : 1;
+    } else if (dateA > dateB) {
+      return sortOrder === "asc" ? 1 : -1;
+    } else {
+      if (minutesA < minutesB) {
+        return sortOrder === "asc" ? -1 : 1;
+      } else if (minutesA > minutesB) {
+        return sortOrder === "asc" ? 1 : -1;
+      } else {
+        return 0;
+      }
+    }
+  });
 
   const renderEvent = ({ item }) => {
     const date = new Date(item.date);
@@ -63,9 +95,19 @@ const Events = ({
 
   return (
     <View style={styles.container}>
-      <Text style={styles.totalEvents}>Total events: {events.length}</Text>
+      <View style={styles.sortContainer}>
+        <Text style={styles.totalEvents}>Total events: {events.length}</Text>
+        <TouchableOpacity style={styles.sortButton} onPress={toggleSortOrder}>
+          <Text style={styles.sortLabel}> Sort events: </Text>
+          <IconButton
+            icon={sortOrder === "asc" ? "sort-descending" : "sort-ascending"}
+            iconColor={"#FFFFFF"}
+            size={24}
+          />
+        </TouchableOpacity>
+      </View>
       <FlatList
-        data={events}
+        data={sortedEvents}
         renderItem={renderEvent}
         keyExtractor={(item, index) => item.id || index.toString()}
         ListEmptyComponent={<Text style={styles.noEventsText}>No events</Text>}
@@ -145,6 +187,28 @@ const createStyles = (calendarHeight) =>
       marginBottom: 5,
       textAlign: "center",
       fontWeight: "bold",
+    },
+    sortContainer: {
+      display: "flex",
+      flexDirection: "row",
+      justifyContent: "space-between",
+      alignItems: "center",
+      marginBottom: 5,
+    },
+    sortButton: {
+      color: GlobalHeaderColor,
+      display: "flex",
+      flexDirection: "row",
+      alignItems: "center",
+      backgroundColor: GlobalAccentColor,
+      borderRadius: 10,
+      height: 35,
+    },
+    sortLabel: {
+      color: "#FFFFFF",
+      fontFamily: GlobalFont,
+      fontSize: 16,
+      marginLeft: 5,
     },
   });
 
