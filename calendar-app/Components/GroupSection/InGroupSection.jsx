@@ -89,13 +89,22 @@ const GroupInput = ({ onRefresh }) => {
 
       if (fetchedUser && !fetchedUser.group_id) {
         const group_id = await getGroupId();
-        await inviteToGroup({ user_id: fetchedUser.id, group_id });
+        const invite = await inviteToGroup({ user_id: fetchedUser.id, group_id });
+
+        if(invite === null) {
+          Toast.show({
+            type: 'error',
+            text1: 'Error',
+            text2: 'Your group has already invited this user!',
+          });
+        }
+        else {
         Toast.show({
           type: 'success',
           text1: 'Success',
           text2: 'Invitation sent!',
         });
-
+      }
       } else {
         Toast.show({
           type: 'error',

@@ -6,6 +6,7 @@ import com.PlannerApp.PlannerApp.Services.InviteService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,9 +21,13 @@ public class InviteController {
     private final InviteService inviteService;
 
     @PostMapping("/insert")
-    @ResponseStatus(HttpStatus.CREATED)
-    public UUID insertInvite(@RequestBody Invite invite){
-        return inviteService.insertInvite(invite);
+    public ResponseEntity<?> insertInvite(@RequestBody Invite invite){
+        UUID inviteId = inviteService.insertInvite(invite);
+        if (inviteId == null) {
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
+        } else {
+            return new ResponseEntity<>(inviteId, HttpStatus.CREATED);
+        }
     }
 
     @GetMapping("/get/{userId}")
