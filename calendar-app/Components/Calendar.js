@@ -11,6 +11,7 @@ import {
   GlobalSecondaryColor,
   GlobalTextColor,
 } from "../Styles";
+import { useFocusEffect } from '@react-navigation/native';
 
 const CalendarComponent = ({ showEvents, onDayPress }) => {
   const [selectedDate, setSelectedDate] = useState("");
@@ -23,11 +24,13 @@ const CalendarComponent = ({ showEvents, onDayPress }) => {
     getUserId().then(setUserId);
   }, []);
 
-  useEffect(() => {
-    if (userId) {
-      fetchEventHeaders();
-    }
-  }, [userId, events]);
+  useFocusEffect(
+    useCallback(() => {
+      if (userId) {
+        fetchEventHeaders();
+      }
+    }, [userId])
+  );
 
   const fetchEventHeaders = async () => {
     if (!userId) {
