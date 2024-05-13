@@ -18,6 +18,7 @@ import {
 } from "../Styles";
 import ButtonComp from "./ButtonComp";
 import { IconButton, MD3Colors } from "react-native-paper";
+import { useMemo } from "react";
 const Events = ({
   events,
   calendarHeight,
@@ -38,7 +39,6 @@ const Events = ({
   };
 
   const deleteLocalEvent = () => {
-    console.log("Deleting event");
     filterLocalEvents(selectedEvent.id);
   };
 
@@ -46,30 +46,33 @@ const Events = ({
     setSortOrder(sortOrder === "asc" ? "desc" : "asc");
   };
 
-  const sortedEvents = [...events].sort((a, b) => {
-    const dateA = new Date(a.date);
-    const dateB = new Date(b.date);
 
-    const timeA = a.from ? a.from.split(":") : ["00", "00"];
-    const timeB = b.from ? b.from.split(":") : ["00", "00"];
+  const sortedEvents = useMemo(() => {
+    return [...events].sort((a, b) => {
+      const dateA = new Date(a.date);
+      const dateB = new Date(b.date);
 
-    const minutesA = parseInt(timeA[0], 10) * 60 + parseInt(timeA[1], 10);
-    const minutesB = parseInt(timeB[0], 10) * 60 + parseInt(timeB[1], 10);
+      const timeA = a.from ? a.from.split(":") : ["00", "00"];
+      const timeB = b.from ? b.from.split(":") : ["00", "00"];
 
-    if (dateA < dateB) {
-      return sortOrder === "asc" ? -1 : 1;
-    } else if (dateA > dateB) {
-      return sortOrder === "asc" ? 1 : -1;
-    } else {
-      if (minutesA < minutesB) {
+      const minutesA = parseInt(timeA[0], 10) * 60 + parseInt(timeA[1], 10);
+      const minutesB = parseInt(timeB[0], 10) * 60 + parseInt(timeB[1], 10);
+
+      if (dateA < dateB) {
         return sortOrder === "asc" ? -1 : 1;
-      } else if (minutesA > minutesB) {
+      } else if (dateA > dateB) {
         return sortOrder === "asc" ? 1 : -1;
       } else {
-        return 0;
+        if (minutesA < minutesB) {
+          return sortOrder === "asc" ? -1 : 1;
+        } else if (minutesA > minutesB) {
+          return sortOrder === "asc" ? 1 : -1;
+        } else {
+          return 0;
+        }
       }
-    }
-  });
+    });
+  }, [events, sortOrder]);
 
   const renderEvent = ({ item }) => {
     const date = new Date(item.date);
