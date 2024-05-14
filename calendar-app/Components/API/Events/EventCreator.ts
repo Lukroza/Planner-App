@@ -31,7 +31,11 @@ export async function createEventApi(props: IEvent) {
                 text2: text
               });
         } else if (response.status === 400) {
-            throw new Error(text);
+            Toast.show({
+                type: 'error',
+                text1: 'Failed to create event',
+                text2: text
+              });
         } else {
             throw new Error('Failed to create event');
         }
