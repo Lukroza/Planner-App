@@ -1,4 +1,5 @@
 import backendURL from "../BeUrl";
+import Toast from "react-native-toast-message";
 
 interface IEvent {
     name: string;
@@ -20,18 +21,26 @@ export async function createEventApi(props: IEvent) {
             },
             body: JSON.stringify(props),
         });
-        if (!response.ok) {
-            throw new Error('Failed to create event');
-        }
 
         const text = await response.text();
-        if (!text) {
-            return null;
-        }
 
-        const data = JSON.parse(text);
-        return data;
+        if (response.status === 201) {
+            Toast.show({
+                type: 'success',
+                text1: 'Event Created',
+                text2: text
+              });
+        } else if (response.status === 400) {
+            Toast.show({
+                type: 'error',
+                text1: 'Failed to create event',
+                text2: text
+              });
+        } else {
+            throw new Error('Failed to create event');
+        }
     } catch (error) {
         console.error(error);
+        return error.message;
     }
 }

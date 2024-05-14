@@ -18,6 +18,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.regex.Pattern;
 
 @RestController
 @RequestMapping("/event")
@@ -25,11 +26,17 @@ import java.util.UUID;
 @Slf4j
 public class EventController {
     private final EventService eventService;
-
     @PostMapping("/insert")
     @ResponseStatus(HttpStatus.CREATED)
-    public void insertEvent(@RequestBody Event event){
-        eventService.insertEvent(event);
+    public ResponseEntity<String> insertEvent(@RequestBody Event event) {
+        Pattern invalidCharsPattern = Pattern.compile("[\";:,()!?]");
+        String eventName = event.getName();
+        if (invalidCharsPattern.matcher(eventName).find()) {
+            return new ResponseEntity<>("Invalid symbols in event name (\";:,()!?)", HttpStatus.BAD_REQUEST);
+        } else {
+            eventService.insertEvent(event);
+            return new ResponseEntity<>("Event created successfully", HttpStatus.CREATED);
+        }
     }
     @DeleteMapping("/delete/{eventId}")
     public void deleteEvent(@PathVariable UUID eventId, @RequestBody Map<String, UUID> body){
