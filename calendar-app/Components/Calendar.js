@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback } from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, StyleSheet } from "react-native";
 import { Calendar, LocaleConfig } from "react-native-calendars";
 import Events from "./Events";
 import { getUserId } from "./Storage/userDataStorage";
@@ -8,7 +8,6 @@ import {
   GlobalBackgroundTextColor,
   GlobalColor,
   GlobalHeaderColor,
-  GlobalSecondaryColor,
   GlobalTextColor,
 } from "../Styles";
 import { useFocusEffect } from '@react-navigation/native';
@@ -61,33 +60,57 @@ const CalendarComponent = ({ showEvents, onDayPress }) => {
       date.setDate(date.getDate() + 1);
       const dateKey = date.toISOString().split("T")[0];
       if (!acc[dateKey]) {
-        acc[dateKey] = { ...curr, marked: true, dotColor: "green", count: 1 };
+        acc[dateKey] = { count: 1 };
       } else {
-        let count = acc[dateKey].count + 1;
-        let dotColor;
-        if (count <= 2) {
-          dotColor = "green";
-        } else if (count <= 4) {
-          dotColor = "yellow";
-        } else {
-          dotColor = "red";
-        }
-        acc[dateKey] = {
-          ...acc[dateKey],
-          ...curr,
-          marked: true,
-          dotColor,
-          count,
-        };
+        acc[dateKey].count += 1;
       }
       return acc;
     }, {});
 
+    Object.keys(dates).forEach((dateKey) => {
+      const count = dates[dateKey].count;
+      let backgroundColor;
+      if (count <= 2) {
+        backgroundColor = "green";
+      } else if (count <= 4) {
+        backgroundColor = "yellow";
+      } else {
+        backgroundColor = "red";
+      }
+
+      dates[dateKey] = {
+        customStyles: {
+          container: {
+            backgroundColor,
+            borderRadius: 5,
+            alignItems: 'center',
+            justifyContent: 'center',
+            opacity: 0.5,
+          },
+          text: {
+            color: 'black',
+            opacity: 1,
+          },
+        },
+      };
+    });
+
     if (selectedDate) {
       dates[selectedDate] = {
-        ...dates[selectedDate],
-        selected: true,
-        disableTouchEvent: true,
+        customStyles: {
+          container: {
+            backgroundColor: GlobalHeaderColor,
+            borderRadius: 15,
+            padding: 2,
+            alignItems: 'center',
+            justifyContent: 'center',
+            opacity: 1,
+          },
+          text: {
+            color: GlobalColor,
+            opacity: 1,
+          },
+        },
       };
     }
 
@@ -110,6 +133,7 @@ const CalendarComponent = ({ showEvents, onDayPress }) => {
             }
           }}
           markedDates={computeMarkedDates()}
+          markingType={'custom'}
           theme={{
             calendarBackground: GlobalColor,
             backgroundColor: GlobalColor,
