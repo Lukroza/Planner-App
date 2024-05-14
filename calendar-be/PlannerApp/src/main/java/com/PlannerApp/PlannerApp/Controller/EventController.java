@@ -32,7 +32,7 @@ public class EventController {
         Pattern invalidCharsPattern = Pattern.compile("[\";:,()!?]");
         String eventName = event.getName();
         if (invalidCharsPattern.matcher(eventName).find()) {
-            return new ResponseEntity<>("Invalid simbols in event name (\";:,()!?)", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Invalid symbols in event name (\";:,()!?)", HttpStatus.BAD_REQUEST);
         } else {
             eventService.insertEvent(event);
             return new ResponseEntity<>("Event created successfully", HttpStatus.CREATED);
