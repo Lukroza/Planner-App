@@ -63,6 +63,7 @@ public class EventService {
                         .name(EventEntity.getEvent_name())
                         .from(formatter.format(EventEntity.getTime_from()))
                         .date(EventEntity.getDate())
+                        .attendeeCount(eventRepository.getAttendees(EventEntity.getEvent_id()).size())
                         .build()).toList();
     }
     public EventDetails getEventDetails(UUID eventId){
@@ -117,6 +118,7 @@ public class EventService {
                         .name(EventEntity.getEvent_name())
                         .date(EventEntity.getDate())
                         .from(formatter.format(EventEntity.getTime_from()))
+                        .attendeeCount(eventRepository.getAttendees(EventEntity.getEvent_id()).size())
                         .build()).toList();
     }
     public PublicEventDetails getPublicEventDetails(UUID eventId){
