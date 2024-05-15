@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.regex.Pattern;
 
 @RestController
 @RequestMapping("/user")
@@ -21,13 +22,32 @@ public class UserController {
 
     @PostMapping("/insert")
     @ResponseStatus(HttpStatus.CREATED)
-    public UUID insertUser(@RequestBody User user) {
-        return userService.insertUser(user.getUsername());
+    public ResponseEntity<String> insertUser(@RequestBody User user) {
+        String username = user.getUsername();
+        if (username == null || username.isEmpty()) {
+            return new ResponseEntity<>("Must enter a username", HttpStatus.BAD_REQUEST);
+        }
+        Pattern invalidCharsPattern = Pattern.compile("[\";:,()!?]");
+        if (invalidCharsPattern.matcher(username).find()) {
+            return new ResponseEntity<>("Invalid symbols in username (\";:,()!?)", HttpStatus.BAD_REQUEST);
+        } else {
+            Optional<User> existingUser = userService.getUserByUsername(username);
+            if (existingUser.isPresent()) {
+                return new ResponseEntity<>("User already exists", HttpStatus.CONFLICT);
+            } else {
+                UUID userId = userService.insertUser(username);
+                return new ResponseEntity<>("User created successfully", HttpStatus.CREATED);
+            }
+        }
     }
-
     @GetMapping("/get/{username}")
-    public Optional<User> getUserByUsername(@PathVariable String username) {
-        return userService.getUserByUsername(username);
+    public ResponseEntity<?> getUserByUsername(@PathVariable String username) {
+        Optional<User> user = userService.getUserByUsername(username);
+        if (user.isPresent()) {
+            return ResponseEntity.ok(user.get());
+        } else {
+            return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
+        }
     }
 
     @GetMapping("/get/group/{groupId}")
