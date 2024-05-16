@@ -1,0 +1,18 @@
+version: '3.8'
+services:
+  backend-service:
+    build: ../calendar-be
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./calendar-be:/usr/src/app
+    environment:
+      - NODE_ENV=production
+  frontend:
+    build: .  # Update this path if your frontend is in a different folder
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend-service
+    environment:
+      - REACT_APP_BACKEND_URL=http://backend-service:8000
