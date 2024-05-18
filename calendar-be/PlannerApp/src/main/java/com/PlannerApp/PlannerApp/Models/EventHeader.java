@@ -18,4 +18,5 @@ public class EventHeader {
     private String name;
     private String from;
     private Date date;
+    private int attendeeCount;
 }
