@@ -14,12 +14,15 @@ import { getUserById } from "../Components/API/Users/UserGetById";
 import Toast from "react-native-toast-message";
 import { useNavigation, CommonActions } from "@react-navigation/native";
 import GroupStats from "../Components/GroupStats";
+import AuthContext from "../Components/AuthContext";
+import { useContext } from "react";
 
 const ProfileScreen = () => {
   const [groupNameData, setGroupName] = useState("");
   const [inGroup, setInGroup] = useState(null);
   const [username, setUsername] = useState("");
   const [isModalVisible, setModalVisible] = useState(false);
+  const { setIsRegistered } = useContext(AuthContext);
 
   async function getGroupStatus() {
     const inGroup = await getInGroupStatus();
@@ -49,17 +52,12 @@ const ProfileScreen = () => {
 
   const handleLogOut = () => {
     storeUserInfo("0", false, false, "0");
+    setIsRegistered(false);
     Toast.show({
       type: "success",
       text1: "Logged out",
       text2: "You have been logged out",
     });
-    navigation.dispatch(
-      CommonActions.reset({
-        index: 0,
-        routes: [{ name: "Registration" }],
-      })
-    );
   };
 
   return (

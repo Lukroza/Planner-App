@@ -1,28 +1,38 @@
-import * as React from 'react';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { View, StyleSheet } from 'react-native';
-import { GlobalColor, GlobalSecondaryColor, GlobalFont } from './Styles';
-import RegistrationScreen from './Screens/RegistrationScreen';
-import { useState, useEffect } from 'react';
-import AppNavigation from './Components/Footer';
-import { getIsLoggedIn, getUserId, storeUserInfo } from './Components/Storage/userDataStorage'; 
-import { Provider } from 'react-native-paper';
-import { getUserById } from './Components/API/Users/UserGetById';
-import ProfileScreen from './Screens/ProfileScreen';
-import { NavigationContainer } from '@react-navigation/native';
-
+import * as React from "react";
+import { SafeAreaProvider } from "react-native-safe-area-context";
+import { View, StyleSheet } from "react-native";
+import { GlobalColor, GlobalSecondaryColor, GlobalFont } from "./Styles";
+import RegistrationScreen from "./Screens/RegistrationScreen";
+import { useContext, useEffect, useState } from "react";
+import AppNavigation from "./Components/Footer";
+import {
+  getIsLoggedIn,
+  getUserId,
+  storeUserInfo,
+} from "./Components/Storage/userDataStorage";
+import { Provider } from "react-native-paper";
+import { getUserById } from "./Components/API/Users/UserGetById";
+import ProfileScreen from "./Screens/ProfileScreen";
+import { NavigationContainer } from "@react-navigation/native";
+import AuthContext, { AuthProvider } from "./Components/AuthContext";
 async function getUser() {
   const userId = await getUserId();
   return userId;
 }
 
+const MainNavigator = () => {
+  const { isRegistered, setIsRegistered } = useContext(AuthContext);
+
+  return isRegistered ? <AppNavigation /> : <RegistrationScreen />;
+};
+
 const App = () => {
   const [refreshKey, setRefreshKey] = useState(0);
   const [isRegistered, setIsRegistered] = useState(false);
   const [userId, setUserId] = useState(null);
-  
+
   const handleRefresh = () => {
-    setRefreshKey(oldKey => oldKey + 1);
+    setRefreshKey((oldKey) => oldKey + 1);
     setIsRegistered(true);
   };
 
@@ -31,22 +41,21 @@ const App = () => {
     getUser().then(setUserId);
   }, [refreshKey]);
 
-  useEffect(() => { 
-    if (userId && isRegistered) { 
+  useEffect(() => {
+    if (userId && isRegistered) {
       updateUserData();
     }
   }, [userId]);
-  
+
   const updateUserData = async () => {
     const userData = await getUserById({ userId });
-    if(userData != null) {
-      if(userData.group_id != null) {
+    if (userData != null) {
+      if (userData.group_id != null) {
         await storeUserInfo(userData.id, true, true, userData.group_id);
-      }
-      else{
+      } else {
         await storeUserInfo(userData.id, false, true, "0");
       }
-    } 
+    }
   };
 
   const checkLoginStatus = async () => {
@@ -55,18 +64,14 @@ const App = () => {
       setIsRegistered(true);
     }
   };
-  
+
   return (
     <Provider>
-        <SafeAreaProvider>
-          {isRegistered ? (
-          <AppNavigation />
-          ) : (
-            <NavigationContainer>
-                <RegistrationScreen key={refreshKey} onRefresh={handleRefresh} />
-            </NavigationContainer>
-          )}
-        </SafeAreaProvider>
+      <SafeAreaProvider>
+        <AuthProvider>
+          <MainNavigator />
+        </AuthProvider>
+      </SafeAreaProvider>
     </Provider>
   );
 };
