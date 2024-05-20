@@ -60,4 +60,23 @@ public class UserController {
     public Optional<User> getUserByID(@PathVariable UUID userId) {
         return userService.getUserByID(userId);
     }
+
+    @PutMapping("/update/name/{userId}")
+    public ResponseEntity<?> updateUsername(@PathVariable UUID userId, @RequestBody String username) {
+        if (username == null || username.isEmpty()) {
+            return new ResponseEntity<>("Must enter a username", HttpStatus.BAD_REQUEST);
+        }
+        Pattern invalidCharsPattern = Pattern.compile("[\";:,()!?]");
+        if (invalidCharsPattern.matcher(username).find()) {
+            return new ResponseEntity<>("Invalid symbols in username (\";:,()!?)", HttpStatus.BAD_REQUEST);
+        } else {
+            Optional<User> existingUser = userService.getUserByID(userId);
+            if (existingUser.isPresent()) {
+                userService.updateUsername(userId, username);
+                return new ResponseEntity<>("Username updated", HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
+            }
+        }
+    }
 }

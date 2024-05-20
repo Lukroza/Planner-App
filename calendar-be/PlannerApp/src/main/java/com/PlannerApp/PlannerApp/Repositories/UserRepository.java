@@ -42,4 +42,7 @@ public interface UserRepository {
 
     @Select("SELECT * FROM users WHERE username LIKE #{usernamePattern}")
     List<UserEntity> findUsersByUsernamePattern(@Param("usernamePattern") String usernamePattern);
+
+    @Update("UPDATE users SET username = #{newUsername} WHERE id = #{userId}")
+    void updateUsername(@Param("userId") UUID userId, @Param("newUsername") String newUsername);
 }
