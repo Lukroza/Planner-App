@@ -68,5 +68,9 @@ public class UserService {
 
         return count;
     }
+
+    public void updateUsername(UUID userId, String newUsername) {
+        userRepository.updateUsername(userId, newUsername);
+    }
     
 }
