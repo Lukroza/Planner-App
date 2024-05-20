@@ -58,7 +58,7 @@ const GroupInput = ({ onRefresh }) => {
       const userId = await getUser();
       const groupId = await getGroup();
       const groupNameData = await getGroupName({ groupId: groupId });
-      setOwnerId(groupNameData.owner_id);
+      setOwnerId(groupNameData?.owner_id ?? null);
       setUserId(userId);
     }
 
