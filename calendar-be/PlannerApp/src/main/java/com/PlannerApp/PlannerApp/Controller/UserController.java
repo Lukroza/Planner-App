@@ -22,7 +22,8 @@ public class UserController {
 
     @PostMapping("/insert")
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<String> insertUser(@RequestBody User user) {
+    public ResponseEntity<?> insertUser(@RequestBody User user) {
+        System.out.println(user);
         String username = user.getUsername();
         if (username == null || username.isEmpty()) {
             return new ResponseEntity<>("Must enter a username", HttpStatus.BAD_REQUEST);
@@ -36,7 +37,7 @@ public class UserController {
                 return new ResponseEntity<>("User already exists", HttpStatus.CONFLICT);
             } else {
                 UUID userId = userService.insertUser(username);
-                return new ResponseEntity<>("User created successfully", HttpStatus.CREATED);
+                return new ResponseEntity<>(userId, HttpStatus.CREATED);
             }
         }
     }
