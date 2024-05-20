@@ -42,13 +42,13 @@ public class UserController {
         }
     }
     @GetMapping("/get/{username}")
-    public ResponseEntity<?> getUserByUsername(@PathVariable String username) {
-        Optional<User> user = userService.getUserByUsername(username);
-        if (user.isPresent()) {
-            return ResponseEntity.ok(user.get());
-        } else {
-            return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
-        }
+    public Optional<User> getUserByUsername(@PathVariable String username) {
+        return userService.getUserByUsername(username);
+//        if (user.isPresent()) {
+//            return ResponseEntity.ok(user.get());
+//        } else {
+//            return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
+//        }
     }
 
     @GetMapping("/get/group/{groupId}")

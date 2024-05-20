@@ -20,14 +20,11 @@ const RegistrationScreen = ({ onRefresh }) => {
 
   const handleRegistration = async () => {
     try {
-      console.log(username);
-      const response = await createUserApi({ username });
-      console.log(response);
+      let response = await createUserApi({ username });
+      response = response.replaceAll(`"`, "");
       await storeUserInfo(response, false, true, "0");
-      console.log("User created");
       onRefresh();
     } catch (error) {
-      console.log(error.message);
       Toast.show({
         type: "error",
         text1: "Error",
