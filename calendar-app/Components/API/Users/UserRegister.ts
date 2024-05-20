@@ -16,7 +16,7 @@ export async function createUserApi(props: IUser) {
         });
 
         const text = await response.text();
-        if (response.status !== 200) {
+        if (response.status !== 201) {
             throw new Error(text);
         }
         return text;
