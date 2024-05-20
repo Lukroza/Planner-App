@@ -43,8 +43,11 @@ Next, connect the app to the backend service.
    cd /calendar-be
 
 3. Run PlannerAppApplication.java:
-    
-4. Ensure the backend is running and connected to the React Native Calendar App:
+
+4. Build gradle
+    ```
+    ./gradle clean build
+5. Ensure the backend is running and connected to the React Native Calendar App:
     ```sh
     npx expo start
 
