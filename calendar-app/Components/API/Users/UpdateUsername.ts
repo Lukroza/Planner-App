@@ -1,22 +1,22 @@
 import backendURL from "../BeUrl";
-import Toast from "react-native-toast-message";
 
-interface IUser {
-    username: string;
+interface IUpdateUser {
+    userId: string;
+    newUsername: string;
 }
 
-export async function createUserApi(props: IUser) {
+export async function updateUsername(props: IUpdateUser) {
     try {
-        const response = await fetch(backendURL + "/user/insert", {
-            method: 'POST',
+        const response = await fetch(backendURL + "/user/update/name/" + props.userId, {
+            method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify(props),
+            body: ( props.newUsername ),
         });
 
         const text = await response.text();
-        if (response.status !== 201) {
+        if (response.status !== 200) {
             throw new Error(text);
         }
         return text;

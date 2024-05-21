@@ -1,4 +1,9 @@
-import { GlobalColor, GlobalTextColor, GlobalRedButtonColor } from "../Styles";
+import {
+  GlobalColor,
+  GlobalTextColor,
+  GlobalRedButtonColor,
+  GlobalAccentColor,
+} from "../Styles";
 import {
   storeUserInfo,
   getUserId,
@@ -7,7 +12,7 @@ import {
 import ButtonComp from "../Components/ButtonComp";
 import Header from "../Components/Header";
 import { useEffect, useState } from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, TextInput } from "react-native";
 import { getGroupName } from "../Components/API/Groups/GroupName";
 import { getInGroupStatus } from "../Components/Storage/userDataStorage";
 import { getUserById } from "../Components/API/Users/UserGetById";
@@ -16,6 +21,8 @@ import { useNavigation, CommonActions } from "@react-navigation/native";
 import GroupStats from "../Components/GroupStats";
 import AuthContext from "../Components/AuthContext";
 import { useContext } from "react";
+import { updateUsername } from "../Components/API/Users/UpdateUsername";
+import { IconButton, MD3Colors } from "react-native-paper";
 
 const ProfileScreen = () => {
   const [groupNameData, setGroupName] = useState("");
@@ -23,11 +30,13 @@ const ProfileScreen = () => {
   const [username, setUsername] = useState("");
   const [isModalVisible, setModalVisible] = useState(false);
   const { setIsRegistered } = useContext(AuthContext);
+  const [newUsername, setNewUsername] = useState("");
 
   async function getGroupStatus() {
     const inGroup = await getInGroupStatus();
     return inGroup;
   }
+
   const fetchGroupName = async () => {
     const groupId = await getGroupId();
     const groupNameData = await getGroupName({ groupId });
@@ -48,6 +57,35 @@ const ProfileScreen = () => {
     getGroupStatus().then(setInGroup);
   }, []);
 
+  const handleUsernameChange = async () => {
+    if (newUsername === "") {
+      Toast.show({
+        type: "error",
+        text1: "Error",
+        text2: "Username cannot be empty",
+      });
+      return;
+    }
+
+    try {
+      const userId = await getUserId();
+      await updateUsername({ userId, newUsername });
+      Toast.show({
+        type: "success",
+        text1: "Success",
+        text2: "Username updated",
+      });
+      setUsername(newUsername);
+      setNewUsername("");
+    } catch (error) {
+      Toast.show({
+        type: "error",
+        text1: "Error",
+        text2: error.message,
+      });
+    }
+  };
+
   const navigation = useNavigation();
 
   const handleLogOut = () => {
@@ -67,7 +105,19 @@ const ProfileScreen = () => {
         <Text style={styles.topLine}>About You</Text>
         <View style={styles.segment}>
           <Text style={styles.value}>Username:</Text>
-          <Text style={styles.value}>{username}</Text>
+          <TextInput
+            placeholderTextColor={"white"}
+            style={styles.input}
+            placeholder={username}
+            value={newUsername}
+            onChangeText={setNewUsername}
+          />
+          <IconButton
+            icon={"pencil"}
+            iconColor={"#FFFFFF"}
+            size={24}
+            onPress={handleUsernameChange}
+          />
         </View>
         <View style={styles.segment}>
           <Text style={styles.value}>Group:</Text>
@@ -114,15 +164,25 @@ const styles = StyleSheet.create({
     margin: 20,
     gap: 5,
   },
-  segment: {
-    marginVertical: 10,
-    display: "flex",
-    flexDirection: "row",
-    justifyContent: "space-between",
-  },
   value: {
     color: GlobalTextColor,
     fontSize: 16,
+  },
+  segment: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginVertical: 10,
+  },
+  input: {
+    color: "white",
+    borderRadius: 10,
+    width: "50%",
+    height: 40,
+    paddingLeft: 10,
+    paddingRight: 10,
+    borderColor: GlobalAccentColor,
+    borderWidth: 2,
   },
   buttonContainer: {
     justifyContent: "center",

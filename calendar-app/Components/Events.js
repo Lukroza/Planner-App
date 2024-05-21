@@ -46,7 +46,6 @@ const Events = ({
     setSortOrder(sortOrder === "asc" ? "desc" : "asc");
   };
 
-
   const sortedEvents = useMemo(() => {
     return [...events].sort((a, b) => {
       const dateA = new Date(a.date);
@@ -89,8 +88,9 @@ const Events = ({
           <Text style={styles.eventNameText}>{item.name}</Text>
           <Text style={styles.eventTimeText}>{item.from}</Text>
         </View>
-        <View>
+        <View style={styles.eventText}>
           <Text style={styles.eventDate}>{formattedDate}</Text>
+          <Text style={styles.eventDate}>Attendees: {item.attendeeCount}</Text>
         </View>
       </TouchableOpacity>
     );

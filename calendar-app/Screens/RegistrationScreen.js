@@ -27,7 +27,11 @@ const RegistrationScreen = ({ onRefresh }) => {
       });
       setIsRegistered(true);
     } catch (error) {
-      setErrorMessage(error.message);
+      Toast.show({
+        type: "error",
+        text1: "Error",
+        text2: error.message,
+      });
     }
   };
 

@@ -22,7 +22,8 @@ public class UserController {
 
     @PostMapping("/insert")
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<String> insertUser(@RequestBody User user) {
+    public ResponseEntity<?> insertUser(@RequestBody User user) {
+        System.out.println(user);
         String username = user.getUsername();
         if (username == null || username.isEmpty()) {
             return new ResponseEntity<>("Must enter a username", HttpStatus.BAD_REQUEST);
@@ -36,18 +37,18 @@ public class UserController {
                 return new ResponseEntity<>("User already exists", HttpStatus.CONFLICT);
             } else {
                 UUID userId = userService.insertUser(username);
-                return new ResponseEntity<>("User created successfully", HttpStatus.CREATED);
+                return new ResponseEntity<>(userId, HttpStatus.CREATED);
             }
         }
     }
     @GetMapping("/get/{username}")
-    public ResponseEntity<?> getUserByUsername(@PathVariable String username) {
-        Optional<User> user = userService.getUserByUsername(username);
-        if (user.isPresent()) {
-            return ResponseEntity.ok(user.get());
-        } else {
-            return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
-        }
+    public Optional<User> getUserByUsername(@PathVariable String username) {
+        return userService.getUserByUsername(username);
+//        if (user.isPresent()) {
+//            return ResponseEntity.ok(user.get());
+//        } else {
+//            return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
+//        }
     }
 
     @GetMapping("/get/group/{groupId}")
@@ -58,5 +59,24 @@ public class UserController {
     @GetMapping("/get/id/{userId}")
     public Optional<User> getUserByID(@PathVariable UUID userId) {
         return userService.getUserByID(userId);
+    }
+
+    @PutMapping("/update/name/{userId}")
+    public ResponseEntity<?> updateUsername(@PathVariable UUID userId, @RequestBody String username) {
+        if (username == null || username.isEmpty()) {
+            return new ResponseEntity<>("Must enter a username", HttpStatus.BAD_REQUEST);
+        }
+        Pattern invalidCharsPattern = Pattern.compile("[\";:,()!?]");
+        if (invalidCharsPattern.matcher(username).find()) {
+            return new ResponseEntity<>("Invalid symbols in username (\";:,()!?)", HttpStatus.BAD_REQUEST);
+        } else {
+            Optional<User> existingUser = userService.getUserByID(userId);
+            if (existingUser.isPresent()) {
+                userService.updateUsername(userId, username);
+                return new ResponseEntity<>("Username updated", HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
+            }
+        }
     }
 }
