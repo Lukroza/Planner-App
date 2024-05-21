@@ -71,11 +71,11 @@ const CalendarComponent = ({ showEvents, onDayPress }) => {
       const count = dates[dateKey].count;
       let backgroundColor;
       if (count <= 2) {
-        backgroundColor = "green";
+        backgroundColor = "#9fbdbb";
       } else if (count <= 4) {
-        backgroundColor = "yellow";
+        backgroundColor = "#f0eec0";
       } else {
-        backgroundColor = "red";
+        backgroundColor = "#ad7e7b";
       }
 
       dates[dateKey] = {
