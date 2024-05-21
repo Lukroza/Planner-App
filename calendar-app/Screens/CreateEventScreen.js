@@ -27,6 +27,7 @@ import TextInputBar from "../Components/TextInputBar";
 import { useNavigation } from "@react-navigation/native";
 import { Switch } from "react-native-gesture-handler";
 import ButtonComp from "../Components/ButtonComp";
+import Toast from "react-native-toast-message";
 
 function CreateEvent() {
   const [name, setName] = React.useState("");
@@ -98,6 +99,14 @@ function CreateEvent() {
   const handleCreate = async () => {
     const userId = await getUserId();
 
+    if(name === "") {
+      Toast.show({
+        type: 'error',
+        text1: 'Missing event name',
+        text2: 'Please enter a name for your event'
+      });
+      return;
+    }
     const eventData = {
       name: name,
       userId: userId,
