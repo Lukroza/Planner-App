@@ -65,7 +65,7 @@ Next, connect the app to the backend service.
   ![Unit test](calendar-app/assets/unit.png)
 
 2. Static code analysis
-  ![Static code analysis](calendar-app/assets/unit.png)
+  ![Static code analysis](calendar-app/assets/static.png)
 
 ## Database diagram
   ![Database diagram](calendar-app/assets/database.png)
