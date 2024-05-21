@@ -108,6 +108,15 @@ function CreateEvent() {
       });
       return;
     }
+    //check if time interval is valid
+    if (fromTime >= toTime) {
+      Toast.show({
+        type: "error",
+        text1: "Invalid time",
+        text2: "Please select a valid time interval",
+      });
+      return;
+    }
     const eventData = {
       name: name,
       userId: userId,
