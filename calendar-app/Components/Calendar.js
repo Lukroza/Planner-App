@@ -10,7 +10,7 @@ import {
   GlobalHeaderColor,
   GlobalTextColor,
 } from "../Styles";
-import { useFocusEffect } from '@react-navigation/native';
+import { useFocusEffect } from "@react-navigation/native";
 
 const CalendarComponent = ({ showEvents, onDayPress }) => {
   const [selectedDate, setSelectedDate] = useState("");
@@ -83,12 +83,12 @@ const CalendarComponent = ({ showEvents, onDayPress }) => {
           container: {
             backgroundColor,
             borderRadius: 5,
-            alignItems: 'center',
-            justifyContent: 'center',
+            alignItems: "center",
+            justifyContent: "center",
             opacity: 0.5,
           },
           text: {
-            color: 'black',
+            color: "black",
             opacity: 1,
           },
         },
@@ -102,8 +102,8 @@ const CalendarComponent = ({ showEvents, onDayPress }) => {
             backgroundColor: GlobalHeaderColor,
             borderRadius: 15,
             padding: 2,
-            alignItems: 'center',
-            justifyContent: 'center',
+            alignItems: "center",
+            justifyContent: "center",
             opacity: 1,
           },
           text: {
@@ -133,7 +133,7 @@ const CalendarComponent = ({ showEvents, onDayPress }) => {
             }
           }}
           markedDates={computeMarkedDates()}
-          markingType={'custom'}
+          markingType={"custom"}
           theme={{
             calendarBackground: GlobalColor,
             backgroundColor: GlobalColor,

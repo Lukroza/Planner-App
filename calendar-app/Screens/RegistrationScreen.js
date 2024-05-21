@@ -12,18 +12,20 @@ import { createUserApi } from "../Components/API/Users/UserRegister";
 import { storeUserInfo } from "../Components/Storage/userDataStorage";
 import { GlobalColor } from "../Styles";
 import { loginUserAPI } from "../Components/API/Users/UsernameCheck";
-import Toast from "react-native-toast-message";
+import AuthContext from "../Components/AuthContext";
+import { useContext, useEffect } from "react";
 
 const RegistrationScreen = ({ onRefresh }) => {
   const [username, setUsername] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+  const { setIsRegistered } = useContext(AuthContext);
 
   const handleRegistration = async () => {
     try {
-      let response = await createUserApi({ username });
-      response = response.replaceAll(`"`, "");
-      await storeUserInfo(response, false, true, "0");
-      onRefresh();
+      await createUserApi({ username }).then(async (response) => {
+        await storeUserInfo(response, false, true, "0");
+      });
+      setIsRegistered(true);
     } catch (error) {
       Toast.show({
         type: "error",
@@ -34,16 +36,20 @@ const RegistrationScreen = ({ onRefresh }) => {
   };
 
   const handleLogin = async () => {
-    const userData = await loginUserAPI({ username });
-    if (userData != null) {
-      if (userData.group_id !== null) {
-        await storeUserInfo(userData.id, true, true, userData.group_id);
+    try {
+      const userData = await loginUserAPI({ username });
+      if (userData != null) {
+        if (userData.group_id !== null) {
+          await storeUserInfo(userData.id, true, true, userData.group_id);
+        } else {
+          await storeUserInfo(userData.id, false, true, "0");
+        }
+        setIsRegistered(true);
       } else {
-        await storeUserInfo(userData.id, false, true, "0");
+        console.log("User not found");
       }
-      onRefresh();
-    } else {
-      console.log("User not found");
+    } catch (error) {
+      setErrorMessage(error.message);
     }
   };
 
