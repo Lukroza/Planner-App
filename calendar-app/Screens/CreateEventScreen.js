@@ -16,6 +16,7 @@ import Header from "../Components/Header";
 import Calendar from "../Components/Calendar";
 import { createEventApi } from "../Components/API/Events/EventCreator";
 import {
+  GlobalBackgroundTextColor,
   GlobalBorderColor,
   GlobalColor,
   GlobalFont,
@@ -27,6 +28,7 @@ import TextInputBar from "../Components/TextInputBar";
 import { useNavigation } from "@react-navigation/native";
 import { Switch } from "react-native-gesture-handler";
 import ButtonComp from "../Components/ButtonComp";
+import Toast from "react-native-toast-message";
 
 function CreateEvent() {
   const [name, setName] = React.useState("");
@@ -67,7 +69,7 @@ function CreateEvent() {
   };
 
   const formatTime = (date) => {
-    let hours = date.getUTCHours() + 2;
+    let hours = date.getUTCHours() + 3;
     const minutes = date.getUTCMinutes();
     const seconds = date.getUTCSeconds();
     if (hours >= 24) {
@@ -98,6 +100,23 @@ function CreateEvent() {
   const handleCreate = async () => {
     const userId = await getUserId();
 
+    if(name === "") {
+      Toast.show({
+        type: 'error',
+        text1: 'Missing event name',
+        text2: 'Please enter a name for your event'
+      });
+      return;
+    }
+    //check if time interval is valid
+    if (fromTime >= toTime) {
+      Toast.show({
+        type: "error",
+        text1: "Invalid time",
+        text2: "Please select a valid time interval",
+      });
+      return;
+    }
     const eventData = {
       name: name,
       userId: userId,
@@ -143,7 +162,9 @@ function CreateEvent() {
             <Button title={fromTimeString} onPress={showFromPicker} />
             <DateTimePickerModal
               isVisible={isFromPickerVisible}
+              backdropStyleIOS={{ backgroundColor: GlobalBorderColor }}
               mode="time"
+              isDarkModeEnabled={true}
               onConfirm={handleFromConfirm}
               onCancel={hideFromPicker}
               date={fromTime}
@@ -151,7 +172,9 @@ function CreateEvent() {
             <Text style={styles.fromToLabel}>To</Text>
             <Button title={toTimeString} onPress={showToPicker} />
             <DateTimePickerModal
+              isDarkModeEnabled={true}
               isVisible={isToPickerVisible}
+              backdropStyleIOS={{ backgroundColor: GlobalBorderColor }}
               mode="time"
               onConfirm={handleToConfirm}
               onCancel={hideToPicker}

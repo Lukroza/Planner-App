@@ -86,6 +86,7 @@ const EventDescription = ({
     await joinEvent({ eventId: event.id, userId });
     getEventDetails({ eventId: event.id }).then(setEventDetails);
     setTimeout(() => setButtonDisabled(false), 5000); // 5 seconds cooldown
+    event.attendeeCount += 1;
   };
 
   const LeaveEvent = async () => {
@@ -93,6 +94,7 @@ const EventDescription = ({
     await leaveEvent({ eventId: event.id, userId });
     getEventDetails({ eventId: event.id }).then(setEventDetails);
     setTimeout(() => setButtonDisabled(false), 5000); // 5 seconds cooldown
+    event.attendeeCount -= 1;
   };
 
   return (

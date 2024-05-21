@@ -12,7 +12,14 @@ import {
 import ButtonComp from "../Components/ButtonComp";
 import Header from "../Components/Header";
 import { useEffect, useState } from "react";
-import { View, Text, StyleSheet, TextInput } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  TextInput,
+  TouchableWithoutFeedback,
+  Keyboard,
+} from "react-native";
 import { getGroupName } from "../Components/API/Groups/GroupName";
 import { getInGroupStatus } from "../Components/Storage/userDataStorage";
 import { getUserById } from "../Components/API/Users/UserGetById";
@@ -29,7 +36,7 @@ const ProfileScreen = () => {
   const [username, setUsername] = useState("");
   const [isModalVisible, setModalVisible] = useState(false);
   const [newUsername, setNewUsername] = useState("");
-  const isFocused = useIsFocused(); 
+  const isFocused = useIsFocused();
 
   async function getGroupStatus() {
     const inGroup = await getInGroupStatus();
@@ -53,10 +60,9 @@ const ProfileScreen = () => {
   useEffect(() => {
     fetchUsername();
     getGroupStatus().then(setInGroup);
-    if(inGroup)
-      {
-        fetchGroupName();
-      }
+    if (inGroup) {
+      fetchGroupName();
+    }
   }, [isFocused]);
 
   const handleUsernameChange = async () => {
@@ -82,8 +88,8 @@ const ProfileScreen = () => {
     } catch (error) {
       Toast.show({
         type: "error",
-        text1: "Error",
-        text2: error.message,
+        text1: "Username update failed",
+        text2: "Username is already taken",
       });
     }
   };
@@ -106,47 +112,51 @@ const ProfileScreen = () => {
   };
 
   return (
-    <View style={styles.wrapper}>
-      <Header title={"Profile"} />
-      <View style={styles.container}>
-        <Text style={styles.topLine}>About You</Text>
-        <View style={styles.segment}>
-          <Text style={styles.value}>Username:</Text>
-          <TextInput
-            placeholderTextColor={"white"}
-            style={styles.input}
-            placeholder={username}
-            value={newUsername}
-            onChangeText={setNewUsername}
-          />
-          <IconButton
-            icon={"pencil"}
-            iconColor={"#FFFFFF"}
-            size={24}
-            onPress={handleUsernameChange}
-          />
-        </View>
-        <View style={styles.segment}>
-          <Text style={styles.value}>Group:</Text>
-          {inGroup ? (
-            <Text style={styles.value}>{groupNameData.name}</Text>
-          ) : (
-            <Text style={styles.value}>Not in a group</Text>
-          )}
-        </View>
-        <View style={styles.segment}>
-          <Text style={styles.value}>Email:</Text>
-          <Text style={styles.value}></Text>
-        </View>
-        {inGroup && (
-          <View style={styles.buttonContainer}>
-            <ButtonComp text="GroupStats" onPress={() => setModalVisible(true)} />
-            <GroupStats
-              isVisible={isModalVisible}
-              onClose={() => setModalVisible(false)}
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <View style={styles.wrapper}>
+        <Header title={"Profile"} />
+        <View style={styles.container}>
+          <Text style={styles.topLine}>About You</Text>
+          <View style={styles.segment}>
+            <Text style={styles.value}>Username:</Text>
+            <TextInput
+              placeholderTextColor={"white"}
+              style={styles.input}
+              placeholder={username}
+              value={newUsername}
+              onChangeText={setNewUsername}
+            />
+            <IconButton
+              icon={"pencil"}
+              iconColor={"#FFFFFF"}
+              size={24}
+              onPress={handleUsernameChange}
             />
           </View>
-        )}
+          <View style={styles.segment}>
+            <Text style={styles.value}>Group:</Text>
+            {inGroup ? (
+              <Text style={styles.value}>{groupNameData.name}</Text>
+            ) : (
+              <Text style={styles.value}>Not in a group</Text>
+            )}
+          </View>
+          <View style={styles.segment}>
+            <Text style={styles.value}>Email:</Text>
+            <Text style={styles.value}></Text>
+          </View>
+          {inGroup && (
+            <View style={styles.buttonContainer}>
+              <ButtonComp
+                text="GroupStats"
+                onPress={() => setModalVisible(true)}
+              />
+              <GroupStats
+                isVisible={isModalVisible}
+                onClose={() => setModalVisible(false)}
+              />
+            </View>
+          )}
         </View>
         <View style={styles.buttonContainer}>
           <ButtonComp
@@ -156,6 +166,7 @@ const ProfileScreen = () => {
           />
         </View>
       </View>
+    </TouchableWithoutFeedback>
   );
 };
 
