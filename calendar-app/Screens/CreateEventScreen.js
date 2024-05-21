@@ -16,6 +16,7 @@ import Header from "../Components/Header";
 import Calendar from "../Components/Calendar";
 import { createEventApi } from "../Components/API/Events/EventCreator";
 import {
+  GlobalBackgroundTextColor,
   GlobalBorderColor,
   GlobalColor,
   GlobalFont,
@@ -151,8 +152,8 @@ function CreateEvent() {
             <Text style={styles.fromToLabel}>From</Text>
             <Button title={fromTimeString} onPress={showFromPicker} />
             <DateTimePickerModal
-              isDarkModeEnabled={true}
               isVisible={isFromPickerVisible}
+              pickerComponentStyleIOS={{ backgroundColor: GlobalBackgroundTextColor }}
               mode="time"
               onConfirm={handleFromConfirm}
               onCancel={hideFromPicker}
