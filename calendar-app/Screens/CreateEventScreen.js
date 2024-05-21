@@ -151,7 +151,7 @@ function CreateEvent() {
             <Text style={styles.fromToLabel}>From</Text>
             <Button title={fromTimeString} onPress={showFromPicker} />
             <DateTimePickerModal
-              isDarkModeEnabled="true"
+              isDarkModeEnabled={true}
               isVisible={isFromPickerVisible}
               mode="time"
               onConfirm={handleFromConfirm}
@@ -161,7 +161,7 @@ function CreateEvent() {
             <Text style={styles.fromToLabel}>To</Text>
             <Button title={toTimeString} onPress={showToPicker} />
             <DateTimePickerModal
-              isDarkModeEnabled="true"
+              isDarkModeEnabled={true}
               isVisible={isToPickerVisible}
               mode="time"
               onConfirm={handleToConfirm}
