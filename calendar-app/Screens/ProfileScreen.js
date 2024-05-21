@@ -21,6 +21,7 @@ import { useNavigation, CommonActions } from "@react-navigation/native";
 import GroupStats from "../Components/GroupStats";
 import { updateUsername } from "../Components/API/Users/UpdateUsername";
 import { IconButton, MD3Colors } from "react-native-paper";
+import { useIsFocused } from "@react-navigation/native";
 
 const ProfileScreen = () => {
   const [groupNameData, setGroupName] = useState("");
@@ -28,6 +29,7 @@ const ProfileScreen = () => {
   const [username, setUsername] = useState("");
   const [isModalVisible, setModalVisible] = useState(false);
   const [newUsername, setNewUsername] = useState("");
+  const isFocused = useIsFocused(); 
 
   async function getGroupStatus() {
     const inGroup = await getInGroupStatus();
@@ -50,9 +52,12 @@ const ProfileScreen = () => {
 
   useEffect(() => {
     fetchUsername();
-    fetchGroupName();
     getGroupStatus().then(setInGroup);
-  }, []);
+    if(inGroup)
+      {
+        fetchGroupName();
+      }
+  }, [isFocused]);
 
   const handleUsernameChange = async () => {
     if (newUsername === "") {
@@ -133,12 +138,15 @@ const ProfileScreen = () => {
           <Text style={styles.value}>Email:</Text>
           <Text style={styles.value}></Text>
         </View>
-        <View style={styles.buttonContainer}>
-          <ButtonComp text="GroupStats" onPress={() => setModalVisible(true)} />
-          <GroupStats
-            isVisible={isModalVisible}
-            onClose={() => setModalVisible(false)}
-          />
+        {inGroup && (
+          <View style={styles.buttonContainer}>
+            <ButtonComp text="GroupStats" onPress={() => setModalVisible(true)} />
+            <GroupStats
+              isVisible={isModalVisible}
+              onClose={() => setModalVisible(false)}
+            />
+          </View>
+        )}
         </View>
         <View style={styles.buttonContainer}>
           <ButtonComp
@@ -148,7 +156,6 @@ const ProfileScreen = () => {
           />
         </View>
       </View>
-    </View>
   );
 };
 

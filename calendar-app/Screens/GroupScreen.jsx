@@ -8,6 +8,7 @@ import { ActivityIndicator } from 'react-native';
 import { GlobalColor, GlobalFont, GlobalSecondaryColor, GlobalTextColor } from '../Styles';
 import NoGroupSection from '../Components/GroupSection/NoGroupSection';
 import InGroupSection from '../Components/GroupSection/InGroupSection';
+import { useIsFocused } from '@react-navigation/native';
 
 async function getGroupStatus() {
   const inGroup = await getInGroupStatus();
@@ -28,11 +29,12 @@ const GroupScreen = () => {
   const [groupName, setGroupName] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [refreshKey, setRefreshKey] = useState(0);
+  const isFocused = useIsFocused(); 
 
   useEffect(() => {
     getGroupStatus().then(setInGroup);
     getUser().then(setUserId);
-  }, []);
+  }, [isFocused]);
 
   const handleCreateGroup = async () => {
     setIsLoading(true);
@@ -42,11 +44,10 @@ const GroupScreen = () => {
       owner_id: userId,
     };
 
-    await createGroup(groupData).then((response) => {
-      storeUserInfo(userId, true, true, response);
-      setInGroup(true);
-      setIsLoading(false);
-    });
+    let response = await createGroup(groupData);
+    await storeUserInfo(userId, true, true, response);
+    setInGroup(true);
+    setIsLoading(false);
   };
 
   const handleRefresh = () => {
