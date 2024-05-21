@@ -68,7 +68,7 @@ function CreateEvent() {
   };
 
   const formatTime = (date) => {
-    let hours = date.getUTCHours() + 2;
+    let hours = date.getUTCHours() + 3;
     const minutes = date.getUTCMinutes();
     const seconds = date.getUTCSeconds();
     if (hours >= 24) {
