@@ -49,7 +49,7 @@ function MainTabNavigator() {
           );
         },
         tabBarStyle: {
-          height: 75,
+          height: 81,
           backgroundColor: GlobalSecondaryColor,
         },
       })}
