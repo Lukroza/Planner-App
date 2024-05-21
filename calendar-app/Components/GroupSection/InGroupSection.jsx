@@ -41,30 +41,30 @@ const GroupInput = ({ onRefresh }) => {
   }
 
   useEffect(() => {
-    const fetchGroupMembers = async () => {
-      setIsLoading(true);
-      const groupId = await getGroup();
-      setGroupId(groupId);
-      if (groupId) {
-        const groupMembers = getGroupMembers({ groupId }).then((data) => {
-          setMembers(data);
-        });
-        setMembers(groupMembers);
-      }
-      setIsLoading(false);
-    }
-
-    const fetchUserId = async () => {
-      const userId = await getUser();
-      const groupId = await getGroup();
-      const groupNameData = await getGroupName({ groupId: groupId });
-      setOwnerId(groupNameData.owner_id);
-      setUserId(userId);
-    }
-
     fetchGroupMembers();
     fetchUserId();
   }, [refreshKey]);
+
+  const fetchUserId = async () => {
+    const userId = await getUser();
+    const groupId = await getGroup();
+    const groupNameData = await getGroupName({ groupId: groupId });
+    setOwnerId(groupNameData?.owner_id ?? null);
+    setUserId(userId);
+  }
+
+  const fetchGroupMembers = async () => {
+    setIsLoading(true);
+    const groupId = await getGroup();
+    setGroupId(groupId);
+    if (groupId) {
+      const groupMembers = getGroupMembers({ groupId }).then((data) => {
+        setMembers(data);
+      });
+      setMembers(groupMembers);
+    }
+    setIsLoading(false);
+  }
 
   const handleSendInvite = async () => {
     if (!username) {
