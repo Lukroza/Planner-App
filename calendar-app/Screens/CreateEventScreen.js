@@ -153,8 +153,9 @@ function CreateEvent() {
             <Button title={fromTimeString} onPress={showFromPicker} />
             <DateTimePickerModal
               isVisible={isFromPickerVisible}
-              pickerComponentStyleIOS={{ backgroundColor: GlobalBackgroundTextColor }}
+              backdropStyleIOS={{ backgroundColor: GlobalBorderColor }}
               mode="time"
+              isDarkModeEnabled={true}
               onConfirm={handleFromConfirm}
               onCancel={hideFromPicker}
               date={fromTime}
@@ -164,6 +165,7 @@ function CreateEvent() {
             <DateTimePickerModal
               isDarkModeEnabled={true}
               isVisible={isToPickerVisible}
+              backdropStyleIOS={{ backgroundColor: GlobalBorderColor }}
               mode="time"
               onConfirm={handleToConfirm}
               onCancel={hideToPicker}
