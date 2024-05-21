@@ -7,14 +7,14 @@ Welcome to the Calendar Event Sharing App! This application provides a simple, m
 
 To test the project locally on your machine, you can use emulators such as Android Studio or the iOS emulator (available only on macOS). Alternatively, you can use the Expo Go app on your mobile device.
 
-### Prerequisites
+## Prerequisites
 
 Ensure you have the following prerequisites installed:
 
 - [Node.js](https://nodejs.org/) (v20.11.1)
 - [npm](https://www.npmjs.com/) (v10.7.0)
 
-### Steps to Install:
+## Steps to Install:
 
 1. Clone this repository:
    ```sh
@@ -51,12 +51,26 @@ Next, connect the app to the backend service.
     ```sh
     npx expo start
 
-### Contributors:
+## Contributors:
 - [Lukroza](https://github.com/Lukroza) - Fullstack developer
 - [vokenboy](https://github.com/vokenboy) - Fullstack and DevOps developer
 - [Oshernee](https://github.com/Oshernee) - Frontend developer
 - [JonasLaur1](https://github.com/JonasLaur1) - Frontend developer
-### Notes:
+
+## UML User diagram
+  ![User diagram](calendar-app/assets/diagram.png)
+
+## Test Results
+1. Unit testing for the backend
+  ![Unit test](calendar-app/assets/unit.png)
+
+2. Static code analysis
+  ![Static code analysis](calendar-app/assets/unit.png)
+
+## Database diagram
+  ![Database diagram](calendar-app/assets/database.png)
+
+## Notes:
 - Dependancies used in this App
  ```
 "dependencies": {
