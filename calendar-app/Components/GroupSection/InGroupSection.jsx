@@ -5,7 +5,7 @@ import ButtonComp from '../ButtonComp';
 import { loginUserAPI } from '../API/Users/UsernameCheck';
 import { inviteToGroup } from '../API/Invites/InviteToGroup';
 import { getGroupMembers } from '../API/Groups/GroupMembers';
-import { getGroupId } from "../Storage/userDataStorage";
+import { getGroupId, storeUserInfo } from "../Storage/userDataStorage";
 import { getUserId } from "../Storage/userDataStorage";
 import { deleteUser } from "../API/Groups/RemoveUser";
 import { GlobalColor, GlobalFont, GlobalHeaderColor, GlobalRedButtonColor, GlobalSecondaryColor, GlobalTextColor } from '../../Styles';
@@ -151,6 +151,7 @@ const GroupInput = ({ onRefresh }) => {
       setIsLoading(true);
       const groupId = await getGroupId();
       await deleteGroup({ group_id: groupId });
+      storeUserInfo(userId, false, true, "0")
       onRefresh();
       Toast.show({
         type: 'success',

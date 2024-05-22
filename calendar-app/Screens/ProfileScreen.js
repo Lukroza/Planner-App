@@ -136,7 +136,7 @@ const ProfileScreen = () => {
           <View style={styles.segment}>
             <Text style={styles.value}>Group:</Text>
             {inGroup ? (
-              <Text style={styles.value}>{groupNameData.name}</Text>
+              <Text style={styles.value}>{groupNameData?.name}</Text>
             ) : (
               <Text style={styles.value}>Not in a group</Text>
             )}
