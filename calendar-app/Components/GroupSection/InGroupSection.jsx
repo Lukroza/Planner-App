@@ -127,6 +127,7 @@ const GroupInput = ({ onRefresh }) => {
     try {
       const userId = await getUser();
       await deleteUser({ userId: userId });
+      storeUserInfo(userId, false, true, "0")
       onRefresh();
       Toast.show({
         type: 'success',
