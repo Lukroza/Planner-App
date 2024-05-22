@@ -29,7 +29,9 @@ const Invites = ({ onAccept }) => {
     const names = {};
     for (const invite of userInvites) {
       const groupNameData = await getGroupName({ groupId: invite.group_id });
-      names[invite.group_id] = groupNameData.name;
+      if (groupNameData) {
+        names[invite.group_id] = groupNameData.name;
+      }
     }
     setGroupNames(names);
   };
