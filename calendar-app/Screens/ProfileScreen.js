@@ -45,6 +45,14 @@ const ProfileScreen = () => {
 
   const fetchGroupName = async () => {
     const groupId = await getGroupId();
+    if (
+      groupId === undefined ||
+      groupId === null ||
+      groupId === "0" ||
+      groupId === ""
+    ) {
+      return;
+    }
     const groupNameData = await getGroupName({ groupId });
     setGroupName(groupNameData);
   };
